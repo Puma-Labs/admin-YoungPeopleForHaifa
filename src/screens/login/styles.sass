@@ -1,0 +1,145 @@
+@import '../../components/variables'
+
+#loginLayout
+  display: flex
+  justify-content: center
+  align-items: center
+  height: 100vh
+  background-color: $bg-white
+  position: relative
+  .background
+    position: absolute
+    width: 100%
+    height: 100%
+    .bg-image
+      position: absolute
+    .Vladimir
+      top: 7.5rem
+      left: 2.5rem
+    .Gosa
+      top: 5rem
+      right: 22.63%
+    .Alex
+      bottom: 5rem
+      right: 5rem
+    .Timofey
+      bottom: 5rem
+      left: 22.63%
+  .login-form
+    max-width: 408px
+    width: 100%
+    position: relative
+    z-index: 5
+    border: $border-dark
+    border-radius: 24px
+    padding: 1.5rem 1.4rem
+    padding-bottom: 1.7rem
+    background-color: $bg-light
+    .title
+      font-weight: 400
+      font-size: 32px
+      line-height: 40px
+      margin-bottom: 2rem
+    .form
+      .input-group
+        display: flex
+        flex-direction: column
+        gap: 1.5rem
+        margin-bottom: 2.2rem
+        label
+          .input-container
+            display: block
+            height: 3.5rem
+            position: relative
+            border-radius: .25rem
+            border: 1px solid $bd-dark
+            .label
+              position: absolute
+              left: 1rem
+              top: -.5rem
+              background-color: $bg-light
+              color: $bd-dark
+              font-weight: 500
+              font-size: 12px
+              line-height: 1rem
+              letter-spacing: 0.5px
+              z-index: 10
+              &::after
+                content: ''
+                position: absolute
+                left: -.25rem
+                width: calc(100% + .5rem)
+                height: 100%
+                background-color: $bg-light
+                z-index: -1
+            .input
+              height: 100%
+              width: 100%
+              padding: 1rem
+              border: none
+              border-radius: .25rem
+              font-size: 1rem
+              line-height: 1.5rem
+              letter-spacing: 0.5px
+              background-color: inherit
+              &:focus
+                outline: none
+            .btn-show-pass
+              position: absolute
+              width: 1.5rem
+              height: 1.5rem
+              left: calc(100% - 2.5rem)
+              top: 1rem
+      .login
+        display: flex
+        justify-content: space-between
+        .button
+          max-width: 5.6rem
+          width: 100%
+          padding: .62rem 0
+          background-color: $c-purple
+          border-radius: 6.25rem
+          font-weight: 500
+          font-size: 14px
+          line-height: 1.25rem
+          letter-spacing: 0.1px
+          color: $c-white
+        .checkbox-container
+          display: flex
+          align-items: center
+          position: relative
+          padding-left: 2.3rem
+          margin-left: 1rem
+          cursor: pointer
+          font-size: 14px
+          line-height: 20px
+          letter-spacing: 0.1px
+          -webkit-user-select: none
+          -moz-user-select: none
+          -ms-user-select: none
+          user-select: none
+          input
+            position: absolute
+            opacity: 0
+            cursor: pointer
+            height: 0
+            width: 0
+            &:checked ~ .checkmark
+              background-color: $c-purple
+              .tick
+                display: block
+          .checkmark
+            position: absolute
+            top: 50%
+            left: 0
+            width: 18px
+            height: 18px
+            transform: translateY(-50%)
+            border: 1px solid $c-purple
+            border-radius: 2px
+            .tick
+              display: none
+              position: absolute
+              top: 50%
+              left: 50%
+              transform: translate(-50%, -50%)

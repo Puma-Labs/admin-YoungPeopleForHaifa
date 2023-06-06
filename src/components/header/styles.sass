@@ -1,0 +1,49 @@
+@import '../variables'
+
+.header
+  background-color: $bg-white
+  border-bottom: 1px solid $bd-lilac
+  position: absolute
+  z-index: 3
+  display: flex
+  align-items: center
+  height: 80px
+  width: 100%
+  left: 0
+  top: 0
+  &.relative
+    position: relative
+  .logo
+    display: flex
+    align-items: center
+    height: 100%
+    padding: 0 24px
+    max-width: 150px
+    border-right: 1px solid $bd-lilac
+  .title
+    padding: 24px
+    font-weight: 500
+    font-size: 16px
+    line-height: 24px
+  .controls
+    display: flex
+    align-items: center
+    gap: 20px
+    margin-left: auto
+    margin-right: 20px
+  .admin
+    display: flex
+    align-items: center
+    gap: 8px
+    padding: 20px 40px 20px 0
+    .name
+      font-size: 12px
+      line-height: 16px
+      font-weight: 500
+
+.header.dark
+  background-color: $bg-dark-main
+  .icon
+    filter: invert(1)
+  .title, .admin .name
+    color: $c-white

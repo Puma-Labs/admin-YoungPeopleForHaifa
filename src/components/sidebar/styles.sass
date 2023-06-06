@@ -1,0 +1,127 @@
+@import '../variables'
+
+.sidebar
+  background-color: $bg-white
+  background-color: #F8F5FA
+  // max-height: calc(100vh - 63px)
+  // min-height: calc(100% - 80px)
+  height: 100vh
+  max-width: 80px
+  width: 100%
+  // padding: 1.5rem 0 0 2.5rem
+  .sidebar-container
+    display: flex
+    flex-direction: column
+    align-items: center
+    justify-content: space-between
+    width: 100%
+    height: 100%
+    padding: 2rem 0
+    background-color: #f1edfa
+    border-right: 1px solid #C7C5D0
+    .logo
+      display: flex
+      align-items: center
+      justify-content: center
+      width: 48px
+      height: 48px
+      border: 0.5px solid black
+      border-radius: 50%
+      img
+        width: 32px
+    .nav
+      display: flex
+      flex-direction: column
+      gap: 40px
+      // padding: 2.5rem 0 1.56rem 2rem
+      .nav-container
+        display: flex
+        flex-direction: column
+        gap: 1.7rem
+        .item
+          display: flex
+          width: 100%
+          align-items: center
+          margin-bottom: 5px
+          border-radius: 5px
+          cursor: default
+          .icon
+            width: 30px
+            border-right: 1px solid $bd-grey
+            display: flex
+            align-items: center
+            justify-content: center
+            padding-right: 10px
+          .name
+            display: flex
+            align-items: center
+            color: $c-sub-title
+            font-weight: 500
+            font-size: 12px
+            line-height: 16px
+  .logout
+    width: 100%
+    min-height: 4.5rem
+    border-top: 1px solid $bd-lilac
+    padding-left: 2rem
+  .itemChild, .logout
+    display: flex
+    flex-direction: column
+    align-items: center
+    gap: 0.5rem
+    // gap: 1rem
+    // height: 32px
+    position: relative
+    z-index: 2
+    .name
+      visibility: hidden
+      font-weight: 500
+      font-size: 12px
+      line-height: 16px
+      letter-spacing: 0.5px
+    .icon-container
+      position: relative
+      svg
+        position: absolute
+        top: 50%
+        left: 0
+        transform: translateY(-50%)
+      .icon
+        font-size: 18px
+    &.active
+      &::before
+        content: ''
+        position: absolute
+        // left: -24px
+        // width: calc(100% + 24px)
+        width: 56px
+        height: 32px
+        top: -7px
+        // height: 100%
+        background-color: #e1e0f9
+        border-radius: 100px
+        z-index: -1
+      // &::after
+      //   content: ''
+      //   position: absolute
+      //   width: 4px
+      //   height: 100%
+      //   right: 0
+      //   background-color: $bg-violet
+    &.active, &:hover
+      .name
+        visibility: visible
+
+.dark
+  .sidebar
+    background-color: $bg-dark
+    .sidebar-container
+      background-color: $bg-dark-main
+      .itemChild:not(.active)
+        .name
+          color: $c-white
+        .icon
+          filter: invert(1)
+      .logout
+        .name
+          color: $c-white

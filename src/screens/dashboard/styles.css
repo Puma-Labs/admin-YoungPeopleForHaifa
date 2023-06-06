@@ -1,0 +1,19 @@
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.dashboard .dash-header .title {
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 32px;
+}
+.dashboard .stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(298px, 1fr));
+  gap: 1.5rem;
+}
+
+.dark .dashboard .title {
+  color: #ffffff;
+}/*# sourceMappingURL=styles.css.map */

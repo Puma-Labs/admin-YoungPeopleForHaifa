@@ -1,0 +1,131 @@
+.event-form {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  z-index: 101;
+  left: 0;
+  top: 0;
+}
+.event-form .background {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  background-color: #48464A;
+  opacity: 0.32;
+}
+.event-form .form-card {
+  display: flex;
+  flex-direction: column;
+  width: 716px;
+  height: 82vh;
+  background-color: #eae8f9;
+  border: 1px solid #C7C5D0;
+  border-radius: 24px;
+  z-index: 102;
+}
+.event-form .form-card .top {
+  display: flex;
+  justify-content: space-between;
+  padding: 1.7rem;
+  padding-right: 1rem;
+  padding: 1.7rem 1rem 1.1rem 1.7rem;
+  border-bottom: 1px solid #c7c5d0;
+}
+.event-form .form-card .top .title {
+  font-size: 32px;
+  font-weight: 400;
+}
+.event-form .form-card .top .close-btn span {
+  display: block;
+  transform: rotate(45deg);
+  font-size: 20px;
+}
+.event-form .form-card .content {
+  padding: 0 1.5rem;
+  overflow-y: auto;
+}
+.event-form .form-card .content .section:not(:last-child) {
+  border-bottom: 1px solid #c7c5d0;
+}
+.event-form .form-card .content .section {
+  padding: 2.1rem 0;
+  padding-bottom: 0.3rem;
+}
+.event-form .form-card .content .section .section-title {
+  font-size: 24px;
+  line-height: 16px;
+  margin-bottom: 2rem;
+}
+.event-form .form-card .content .section.preview .section-title {
+  margin-bottom: 1.3rem;
+}
+.event-form .form-card .content .section.preview .preview-card {
+  max-width: 358px;
+  margin: 0 auto;
+  padding: 0 1rem 1.2rem 1rem;
+  margin-bottom: 1rem;
+  background-color: #fffbff;
+  border: 1px solid #1b1b1f;
+  border-radius: 6px;
+}
+.event-form .form-card .content .section.preview .preview-card .dots {
+  display: inline-block;
+  transform: rotate(90deg);
+  font-size: 30px;
+  margin-bottom: -0.5rem;
+}
+.event-form .form-card .content .section.preview .preview-card .img-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 318px;
+  height: 188px;
+  margin: 0 auto;
+  margin-bottom: 1.1rem;
+  border: 1px solid #1b1b1f;
+}
+.event-form .form-card .content .section.preview .preview-card .img-container img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  overflow: hidden;
+}
+.event-form .form-card .content .section.preview .preview-card .event-title, .event-form .form-card .content .section.preview .preview-card .event-info {
+  text-align: center;
+}
+.event-form .form-card .content .section.preview .preview-card .event-title {
+  font-weight: 500;
+  line-height: 24px;
+  letter-spacing: 0.4px;
+  margin-bottom: 0.5rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.event-form .form-card .content .section.preview .preview-card .event-info {
+  font-size: 12px;
+  letter-spacing: 0.6px;
+}
+.event-form .form-card .bottom {
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid #c7c5d0;
+  padding: 1.2rem 1.4rem 1.2rem 1.2rem;
+}
+.event-form .form-card .bottom .btn-delete {
+  font-size: 18px;
+}
+.event-form .form-card .bottom .submit-btn {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.1px;
+  color: #4651C6;
+}/*# sourceMappingURL=styles.css.map */

@@ -1,0 +1,22 @@
+@import "../../../components/variables"
+
+.listItem
+  @include bdReg
+  position: relative
+  background-color: $bg-white
+  padding: 1rem
+  .itemTitle
+    @include fH5Title
+    margin-bottom: 4px
+  .itemMessage
+    @include fAdditional
+  .itemDates
+    display: flex
+    gap: 4px
+    margin-top: 1.5rem
+  .itemDate, .itemDateLabel
+    @include fAdditional
+  .itemStatus
+    position: absolute
+    right: 1rem
+    top: 1rem

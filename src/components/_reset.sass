@@ -1,0 +1,63 @@
+$c-main: #041121
+
+*, *::before, *::after
+  box-sizing: border-box
+
+ul[class], ol[class]
+  padding: 0
+
+body
+  scroll-behavior: smooth
+  text-rendering: optimizeSpeed
+  line-height: 1.5
+  display: flex
+  flex-direction: column
+  justify-content: space-between
+  font-family: 'Roboto', sans-serif
+  color: $c-main
+main
+  overflow-x: hidden
+
+*, body, h1, h2, h3, h4,
+p, ul[class], ol[class],
+li, ul, figure, figcaption,
+blockquote, dl, dd, span
+  margin: 0
+  font-family: 'Roboto', sans-serif
+  font-style: normal
+  color: $c-main
+  line-height: 100%
+  list-style: none
+  padding: 0
+
+ul[class], ol[class]
+  list-style: none
+
+a
+  text-decoration: none
+
+img
+  max-width: 100%
+  display: block
+
+input, button, textarea, select
+  font: inherit
+
+input
+  border: 1px solid #777680
+  &:focus
+  outline: none
+
+button
+  cursor: pointer
+
+@media (prefers-reduced-motion: reduce)
+*
+  animation-duration: 0.01ms
+  animation-iteration-count: 1
+  transition-duration: 0.01ms
+  scroll-behavior: auto
+
+button
+  background-color: unset
+  border: none

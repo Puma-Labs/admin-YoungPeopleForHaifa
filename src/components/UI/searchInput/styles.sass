@@ -1,0 +1,30 @@
+@import '../../variables'
+
+.input-container
+  position: relative
+  
+  .search-input
+    border-radius: 100px
+    height: 40px
+    padding: 1rem
+    width: 300px 
+    &::placeholder
+      @include fPlaceholder
+    &:disabled
+      background-color: inherit
+      border-color: $bd-input-disabled
+      &::placeholder
+        color: $c-placeholder-disabled
+  .icon
+    position: absolute
+    top: 2px
+    right: 2px
+    color: $c-icon
+    font-size: 17.5px
+    padding: 0.5rem
+    background-color: inherit
+    border-radius: 100px
+    &.disabled
+      color: $c-icon-disabled
+
+

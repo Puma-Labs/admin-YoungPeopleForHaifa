@@ -1,0 +1,29 @@
+.emptiness {
+  width: 100%;
+  min-height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+.emptiness .avatar-bg {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  border: 1px solid #000569;
+  background-color: #dfe0ff;
+}
+.emptiness .add-btn, .emptiness .add-btn span {
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.1px;
+  color: #4651C6;
+}
+.emptiness .add-btn {
+  display: flex;
+  gap: 0.5rem;
+}
+.emptiness .add-btn span {
+  font-size: 20px;
+  font-weight: 200;
+}/*# sourceMappingURL=styles.css.map */

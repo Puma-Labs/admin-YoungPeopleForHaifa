@@ -1,0 +1,136 @@
+@import "components/reset"
+@import "components/variables"
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Roboto:ital,wght@0,400;1,500&display=swap')
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap')
+
+#root
+  width: 100%
+  min-height: 100vh
+  .main
+    position: relative
+    display: flex
+    width: 100%
+    height: 100vh
+    // height: calc(100vh - 80px)
+    // max-height: calc(100vh - 80px)
+    .mainBody
+      background-color: $bg-white
+      padding-top: 112px
+      // padding: 2.5rem 2.5rem 3rem 1.5rem
+      // padding-top: calc(2.5rem + 56px + 56px)
+      // position: absolute
+      // right: 0
+      // left: 0
+      // width: auto
+      width: 100%
+      min-height: 100%
+    .container
+      // margin-top: 80px
+      width: 100%
+      height: 100%
+      padding: 2.3rem 1.5rem
+      overflow-y: auto
+      // max-width: 1000px
+    .containerFluid
+      margin-top: 80px
+      width: 100%
+      max-width: unset
+      padding: 0 20px
+
+#root
+  .dark
+    .main
+      .mainBody
+        background-color: $bg-dark
+
+.mainLoading
+  width: 100%
+  height: 100vh
+  display: flex
+  justify-content: center
+  align-items: center
+
+.dropMenu
+  min-width: 150px
+  margin-top: 10px
+  opacity: 0
+  z-index: -1
+  position: absolute
+  left: -50px
+  max-height: 200px
+  background-color: rgba(242, 242, 242, 0.62)
+  box-shadow: 0 0 15px 0 rgba(34, 60, 80, 0.2)
+  transition: .2s
+  padding: 10px 5px
+  .itemMenu
+    border-bottom: 1px solid #C9C9C9
+    padding: 10px 20px
+    cursor: pointer
+    &:hover
+      background-color: #ffcdbe9c
+
+.RouterSidebar
+  display: flex
+  width: 100%
+  Router
+    width: 100%
+    height: 100%
+
+
+.sectionHeader
+  height: min-content
+  .title
+    @include pageTitle
+    margin-bottom: 1rem
+  .controls
+    display: flex
+    gap: $gap-m
+    width: 100%
+    label
+      flex: 1
+      .input-container
+        position: relative
+      .icon
+        position: absolute
+        top: 50%
+        width: 56px
+        left: calc(56px / 2 - 24px / 2)
+        transform: translateY(-50%)
+      .input
+        width: 100%
+        border: none
+        min-height: 56px
+        border: 1px solid $bd-lilac
+        border-radius: 1rem
+        padding-left: 56px
+        &::placeholder
+          @include fLabel
+        &:focus
+          outline: none
+    .buttonComponent
+      align-self: flex-start
+
+.aside
+  display: flex
+  flex-direction: column
+  gap: $gap-m
+  grid-column: 2 / 3
+  grid-row: 1 / 3
+
+
+.grid
+  display: grid
+  grid-template-columns: 1fr 233px
+  grid-template-rows: 104px 1fr
+  row-gap: $gap
+  column-gap: $gap-m
+  min-height: calc(100vh - 48px - 48px - 80px)
+
+.body
+  @include bdReg
+  display: flex
+  flex-direction: column
+  gap: $gap-m
+  background-color: $bg-white
+  padding: 24px
+  height: max-content

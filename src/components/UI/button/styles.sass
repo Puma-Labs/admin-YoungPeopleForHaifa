@@ -1,0 +1,61 @@
+@import '../../variables'
+
+.buttonComponent
+  @include fButton
+  display: flex
+  gap: $gap-xsm
+  align-items: center
+  justify-content: center
+  background: $bg-purple
+  box-sizing: border-box
+  border-radius: 100px
+  color: $c-white
+  align-self: center
+  padding: 10px
+  height: 42px
+  cursor: pointer
+  min-width: 104px
+  .icon-container
+    display: flex
+    justify-content: center
+    align-items: center
+    max-width: 18px
+  &:hover
+    background-color: $bg-btn-hover
+  &:active
+    background-color: $bg-btn-click
+
+.buttonComponent.border, .buttonComponent.round
+  color: $c-purple
+  background-color: $bg-white
+  border: 1px solid $bd-btn
+  &:hover
+    background-color: $bg-add-btn-hover
+    border: 1px solid $bd-add-btn-hover
+  &:active
+    border: 1px solid $c-label
+    .icon-container
+      .icon
+        path
+          stroke: $c-label
+
+.buttonComponent.round
+  min-width: 56px
+  width: 56px
+  height: 56px
+  border-radius: 28px
+  padding: 0
+  .icon-container
+    max-width: 24px
+
+.buttonComponent.delete
+  background: #dd7676
+  border: 1px solid #9c5454
+
+.buttonComponent.success
+  background: #89dd76
+  border: 1px solid #649c54
+
+.buttonComponent.disabled
+  opacity: 0.5
+  cursor: not-allowed

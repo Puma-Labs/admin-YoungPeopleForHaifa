@@ -1,0 +1,39 @@
+.listItem {
+  border: 1px solid #E5E1EC;
+  border-radius: 1rem;
+  position: relative;
+  background-color: #ffffff;
+  padding: 1rem;
+}
+.listItem .itemTitle {
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0.5px;
+  letter-spacing: 0.1px;
+  margin-bottom: 4px;
+}
+.listItem .itemMessage {
+  font-size: 12px;
+  letter-spacing: 0.4px;
+  color: #777680;
+  letter-spacing: 0.25px;
+  color: #47464F;
+}
+.listItem .itemDates {
+  display: flex;
+  gap: 4px;
+  margin-top: 1.5rem;
+}
+.listItem .itemDate, .listItem .itemDateLabel {
+  font-size: 12px;
+  letter-spacing: 0.4px;
+  color: #777680;
+  letter-spacing: 0.25px;
+  color: #47464F;
+}
+.listItem .itemStatus {
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+}/*# sourceMappingURL=styles.css.map */

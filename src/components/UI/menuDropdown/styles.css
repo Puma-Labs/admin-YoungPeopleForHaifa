@@ -1,0 +1,62 @@
+.menu-dropdown {
+  position: relative;
+}
+.menu-dropdown .menu-btn .btn-dropdown {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.3rem 0.5rem;
+  padding-right: 0.7rem;
+  border: 1px solid #777680;
+  border-radius: 8px;
+}
+.menu-dropdown .menu-btn .btn-dropdown.active .arrow {
+  transform: translateY(-10%) rotate(-180deg);
+}
+.menu-dropdown .menu-btn .btn-dropdown.disabled {
+  cursor: default;
+  border-color: #cac8d0;
+}
+.menu-dropdown .menu-btn .btn-dropdown.disabled .icon {
+  color: #b9bae9;
+}
+.menu-dropdown .menu-btn .btn-dropdown.disabled .status-text, .menu-dropdown .menu-btn .btn-dropdown.disabled .arrow {
+  color: #b8b6bd;
+}
+.menu-dropdown .menu-btn .btn-dropdown.disabled .arrow {
+  transform: none;
+}
+.menu-dropdown .menu-btn .btn-dropdown .icon {
+  color: #4651C6;
+}
+.menu-dropdown .menu-btn .btn-dropdown .status-text {
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.1px;
+  margin-right: 0.3rem;
+}
+.menu-dropdown .menu-btn .btn-dropdown .arrow {
+  font-size: 8px;
+  line-height: 8px;
+  transition: transform 0.2s ease;
+}
+.menu-dropdown .menu {
+  position: absolute;
+  right: 0;
+  margin-top: 0.4rem;
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3), 0px 2px 6px 2px rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+  background-color: #f1edfa;
+}
+.menu-dropdown .menu.optionsMenu .menu-item {
+  width: 200px;
+  height: 64px;
+  line-height: 64px;
+  padding: 0 1rem;
+}
+.menu-dropdown .menu.optionsMenu .menu-item .menu-text {
+  cursor: pointer;
+}
+.menu-dropdown .menu.datePicker {
+  width: 328px;
+}/*# sourceMappingURL=styles.css.map */

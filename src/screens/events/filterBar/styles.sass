@@ -1,0 +1,82 @@
+@import '../../../components/variables'
+
+.filter-bar
+  position: fixed
+  width: calc(100% - 80px)
+  max-width: 100%
+  top: 0
+  right: 0
+  z-index: 10
+  .title-container
+    width: 100%
+    height: 56px
+    padding: 0 1.7rem
+    padding-right: 2.4rem
+    background-color: #f7f3fd
+    // position: absolute
+    top: 0
+    left: 0
+    display: flex
+    justify-content: space-between
+    border-bottom: $border-light
+    .title
+      @include fSectionTitle
+      display: flex
+      align-items: center
+      gap: 0.7rem
+      &::before
+        font-size: 18px
+      .totalCount
+        font-size: 12px
+        margin-top: 0.5rem
+        margin-left: -0.3rem
+    .button-share
+      span
+        font-size: 20px
+  .filter
+    // position: absolute
+    // top: 56px
+    // left: 0
+    display: flex
+    align-items: center
+    justify-content: space-between
+    width: 100%
+    height: 56px
+    padding: 0 1.5rem
+    padding-right: 2.4rem
+    border-bottom: $border-light
+    background-color: $bg-light
+    .container-left, .container-right
+      display: flex
+      align-items: center
+    .container-left
+      gap: 0.8rem
+      .status-info
+        font-size: 22px
+        cursor: default
+        &.disabled
+          color: $c-icon-disabled
+    .container-right
+      gap: 0.5rem
+      .archive-btn
+        position: relative
+        margin-left: 0.8rem
+        .icon
+          font-size: 18px
+          color: $c-icon
+        .badge
+          position: absolute
+          top: -5px
+          right: -5px
+          width: 14px
+          height: 14px
+          font-size: 10px
+          line-height: 14px
+          background-color: $c-red
+          color: #fff
+          border-radius: 50%
+        &:disabled
+          .icon
+            color: $c-icon-disabled
+          .badge
+            display: none

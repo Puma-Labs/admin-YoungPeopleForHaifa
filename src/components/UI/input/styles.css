@@ -1,0 +1,233 @@
+.input {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.1px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+  margin-bottom: 1.5rem;
+  background-color: inherit;
+  margin-top: 0.5rem;
+}
+.input .input-container {
+  position: relative;
+}
+.input .input-container .icon {
+  position: absolute;
+  top: 50%;
+  width: 24px;
+  right: 15px;
+  transform: translateY(-50%);
+}
+.input .input-container .label {
+  font-size: 12px;
+  letter-spacing: 0.4px;
+  color: #777680;
+  position: absolute;
+  left: 0.7rem;
+  top: -0.4rem;
+  padding: 0 5px;
+  background-color: #eae8f9;
+}
+.input .inputComponent {
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  width: 100%;
+  min-height: 56px;
+  background-color: inherit;
+  border: 1px solid #777680;
+  border-radius: 4px;
+  padding-left: 1.5rem;
+}
+.input .inputComponent::-moz-placeholder {
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.1px;
+  color: #777680;
+}
+.input .inputComponent::placeholder {
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.1px;
+  color: #777680;
+}
+.input .inputComponent:focus {
+  outline: none;
+}
+.input.with-icon .input-container .inputComponent {
+  padding-right: 54px;
+}
+.input.disabled {
+  color: #A9A8AA;
+}
+.input.disabled .inputComponent {
+  color: #A9A8AA;
+}
+.input.error .errorComponent {
+  display: flex;
+  flex-direction: row;
+}
+.input.error .errorComponent .errorText {
+  margin-left: 5px;
+}
+
+.selectComponent {
+  padding: 0 10px;
+}
+
+.textareaContainer {
+  position: relative;
+}
+.textareaContainer .textareaComponent {
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.1px;
+  padding: 1.125rem 0.8rem 3rem;
+  resize: none;
+  height: 211px;
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  width: 100%;
+  min-height: 56px;
+  background-color: inherit;
+  border: 1px solid #777680;
+  border-radius: 4px;
+  padding-left: 1.5rem;
+}
+.textareaContainer .textareaComponent::-moz-placeholder {
+  font-size: 12px;
+  letter-spacing: 0.4px;
+  color: #777680;
+}
+.textareaContainer .textareaComponent::placeholder {
+  font-size: 12px;
+  letter-spacing: 0.4px;
+  color: #777680;
+}
+.textareaContainer .textareaComponent::-moz-placeholder {
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.1px;
+  color: #777680;
+}
+.textareaContainer .textareaComponent::placeholder {
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.1px;
+  color: #777680;
+}
+.textareaContainer .textareaComponent:focus {
+  outline: none;
+}
+.textareaContainer .charCounter {
+  position: absolute;
+  bottom: 0.45rem;
+  right: 1rem;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.1px;
+  font-size: 14px;
+  padding: 0.3rem 0.6rem;
+  background-color: #fff;
+  border-radius: 15px;
+}
+.textareaContainer .charCounter.error {
+  color: #b91a1a;
+}
+
+.tagsInputComponent {
+  position: relative;
+  margin-bottom: 12px;
+}
+.tagsInputComponent .label {
+  font-size: 12px;
+  letter-spacing: 0.4px;
+  color: #777680;
+  position: absolute;
+  left: 0.7rem;
+  top: -0.4rem;
+  padding: 0 5px;
+  background-color: #eae8f9;
+}
+.tagsInputComponent .rti--container {
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  width: 100%;
+  min-height: 56px;
+  background-color: inherit;
+  border: 1px solid #777680;
+  border-radius: 4px;
+  padding-left: 1.5rem;
+}
+.tagsInputComponent .rti--container::-moz-placeholder {
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.1px;
+  color: #777680;
+}
+.tagsInputComponent .rti--container::placeholder {
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.1px;
+  color: #777680;
+}
+.tagsInputComponent .rti--container:focus {
+  outline: none;
+}
+.tagsInputComponent .rti--container:focus-within {
+  box-shadow: none;
+}
+.tagsInputComponent .valueInput::-moz-placeholder {
+  color: #777680;
+}
+.tagsInputComponent .valueInput::placeholder {
+  color: #777680;
+}
+.tagsInputComponent .tag {
+  background: #A8A0FF;
+  border: 1px solid #4651C6;
+  border-radius: 50px;
+  padding: 2.5px 4px 2.5px 8px;
+}
+.tagsInputComponent .tag span {
+  color: #4651C6;
+  margin-right: 4px;
+}
+.tagsInputComponent .tag button {
+  padding: 1px 4.5px 0 4.5px;
+  color: #fff;
+  background: #383838;
+  font-size: 10px;
+}
+.tagsInputComponent .tag button:hover {
+  color: #fff;
+}
+
+@media only screen and (max-width: 440px) {
+  .input .inputComponent::-moz-placeholder {
+    font-size: 14px;
+  }
+  .input .inputComponent,
+  .input .inputComponent::placeholder {
+    font-size: 14px;
+  }
+  .textareaContainer .textareaComponent {
+    font-size: 14px;
+  }
+  .textareaContainer .charCounter {
+    font-size: 12px;
+    right: 0.2rem;
+  }
+  .tagsInputComponent .valueInput::-moz-placeholder {
+    font-size: 14px;
+  }
+  .tagsInputComponent .rti--container,
+  .tagsInputComponent .valueInput::placeholder {
+    font-size: 14px;
+  }
+}/*# sourceMappingURL=styles.css.map */
