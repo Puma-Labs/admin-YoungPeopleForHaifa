@@ -1,0 +1,50 @@
+@import '../../variables'
+
+.checkbox-container
+  @include fFilter
+  display: flex
+  align-items: center
+  position: relative
+  padding-left: 2rem
+  cursor: pointer
+  -webkit-user-select: none
+  -moz-user-select: none
+  -ms-user-select: none
+  user-select: none
+  &.sm
+    font-size: 12px
+    line-height: 16px
+    letter-spacing: 0.4px
+  input
+    position: absolute
+    opacity: 0
+    cursor: pointer
+    height: 0
+    width: 0
+    &:checked ~ .checkmark
+      border: 1px solid $c-purple
+  .checkmark
+    display: flex
+    align-items: center
+    justify-content: center
+    position: absolute
+    top: 50%
+    left: 0
+    width: 24px
+    height: 24px
+    transform: translateY(-50%)
+    border: 1px solid $c-main
+    border-radius: 8px
+    .tick
+      position: absolute
+      top: 50%
+      left: 50%
+      transform: translate(-50%, -50%)
+  &.checked
+    color: $c-purple
+    .checkmark
+      border-color: $c-purple
+  &.disabled
+    color: $c-disabled
+    .checkmark
+      border: 1px solid $c-disabled

@@ -1,0 +1,64 @@
+@import '../../variables'
+
+.form-select
+  position: relative
+  cursor: pointer
+  .label
+    @include fButton
+    margin-bottom: .5rem
+  .input-container
+    @include bdSm
+    position: relative
+    display: flex
+    align-items: center
+    height: 56px
+    padding-inline: 1rem
+    background-color: $bg-white
+    .selected-option
+    .icon
+      position: absolute
+      right: 1rem
+      cursor: pointer
+      svg
+        transition: all .3s ease-in
+    &.open
+      .icon
+        svg
+          transform: rotate(-180deg)
+    &:hover
+      .icon
+        svg
+          path
+            fill: $c-main
+  .options
+    @include bdSm
+    display: flex
+    flex-direction: column
+    gap: $gap-xsm
+    padding: 1rem
+    background-color: $bg-white
+    position: absolute
+    top: 100%
+    left: 0
+    width: 100%
+    display: none
+    z-index: 10
+    animation: growDown 300ms ease-in-out forwards
+    transform: translateY(-100%)
+    .option
+      @include fFilter
+      display: flex
+      align-items: center
+      gap: $gap-xsm
+      cursor: pointer
+    &.open
+      display: flex
+      .option
+
+@keyframes growDown
+  0%
+    opacity: 0
+    transform: translateY(-100%)
+  100%
+    transform: translateY(0)
+    opacity: 1

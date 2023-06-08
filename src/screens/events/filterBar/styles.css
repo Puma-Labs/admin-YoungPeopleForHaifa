@@ -1,0 +1,92 @@
+.filter-bar {
+  position: fixed;
+  width: calc(100% - 80px);
+  max-width: 100%;
+  top: 0;
+  right: 0;
+  z-index: 10;
+}
+.filter-bar .title-container {
+  width: 100%;
+  height: 56px;
+  padding: 0 1.7rem;
+  padding-right: 2.4rem;
+  background-color: #f7f3fd;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #c7c5d0;
+}
+.filter-bar .title-container .title {
+  font-size: 24px;
+  line-height: 16px;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+.filter-bar .title-container .title::before {
+  font-size: 18px;
+}
+.filter-bar .title-container .title .totalCount {
+  font-size: 12px;
+  margin-top: 0.5rem;
+  margin-left: -0.3rem;
+}
+.filter-bar .title-container .button-share span {
+  font-size: 20px;
+}
+.filter-bar .filter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 56px;
+  padding: 0 1.5rem;
+  padding-right: 2.4rem;
+  border-bottom: 1px solid #c7c5d0;
+  background-color: #fffbff;
+}
+.filter-bar .filter .container-left, .filter-bar .filter .container-right {
+  display: flex;
+  align-items: center;
+}
+.filter-bar .filter .container-left {
+  gap: 0.8rem;
+}
+.filter-bar .filter .container-left .status-info {
+  font-size: 22px;
+  cursor: default;
+}
+.filter-bar .filter .container-left .status-info.disabled {
+  color: #b8b6bd;
+}
+.filter-bar .filter .container-right {
+  gap: 0.5rem;
+}
+.filter-bar .filter .container-right .archive-btn {
+  position: relative;
+  margin-left: 0.8rem;
+}
+.filter-bar .filter .container-right .archive-btn .icon {
+  font-size: 18px;
+  color: #45464f;
+}
+.filter-bar .filter .container-right .archive-btn .badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 14px;
+  height: 14px;
+  font-size: 10px;
+  line-height: 14px;
+  background-color: #b91a1a;
+  color: #fff;
+  border-radius: 50%;
+}
+.filter-bar .filter .container-right .archive-btn:disabled .icon {
+  color: #b8b6bd;
+}
+.filter-bar .filter .container-right .archive-btn:disabled .badge {
+  display: none;
+}/*# sourceMappingURL=styles.css.map */

@@ -1,0 +1,102 @@
+@import '../../variables'
+
+.custom-select
+  .select
+    display: flex
+    gap: $gap-xsm
+    .selected-value, .option-item
+      @include fButton
+      color: $c-additional
+    .select-container
+      position: relative
+      z-index: 20
+      display: flex
+      gap: $gap-xsm
+      height: 32px
+      padding: 6px 8px 6px 16px
+      background-color: $bg-white
+      border: 1px solid $c-label
+      border-radius: .5rem
+      cursor: pointer
+      &:hover
+        background-color: $bg-sel-hover
+        .selected-value
+          color: $c-main
+      .icon
+        transition: transform .3s ease-in
+        svg
+          width: 18px
+          height: 18px
+      &.open
+        background-color: $bg-sel-hover
+        border: 1px solid $c-main
+        .selected-value
+          color: $c-main
+        .icon
+          transform: rotate(-90deg)
+    .option-list
+      position: relative
+      z-index: 2
+      display: flex
+      align-items: center
+      opacity: 0
+      width: 0
+      transform: translateX(-50px)
+      animation: .5s close
+      // transition: all .4s ease-in-out
+      // transform: translateX(-106px)
+      .option-item
+        display: flex
+        cursor: pointer
+        &::after
+          content: '/'
+          display: flex
+          align-items: center
+          justify-content: center
+          width: 16px
+        &:last-child::after
+          content: none
+        &.selected, &:hover
+          color: $c-purple
+      &.open
+        animation: .5s open
+        opacity: 1
+        transform: translateX(0px)
+        width: 100%
+
+.custom-select.disabled
+  pointer-events: none
+  .select
+    .selected-value, .option-item
+      color: $c-disabled
+    .select-container
+      border-color: $c-disabled
+      .icon
+        svg
+          path
+            fill: $c-disabled
+
+@keyframes open
+  from
+    width: 0
+    opacity: 0
+    transform: translateX(-50px)
+  to
+    width: 100%
+    opacity: 1
+    transform: translateX(0px)
+
+@keyframes close
+  0%
+    max-width: 400px
+    opacity: 1
+    transform: translateX(0px)
+
+  50%
+    width: 50%
+
+  100%
+    max-width: 0
+    width: 0
+    opacity: 0
+    transform: translateX(-50px)

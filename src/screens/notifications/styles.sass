@@ -1,0 +1,25 @@
+@import '../../components/variables'
+
+.notifications
+  .inputGroup
+    display: flex
+    .form-select
+      flex: 1
+      margin-right: 1rem
+  .input
+    flex: 0
+    .inputComponent.dateInput
+      width: fit-content
+      padding-right: 1.5rem
+      &:first-of-type
+        margin-right: 1rem
+  .btn-group
+    display: flex
+    justify-content: flex-end
+    gap: $gap-sm
+    padding-top: $gap-m
+
+  .itemsList
+    display: grid
+    grid-template-columns: repeat(auto-fit, minmax(358px, 1fr))
+    gap: 1.5rem

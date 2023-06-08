@@ -1,0 +1,53 @@
+@import '../../variables'
+
+.menu-dropdown
+  position: relative
+  // z-index: 1
+  .menu-btn 
+    .btn-dropdown
+      display: flex
+      align-items: center
+      gap: 0.6rem
+      padding: 0.3rem 0.5rem
+      padding-right: 0.7rem
+      border: $border-dark
+      border-radius: 8px
+      &.active
+        .arrow
+          transform: translateY(-10%) rotate(-180deg)
+      &.disabled
+        cursor: default
+        border-color: $bd-input-disabled
+        .icon
+          color: #b9bae9
+        .status-text, .arrow
+          color: $c-icon-disabled
+        .arrow
+          transform: none
+      .icon
+        color: $c-purple
+      .status-text
+        @include fMain
+        margin-right: 0.3rem
+      .arrow
+        font-size: 8px
+        line-height: 8px
+        transition: transform 0.2s ease
+  .menu
+    position: absolute
+    right: 0
+    margin-top: 0.4rem
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3), 0px 2px 6px 2px rgba(0, 0, 0, 0.15)
+    border-radius: 4px
+    background-color: $bg-menu
+    // z-index: 2
+    &.optionsMenu
+      .menu-item
+        width: 200px
+        height: 64px
+        line-height: 64px
+        padding: 0 1rem
+        .menu-text
+          cursor: pointer
+    &.datePicker
+      width: 328px

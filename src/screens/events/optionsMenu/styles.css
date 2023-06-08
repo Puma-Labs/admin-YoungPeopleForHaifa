@@ -1,0 +1,66 @@
+.options-menu {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  z-index: 101;
+  left: 0;
+  top: 0;
+}
+.options-menu .background {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  background-color: #48464A;
+  opacity: 0.32;
+}
+.options-menu .menu-card {
+  display: flex;
+  flex-direction: column;
+  width: 360px;
+  background-color: #eae8f9;
+  border: 1px solid #C7C5D0;
+  border-radius: 24px;
+  z-index: 102;
+  cursor: default;
+}
+.options-menu .menu-card .top {
+  display: flex;
+  justify-content: space-between;
+  padding: 1.7rem;
+  padding-right: 1rem;
+  padding: 1.7rem 1rem 1.1rem 1.4rem;
+  border-bottom: 1px solid #c7c5d0;
+}
+.options-menu .menu-card .top .title {
+  font-size: 32px;
+  font-weight: 400;
+}
+.options-menu .menu-card .menu {
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 1.1rem;
+  gap: 1rem;
+}
+.options-menu .menu-card .menu .menu-item {
+  display: flex;
+  align-items: center;
+  letter-spacing: 0.5px;
+}
+.options-menu .menu-card .menu .menu-item .icon {
+  font-size: 18px;
+  color: #45464f;
+}
+.options-menu .menu-card .bottom {
+  text-align: right;
+  padding: 1.2rem 1.4rem 1.2rem 1.2rem;
+}
+.options-menu .menu-card .bottom .close-btn {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.1px;
+  color: #4651C6;
+}/*# sourceMappingURL=styles.css.map */

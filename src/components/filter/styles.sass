@@ -1,0 +1,67 @@
+@import '../variables'
+
+.filter-box
+  @include bdReg
+  background-color: $bg-white
+  .title
+    @include fTitle
+    padding: $gap-m
+    padding-bottom: $gap-sm
+    border-bottom: 1px solid $bd-lilac
+  .checkbox-group
+    display: flex
+    flex-direction: column
+    padding: $gap-m
+    .alwaysShownBoxes, .hiddenBoxes
+      display: flex
+      flex-direction: column
+      gap: $gap-sm
+    .hiddenBoxes
+      padding: 0
+      &.closed
+        height: 0
+        opacity: 0
+      // animation: .5s ease-in-out closeList
+      &.opened
+        animation: .5s ease-in-out openList
+        margin-top: $gap-sm
+    .icon
+      height: 32px
+      width: 100%
+      position: relative
+      z-index: 10
+      margin: 0 auto
+      margin-bottom: -12px
+      cursor: pointer
+      img
+        transition: transform .3s ease-in
+        height: 8px
+        width: 12px
+        position: absolute
+        bottom: 0
+        left: 50%
+      &.close-icon
+        img
+          transform: rotate(180deg)
+
+@keyframes openList
+  0%
+    max-height: 0
+    height: 0
+    opacity: 0
+  100%
+    max-height: 1000px
+    height: 100%
+    opacity: 1
+
+@keyframes closeList
+  0%
+    height: 100%
+    opacity: 1
+
+  50%
+    opacity: 0
+    height: 0
+
+  100%
+    height: 0

@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/admin/f/static/css/main.7a642b42.css",
+    "main.js": "/admin/f/static/js/main.16072d6a.js",
+    "static/media/wotch.png": "/admin/f/static/media/wotch.8a360c8c402f4e24161b.png",
+    "index.html": "/admin/f/index.html",
+    "main.7a642b42.css.map": "/admin/f/static/css/main.7a642b42.css.map",
+    "main.16072d6a.js.map": "/admin/f/static/js/main.16072d6a.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.7a642b42.css",
+    "static/js/main.16072d6a.js"
+  ]
+}

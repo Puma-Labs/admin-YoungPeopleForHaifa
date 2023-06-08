@@ -1,0 +1,230 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Roboto:ital,wght@0,400;1,500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap");
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+ul[class], ol[class] {
+  padding: 0;
+}
+
+body {
+  scroll-behavior: smooth;
+  text-rendering: optimizeSpeed;
+  line-height: 1.5;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-family: "Roboto", sans-serif;
+  color: #041121;
+}
+
+main {
+  overflow-x: hidden;
+}
+
+*, body, h1, h2, h3, h4,
+p, ul[class], ol[class],
+li, ul, figure, figcaption,
+blockquote, dl, dd, span {
+  margin: 0;
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
+  color: #041121;
+  line-height: 100%;
+  list-style: none;
+  padding: 0;
+}
+
+ul[class], ol[class] {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+input, button, textarea, select {
+  font: inherit;
+}
+
+input {
+  border: 1px solid #777680;
+  outline: none;
+}
+button {
+  cursor: pointer;
+}
+
+* {
+  animation-duration: 0.01ms;
+  animation-iteration-count: 1;
+  transition-duration: 0.01ms;
+  scroll-behavior: auto;
+}
+
+button {
+  background-color: unset;
+  border: none;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
+#root .main {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 100vh;
+}
+#root .main .mainBody {
+  background-color: #ffffff;
+  padding-top: 112px;
+  width: 100%;
+  min-height: 100%;
+}
+#root .main .container {
+  width: 100%;
+  height: 100%;
+  padding: 2.3rem 1.5rem;
+  overflow-y: auto;
+}
+#root .main .containerFluid {
+  margin-top: 80px;
+  width: 100%;
+  max-width: unset;
+  padding: 0 20px;
+}
+
+#root .dark .main .mainBody {
+  background-color: #49454D;
+}
+
+.mainLoading {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dropMenu {
+  min-width: 150px;
+  margin-top: 10px;
+  opacity: 0;
+  z-index: -1;
+  position: absolute;
+  left: -50px;
+  max-height: 200px;
+  background-color: rgba(242, 242, 242, 0.62);
+  box-shadow: 0 0 15px 0 rgba(34, 60, 80, 0.2);
+  transition: 0.2s;
+  padding: 10px 5px;
+}
+.dropMenu .itemMenu {
+  border-bottom: 1px solid #C9C9C9;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+.dropMenu .itemMenu:hover {
+  background-color: rgba(255, 205, 190, 0.6117647059);
+}
+
+.RouterSidebar {
+  display: flex;
+  width: 100%;
+}
+.RouterSidebar Router {
+  width: 100%;
+  height: 100%;
+}
+
+.sectionHeader {
+  height: -moz-min-content;
+  height: min-content;
+}
+.sectionHeader .title {
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 32px;
+  letter-spacing: 0.25px;
+  margin-bottom: 1rem;
+}
+.sectionHeader .controls {
+  display: flex;
+  gap: 1.5rem;
+  width: 100%;
+}
+.sectionHeader .controls label {
+  flex: 1;
+}
+.sectionHeader .controls label .input-container {
+  position: relative;
+}
+.sectionHeader .controls label .icon {
+  position: absolute;
+  top: 50%;
+  width: 56px;
+  left: 16px;
+  transform: translateY(-50%);
+}
+.sectionHeader .controls label .input {
+  width: 100%;
+  border: none;
+  min-height: 56px;
+  border: 1px solid #E5E1EC;
+  border-radius: 1rem;
+  padding-left: 56px;
+}
+.sectionHeader .controls label .input::-moz-placeholder {
+  font-size: 12px;
+  letter-spacing: 0.4px;
+  color: #777680;
+}
+.sectionHeader .controls label .input::placeholder {
+  font-size: 12px;
+  letter-spacing: 0.4px;
+  color: #777680;
+}
+.sectionHeader .controls label .input:focus {
+  outline: none;
+}
+.sectionHeader .controls .buttonComponent {
+  align-self: flex-start;
+}
+
+.aside {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  grid-column: 2/3;
+  grid-row: 1/3;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 233px;
+  grid-template-rows: 104px 1fr;
+  row-gap: 2rem;
+  -moz-column-gap: 1.5rem;
+       column-gap: 1.5rem;
+  min-height: calc(100vh - 48px - 48px - 80px);
+}
+
+.body {
+  border: 1px solid #E5E1EC;
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  background-color: #ffffff;
+  padding: 24px;
+  height: -moz-max-content;
+  height: max-content;
+}/*# sourceMappingURL=App.css.map */

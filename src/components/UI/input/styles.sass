@@ -1,0 +1,124 @@
+@import '../../variables'
+
+@mixin label
+  @include fLabel
+  position: absolute
+  left: .7rem
+  top: -.4rem
+  padding: 0 5px
+  background-color: $bg-lavender
+
+.input
+  @include fButton
+  display: flex
+  flex-direction: column
+  gap: $gap-xsm
+  flex: 1
+  margin-bottom: 1.5rem
+  background-color: inherit
+  margin-top: 0.5rem
+  .input-container
+    position: relative
+    .icon
+      position: absolute
+      top: 50%
+      width: 24px
+      right: 15px
+      transform: translateY(-50%)
+    .label
+      @include label
+  .inputComponent
+    @include inputStyle
+
+  &.with-icon
+    .input-container
+      .inputComponent
+        padding-right: 54px
+
+  &.disabled
+    color: $c-disabled
+    .inputComponent
+      color: $c-disabled
+
+  &.error
+    .inputComponent
+      // border-color: $bd-error
+    .errorComponent
+      display: flex
+      flex-direction: row
+      .errorText
+        // @include fError
+        margin-left: 5px
+
+.selectComponent
+  padding: 0 10px
+
+.textareaContainer
+  position: relative
+  .textareaComponent
+    @include fMain
+    padding: 1.125rem 0.8rem 3rem
+    resize: none
+    height: 211px
+    &::placeholder
+      @include fLabel
+    @include inputStyle
+  .charCounter
+    position: absolute
+    bottom: 0.45rem
+    right: 1rem
+    @include fMain
+    font-size: 14px
+    padding: 0.3rem 0.6rem
+    background-color: #fff
+    border-radius: 15px
+  .charCounter.error
+    color: $c-red
+
+.tagsInputComponent
+  position: relative
+  margin-bottom: 12px
+  .label
+    @include label
+  .rti--container
+    @include inputStyle
+    &:focus-within
+      // border: 1px solid $bd-input
+      box-shadow: none
+  .valueInput
+    &::placeholder
+      color: $c-label
+  .tag
+    background: $bg-violet
+    border: 1px solid $c-purple
+    border-radius: 50px
+    padding: 2.5px 4px 2.5px 8px
+    span
+      color: $c-purple
+      margin-right: 4px
+    button
+      padding: 1px 4.5px 0 4.5px
+      color: #fff
+      background: #383838
+      font-size: 10px
+      &:hover
+        color: #fff
+
+@media only screen and (max-width: 440px)
+  .input
+    .inputComponent,
+    .inputComponent::placeholder
+      font-size: 14px
+  .textareaContainer
+    .textareaComponent
+      font-size: 14px
+    .charCounter
+      font-size: 12px
+      right: 0.2rem
+
+  
+
+  .tagsInputComponent
+    .rti--container,
+    .valueInput::placeholder
+      font-size: 14px

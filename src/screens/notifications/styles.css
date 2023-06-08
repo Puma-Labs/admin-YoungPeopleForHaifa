@@ -1,0 +1,29 @@
+.notifications .inputGroup {
+  display: flex;
+}
+.notifications .inputGroup .form-select {
+  flex: 1;
+  margin-right: 1rem;
+}
+.notifications .input {
+  flex: 0;
+}
+.notifications .input .inputComponent.dateInput {
+  width: -moz-fit-content;
+  width: fit-content;
+  padding-right: 1.5rem;
+}
+.notifications .input .inputComponent.dateInput:first-of-type {
+  margin-right: 1rem;
+}
+.notifications .btn-group {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding-top: 1.5rem;
+}
+.notifications .itemsList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(358px, 1fr));
+  gap: 1.5rem;
+}/*# sourceMappingURL=styles.css.map */

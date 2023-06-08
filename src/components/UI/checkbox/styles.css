@@ -1,0 +1,61 @@
+.checkbox-container {
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.5px;
+  letter-spacing: 0.4px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding-left: 2rem;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+.checkbox-container.sm {
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.4px;
+}
+.checkbox-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+.checkbox-container input:checked ~ .checkmark {
+  border: 1px solid #4651C6;
+}
+.checkbox-container .checkmark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 24px;
+  height: 24px;
+  transform: translateY(-50%);
+  border: 1px solid #041121;
+  border-radius: 8px;
+}
+.checkbox-container .checkmark .tick {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.checkbox-container.checked {
+  color: #4651C6;
+}
+.checkbox-container.checked .checkmark {
+  border-color: #4651C6;
+}
+.checkbox-container.disabled {
+  color: #A9A8AA;
+}
+.checkbox-container.disabled .checkmark {
+  border: 1px solid #A9A8AA;
+}/*# sourceMappingURL=styles.css.map */

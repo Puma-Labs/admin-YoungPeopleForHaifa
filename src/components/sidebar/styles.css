@@ -1,0 +1,126 @@
+.sidebar {
+  background-color: #ffffff;
+  background-color: #F8F5FA;
+  height: 100vh;
+  max-width: 80px;
+  width: 100%;
+}
+.sidebar .sidebar-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+  padding: 2rem 0;
+  background-color: #f1edfa;
+  border-right: 1px solid #C7C5D0;
+}
+.sidebar .sidebar-container .logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border: 0.5px solid black;
+  border-radius: 50%;
+}
+.sidebar .sidebar-container .logo img {
+  width: 32px;
+}
+.sidebar .sidebar-container .nav {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+.sidebar .sidebar-container .nav .nav-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.7rem;
+}
+.sidebar .sidebar-container .nav .nav-container .item {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  margin-bottom: 5px;
+  border-radius: 5px;
+  cursor: default;
+}
+.sidebar .sidebar-container .nav .nav-container .item .icon {
+  width: 30px;
+  border-right: 1px solid #CDE4FF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-right: 10px;
+}
+.sidebar .sidebar-container .nav .nav-container .item .name {
+  display: flex;
+  align-items: center;
+  color: #8F8C94;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+}
+.sidebar .logout {
+  width: 100%;
+  min-height: 4.5rem;
+  border-top: 1px solid #E5E1EC;
+  padding-left: 2rem;
+}
+.sidebar .itemChild, .sidebar .logout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+  z-index: 2;
+}
+.sidebar .itemChild .name, .sidebar .logout .name {
+  visibility: hidden;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.5px;
+}
+.sidebar .itemChild .icon-container, .sidebar .logout .icon-container {
+  position: relative;
+}
+.sidebar .itemChild .icon-container svg, .sidebar .logout .icon-container svg {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+}
+.sidebar .itemChild .icon-container .icon, .sidebar .logout .icon-container .icon {
+  font-size: 18px;
+}
+.sidebar .itemChild.active::before, .sidebar .logout.active::before {
+  content: "";
+  position: absolute;
+  width: 56px;
+  height: 32px;
+  top: -7px;
+  background-color: #e1e0f9;
+  border-radius: 100px;
+  z-index: -1;
+}
+.sidebar .itemChild.active .name, .sidebar .itemChild:hover .name, .sidebar .logout.active .name, .sidebar .logout:hover .name {
+  visibility: visible;
+}
+
+.dark .sidebar {
+  background-color: #49454D;
+}
+.dark .sidebar .sidebar-container {
+  background-color: #1C1B1E;
+}
+.dark .sidebar .sidebar-container .itemChild:not(.active) .name {
+  color: #ffffff;
+}
+.dark .sidebar .sidebar-container .itemChild:not(.active) .icon {
+  filter: invert(1);
+}
+.dark .sidebar .sidebar-container .logout .name {
+  color: #ffffff;
+}/*# sourceMappingURL=styles.css.map */
