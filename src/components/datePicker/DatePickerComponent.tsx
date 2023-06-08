@@ -2,28 +2,29 @@ import "./styles.sass";
 
 import React, { FC, useState } from "react";
 
-import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
-import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
+// import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
+// import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { StaticDatePicker } from "@mui/x-date-pickers";
 import { Moment } from "moment";
 import moment from 'moment';
 
 interface DatePickerComponentProps {
     value?: string;
-    // onChange: (value: string) => void;
+    onChange: () => void;
     disabled?: boolean;
 }
 
-const DatePickerComponent: FC<DatePickerComponentProps> = ({ value, disabled = false }) => {
+const DatePickerComponent: FC<DatePickerComponentProps> = ({ value, onChange, disabled = false }) => {
     const [selectedDate, setSelectedDate] = useState(value || null);
     const [showCalendar, setShowCalendar] = useState(false);
 
     const handleSelectDate = () => {
         setShowCalendar(false);
+        onChange();
     };
 
     return (
-        <LocalizationProvider dateAdapter={AdapterMoment}>
+        // <LocalizationProvider dateAdapter={AdapterMoment}>
             <div className="menu-dropdown">
                 <div className="menu-btn">
                     <button
@@ -47,7 +48,7 @@ const DatePickerComponent: FC<DatePickerComponentProps> = ({ value, disabled = f
                     </div>
                 )}
             </div>
-        </LocalizationProvider>
+        // </LocalizationProvider>
     );
 };
 
