@@ -51,8 +51,6 @@
             display: block
             height: 3.5rem
             position: relative
-            border-radius: .25rem
-            border: 1px solid $bd-dark
             .label
               position: absolute
               left: 1rem
@@ -76,7 +74,7 @@
               height: 100%
               width: 100%
               padding: 1rem
-              border: none
+              border: 1px solid $bd-dark
               border-radius: .25rem
               font-size: 1rem
               line-height: 1.5rem
@@ -86,10 +84,12 @@
                 outline: none
             .btn-show-pass
               position: absolute
-              width: 1.5rem
-              height: 1.5rem
-              left: calc(100% - 2.5rem)
-              top: 1rem
+              display: flex
+              width: 1.7rem
+              height: 100%
+              top: 0
+              right: 0.7rem
+              padding: 0
       .login
         display: flex
         justify-content: space-between

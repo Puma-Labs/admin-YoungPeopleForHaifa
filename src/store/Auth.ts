@@ -6,7 +6,7 @@ export default class Auth {
     user = {
         role: 1
     } as IUser;
-    isAuth = true
+    isAuth = false
 
     constructor() {
         makeAutoObservable(this)
@@ -20,8 +20,8 @@ export default class Auth {
         this.user = user;
     }
 
-    async login(email: string, password: string) {
-        const res = await AuthService.login(email, password);
+    async login(email: string, password: string, remember: boolean) {
+        const res = await AuthService.login(email, password, remember);
         localStorage.setItem('token', res.data.accessToken);
         this.setUser(res.data.user);
         this.setAuth(true);
@@ -39,7 +39,7 @@ export default class Auth {
     }
 
     async checkAuth() {
-        try {
+        try {          
             const res = await AuthService.checkAuth();
             localStorage.setItem('token', res.data.accessToken);
             this.setUser(res.data.user);
