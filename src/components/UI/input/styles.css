@@ -40,7 +40,8 @@
   background-color: inherit;
   border: 1px solid #777680;
   border-radius: 4px;
-  padding-left: 1.5rem;
+  padding-left: 14px;
+  padding-right: 14px;
 }
 .input .inputComponent::-moz-placeholder {
   font-size: 14px;
@@ -96,7 +97,8 @@
   background-color: inherit;
   border: 1px solid #777680;
   border-radius: 4px;
-  padding-left: 1.5rem;
+  padding-left: 14px;
+  padding-right: 14px;
 }
 .textareaContainer .textareaComponent::-moz-placeholder {
   font-size: 12px;
@@ -162,7 +164,8 @@
   background-color: inherit;
   border: 1px solid #777680;
   border-radius: 4px;
-  padding-left: 1.5rem;
+  padding-left: 14px;
+  padding-right: 14px;
 }
 .tagsInputComponent .rti--container::-moz-placeholder {
   font-size: 14px;

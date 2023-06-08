@@ -3,6 +3,7 @@
   position: relative;
   flex-direction: column;
   width: 100%;
+  border: none;
 }
 .image-loader .label {
   font-weight: 500;
@@ -15,23 +16,23 @@
   display: none;
 }
 .image-loader .workspace {
-  border: 1px solid #E5E1EC;
-  border-radius: 1rem;
-  border-radius: 1rem 1rem 0 0;
+  border-radius: 4px;
   width: 100%;
   display: flex;
   flex-direction: row;
-  min-height: 500px;
+  min-height: 348px;
   background-color: #ffffff;
   cursor: pointer;
   align-items: center;
   justify-content: center;
   position: relative;
+  overflow: hidden;
 }
 .image-loader .workspace .add-image {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  width: 100%;
 }
 .image-loader .workspace .params {
   position: absolute;
@@ -54,15 +55,16 @@
 }
 .image-loader .toolContainer .tools {
   display: flex;
-  justify-content: center;
-  border: 1px solid #E5E1EC;
+  justify-content: space-between;
   padding-bottom: 15px;
-  border-top: none;
-  border-radius: 0 0 1rem 1rem;
   padding-top: 1rem;
 }
 .image-loader .toolContainer .tools .tool-item {
   margin: 0 10px;
+}
+.image-loader .toolContainer .tools .icon-buttons {
+  display: flex;
+  align-items: center;
 }
 .image-loader .toolContainer .containerListImage {
   position: relative;

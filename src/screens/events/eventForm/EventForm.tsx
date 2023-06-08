@@ -1,12 +1,13 @@
 import "./styles.sass";
 
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useState, FormEvent } from "react";
 import { observer } from "mobx-react-lite";
 import { useParams, useNavigate } from "react-router-dom";
 import { useStore } from "../../../context/StoreContext";
 import { useModal } from "../../../customHooks/useModal";
 import { IEvent } from "../../../models/IEvent";
 import Input from "../../../components/UI/input/Input";
+import ImageLoader from "../../../components/imageLoader/ImageLoader";
 import Emptiness from "../../../components/UI/emptiness_/Emptiness";
 import AddButton from "../../../components/UI/addButton/AddButton";
 import SearchInput from "../../../components/UI/searchInput/SearchInput";
@@ -15,59 +16,89 @@ import StatItem from "../../../components/statItem/statItem";
 import { log } from "console";
 import coverEmpty from "../../../assets/images/preview-empty.png";
 import coverImg from "../../../assets/images/preview.png";
+import Textarea from "../../../components/UI/input/Textarea";
+import { DateFieldComponent, TimeFieldComponent } from "../../../components/dateTimeFields/DateTimeFieldComponents";
+import moment from 'moment';
 
 interface EventFormProps {
-    showForm: boolean;
-    onCloseForm: () => void;
-    event?: IEvent;
+    isOpen: boolean;
+    onClose: () => void;
+    // onSave: (event: IEvent) => void;
+    event?: IEvent | null;
 }
 
-const EventForm: FC<EventFormProps> = ({ showForm, onCloseForm, event }) => {
-    const modal = useModal();
-    const navigate = useNavigate();
+const EventForm: FC<EventFormProps> = ({ isOpen, onClose, event }) => {
+    // const modal = useModal();
+    // const navigate = useNavigate();
 
     const { events } = useStore();
 
-    const [formData, setFormData] = useState<IEvent>({} as IEvent);
+    // const [formData, setFormData] = useState<IEvent>({} as IEvent);
+    const [formData, setFormData] = useState<IEvent>(event || {} as IEvent);
 
-    const [title, setTitle] = useState<string>(event ? "Редактирование" : "Новое событие");
+    const [title, setTitle] = useState(event ? "Редактирование" : "Новое событие");
 
-    const [isFormValid, setIsFormValid] = useState(false);
-    const [isFormEmpty, setIsFormEmpty] = useState(!!event);
+
+    // const [isFormValid, setIsFormValid] = useState(false);
+    // const [isFormEmpty, setIsFormEmpty] = useState(!!event);
     const [isPosting, setIsPosting] = useState(false);
-    const [showError, setShowError] = useState(false);
-    const [clearAll, setClearAll] = useState(false);
+    // const [showError, setShowError] = useState(false);
+    // const [clearAll, setClearAll] = useState(false);
     const [successModalOpen, setSuccessModalOpen] = useState(false);
-    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+    // const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
-    useEffect(() => {
-        if (event) {
-            setFormData(event);
-        }
-    }, [event]);
-
-    const handleInputChange = (name: string, value: string) => {
+    const handleInputChange = (name: string, value: string | Date | null) => {
         setFormData((prevData) => ({ ...prevData, [name]: value }));
     };
 
-    const handleCloseForm = () => {
-        onCloseForm();
-    };
+    const handleSubmit = async (e: FormEvent) => {
+      e.preventDefault();
+  
+      // if (error) {
+      //   setShowError(true);
+      // } else {
+      //   setIsPosting(true);
+  
+        if (!event) {
+          events
+            .createOne(formData)
+            .then(() => {
+              setIsPosting(false);
+              // setSuccessModalOpen(true);
+            })
+            .catch((err) => {
+              console.error(err);
+            });
+        } else {
+          events
+            .updateOne(formData)
+            .then(() => {
+              setIsPosting(false);
+              // setSuccessModalOpen(true);
+            })
+            .catch((err) => {
+              console.error(err);
+            });
+        }
+
+        onClose();
+      }
+    
 
     return (
         <>
-            {showForm && (
+            {isOpen && (
                 <div className="event-form">
                     <div className="background"></div>
                     <div className="form-card">
                         <div className="top">
                             <div className="title">{title}</div>
-                            <button onClick={handleCloseForm} className="close-btn">
+                            <button onClick={() => onClose()} className="close-btn">
                                 <span className="_icon-ico-plus"></span>
                             </button>
                         </div>
                         <div className="content">
-                            <form>
+                            <form onSubmit={handleSubmit}>
                                 <div className="section">
                                     <div className="section-title">Основная информация</div>
                                     <Input
@@ -84,27 +115,33 @@ const EventForm: FC<EventFormProps> = ({ showForm, onCloseForm, event }) => {
                                         }}
                                         value={formData?.place || ""}
                                     />
-                                    <Input
+                                    <DateFieldComponent
                                         label="Дата проведения"
                                         onChange={(date) => {
-                                            handleInputChange("date", date);
-                                        }}
-                                        value={formData?.date || ""}
-                                        placeholder="ДД.ММ.ГГ"
+                                          handleInputChange("date", date);
+                                      }}
+                                        value={formData?.date || null}
                                     />
-                                    <Input
+                                    <TimeFieldComponent
                                         label="Время проведения"
                                         onChange={(time) => {
-                                            handleInputChange("time", time);
-                                        }}
-                                        value={formData?.time || ""}
+                                          handleInputChange("time", time);
+                                      }}
+                                        value={formData?.time || null}
                                     />
                                 </div>
                                 <div className="section">
                                     <div className="section-title">Обложка</div>
+                                    <ImageLoader onChange={() => {}}/>
                                 </div>
                                 <div className="section">
                                     <div className="section-title">Текст статьи</div>
+                                    <Textarea
+                                        onChange={(text) => {
+                                            handleInputChange("text", text);
+                                        }}
+                                        value={formData?.text || ""}
+                                    />
                                 </div>
                                 <div className="preview section">
                                     <div className="section-title">Превью</div>
@@ -115,7 +152,7 @@ const EventForm: FC<EventFormProps> = ({ showForm, onCloseForm, event }) => {
                                         </div>
                                         <div className="event-title">{formData?.title || ""}</div>
                                         <div className="event-info">
-                                            {`${formData?.date && formData.date + " —"} ${formData?.time && formData.time + " —"} ${formData?.place || ""}`}
+                                            {`${formData?.date ? moment(formData.date).format("DD.MM.YYYY") + " —" : ""} ${formData?.time ? moment(formData.time).format("hh:mm") + " —" : ""} ${formData?.place || ""}`}
                                         </div>
                                     </div>
                                 </div>
@@ -125,7 +162,7 @@ const EventForm: FC<EventFormProps> = ({ showForm, onCloseForm, event }) => {
                             <button className="btn-delete">
                                 <span className="_icon-ico-trash"></span>
                             </button>
-                            <button className="submit-btn" type="submit">
+                            <button className="submit-btn" onClick={handleSubmit}>
                                 {event ? "Обновить публикацию" : "Опубликовать"}
                             </button>
                         </div>

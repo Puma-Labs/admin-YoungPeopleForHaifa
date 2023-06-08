@@ -8,13 +8,15 @@ import SearchInput from "../../../components/UI/searchInput/SearchInput";
 import MenuDropdown from "../../../components/UI/menuDropdown/MenuDropdown";
 import StatItem from "../../../components/statItem/statItem";
 import DatePickerComponent from "../../../components/datePicker/DatePickerComponent";
+import { IEvent } from "../../../models/IEvent";
 
 
 interface FilterBarProps {
+  events: IEvent[];
   disabled: boolean
 }
 
-const FilterBar: FC<FilterBarProps> = ({ disabled }) => {
+const FilterBar: FC<FilterBarProps> = ({ events, disabled }) => {
     const defaultStatus = "Активные";
     const [status, setStatus] = useState(defaultStatus);
     const [date, setDate] = useState("");
@@ -31,7 +33,7 @@ const FilterBar: FC<FilterBarProps> = ({ disabled }) => {
         <div className="filter-bar">
             <div className="title-container">
                 <div className="title _icon-ico-list">
-                    События /<span className="totalCount">Всего - 0</span>
+                    События /<span className="totalCount">{`Всего - ${events.length}`}</span>
                 </div>
                 <button className="button-share">
                     <span className="_icon-ico-share"></span>
@@ -50,7 +52,7 @@ const FilterBar: FC<FilterBarProps> = ({ disabled }) => {
                         defaultOption={defaultStatus}
                         disabled={disabled}
                     />
-                    <DatePickerComponent />
+                    <DatePickerComponent onChange={() => {}} disabled={disabled} />
                     <button className="archive-btn" disabled={disabled}>
                         <span className="icon _icon-ico-download"></span>
                         <span className="badge">3</span>

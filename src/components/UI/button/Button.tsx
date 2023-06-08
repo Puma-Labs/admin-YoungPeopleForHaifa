@@ -7,7 +7,7 @@ interface ButtonProps {
   onClick?: () => void
   className?: string
   type?: "button" | "submit" | "reset"
-  stylesType?: 'default' | 'success' | 'delete' | 'border' | 'round'
+  stylesType?: 'default' | 'success' | 'delete' | 'border' | 'round' | 'icon' | 'text'
   disabled?: boolean
   icon?: IIcon
 }
