@@ -17,6 +17,7 @@ import coverEmpty from "../../assets/images/preview-empty.png";
 import coverImg from "../../assets/images/preview.png";
 import { IEvent } from "../../models/IEvent";
 import Spinner from "../../components/UI/spinner/Spinner";
+import Modal from "../../components/modal_/Modal";
 
 const Events: FC = () => {
     const { events } = useStore();
@@ -24,6 +25,8 @@ const Events: FC = () => {
     const [selectedEvent, setSelectedEvent] = useState<IEvent | null>(null);
     const [isOptionsMenuOpen, setOptionsMenuOpen] = useState(false);
     const [isFormOpen, setFormOpen] = useState(false);
+    const [isDeleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
+    const [pendingSelectedEvent, setPendingSelectedEvent] = useState<IEvent | null>(null);
 
     useEffect(() => {
         events
@@ -34,34 +37,45 @@ const Events: FC = () => {
             });
     }, [events]);
 
+    useEffect(() => {
+      setSelectedEvent(pendingSelectedEvent);
+    }, [isOptionsMenuOpen]);
+
     const handleOptionsClick = (event: IEvent) => {
-        setSelectedEvent(event);
+        setPendingSelectedEvent(event);
         setOptionsMenuOpen(true);
     };
 
     const handleEdit = (event: IEvent) => {
         setSelectedEvent(event);
         setFormOpen(true);
-    };
-
-    const handleDelete = (event: IEvent) => {
-        if (event) {
-          events
-            .deleteOne(event)
-            .then(() => {})
-            .catch((err) => {
-              console.error(err);
-            });
-    
-          setSelectedEvent(null);
-        }
-    
         setOptionsMenuOpen(false);
     };
 
-    const handleAddNewEvent = () => {     
+    const handleDelete = (event: IEvent) => {
+      setSelectedEvent(event);
+      setDeleteConfirmationOpen(true);
+      setOptionsMenuOpen(false);
+    };
+  
+    const handleDeleteConfirmed = () => {
+      if (selectedEvent) {
+            events
+                .deleteOne(selectedEvent)
+                .then(() => {})
+                .catch((err) => {
+                    console.error(err);
+                });
+
+            setSelectedEvent(null);
+        }
+
+        setDeleteConfirmationOpen(false);
+    };
+
+    const handleAddNewEvent = () => {
         setSelectedEvent(null);
-        setFormOpen(true);
+        setFormOpen(true);        
     };
 
     return (
@@ -83,9 +97,7 @@ const Events: FC = () => {
                                 <span className="monthYear">Декабрь, 2022</span>
                                 <span className="eventsCount">4 Событий</span>
                             </div>
-                            <div className="events-wrapper">
-
-                            </div>
+                            <div className="events-wrapper"></div>
                         </div>
                     </div>
                     <div className="events-container all-events">
@@ -120,21 +132,34 @@ const Events: FC = () => {
             <EventForm
                 isOpen={isFormOpen}
                 onClose={() => {
-                  setFormOpen(false);
-                  setSelectedEvent(null);
+                    setFormOpen(false);
+                    setSelectedEvent(null);
                 }}
                 // onSave={handleSave}
                 event={selectedEvent}
+                onDelete={handleDelete}
             />
             <OptionsMenu
                 event={selectedEvent}
                 isOpen={isOptionsMenuOpen}
                 onClose={() => {
-                  setOptionsMenuOpen(false);
-                  setSelectedEvent(null);
+                    setPendingSelectedEvent(null);
+                    setOptionsMenuOpen(false);
                 }}
                 onEdit={handleEdit}
                 onDelete={handleDelete}
+            />
+            <Modal
+                showModal={isDeleteConfirmationOpen}
+                onCancel={() => {
+                  setDeleteConfirmationOpen(false)
+                  setSelectedEvent(null);
+                }}
+                onConfirm={handleDeleteConfirmed}
+                title="Вы уверены?"
+                message="Если вы удалите событие, то отменить это действие будет невозможно."
+                cancelButtonText="Отмена"
+                confirmButtonText="Удалить"
             />
 
             <AddButton onClick={handleAddNewEvent} />

@@ -27,15 +27,15 @@ interface OptionsMenuProps {
 const OptionsMenu: FC<OptionsMenuProps> = ({ event, isOpen, onClose, onEdit, onDelete }) => {
     const handleEdit = () => {
       if (event) {
-        onClose();
         onEdit(event);
+        // onClose();
       }
     };
 
     const handleDelete = () => {
       if (event) {
-        onClose();
         onDelete(event);
+        // onClose();
       }
     };
 

@@ -24,33 +24,36 @@ interface EventFormProps {
     isOpen: boolean;
     onClose: () => void;
     // onSave: (event: IEvent) => void;
-    event?: IEvent | null;
+    event: IEvent | null;
+    onDelete: (event: IEvent) => void;
 }
 
-const EventForm: FC<EventFormProps> = ({ isOpen, onClose, event }) => {
-    // const modal = useModal();
-    // const navigate = useNavigate();
-    console.log(event);
-
+const EventForm: FC<EventFormProps> = ({ isOpen, onClose, event, onDelete }) => {
     const { events } = useStore();
 
-    const [formData, setFormData] = useState<IEvent>({} as IEvent);
-
+    const [formData, setFormData] = useState<IEvent>(event || {} as IEvent);
     const [title, setTitle] = useState<"Редактирование" | "Новое событие">("Новое событие");
+    const [submitBtnText, setSubmitBtnText] =useState<"Обновить публикацию" | "Опубликовать">("Опубликовать");
 
 
     // const [isFormValid, setIsFormValid] = useState(false);
     // const [isFormEmpty, setIsFormEmpty] = useState(!!event);
     const [isPosting, setIsPosting] = useState(false);
     // const [showError, setShowError] = useState(false);
-    // const [clearAll, setClearAll] = useState(false);
     const [successModalOpen, setSuccessModalOpen] = useState(false);
     // const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
     useEffect(() => {
+      console.log(event);
+      
       if (event) {
         setFormData(event);
         setTitle("Редактирование");
+        setSubmitBtnText("Обновить публикацию");
+      } else {
+        setFormData({} as IEvent);
+        setTitle("Новое событие");
+        setSubmitBtnText("Опубликовать");
       }
     }, [event])
 
@@ -71,7 +74,6 @@ const EventForm: FC<EventFormProps> = ({ isOpen, onClose, event }) => {
             .createOne(formData)
             .then(() => {
               setIsPosting(false);
-              // setSuccessModalOpen(true);
             })
             .catch((err) => {
               console.error(err);
@@ -81,7 +83,6 @@ const EventForm: FC<EventFormProps> = ({ isOpen, onClose, event }) => {
             .updateOne(formData)
             .then(() => {
               setIsPosting(false);
-              // setSuccessModalOpen(true);
             })
             .catch((err) => {
               console.error(err);
@@ -91,8 +92,16 @@ const EventForm: FC<EventFormProps> = ({ isOpen, onClose, event }) => {
         handleClose();
       }
 
+      const handleDelete = () => {
+        if (event) {
+          onClose();
+          onDelete(event);
+        }
+      };
+
       const handleClose = () => {
         setTitle("Новое событие");
+        setSubmitBtnText("Опубликовать");
         setFormData({} as IEvent);
         onClose();
       }
@@ -172,11 +181,11 @@ const EventForm: FC<EventFormProps> = ({ isOpen, onClose, event }) => {
                             </form>
                         </div>
                         <div className="bottom">
-                            <button className="btn-delete">
+                            <button className="btn-delete" onClick={handleDelete}>
                                 <span className="_icon-ico-trash"></span>
                             </button>
                             <button className="submit-btn" onClick={handleSubmit}>
-                                {event ? "Обновить публикацию" : "Опубликовать"}
+                                {submitBtnText}
                             </button>
                         </div>
                     </div>
