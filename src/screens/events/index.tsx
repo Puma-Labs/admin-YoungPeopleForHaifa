@@ -20,7 +20,7 @@ import Spinner from "../../components/UI/spinner/Spinner";
 
 const Events: FC = () => {
     const { events } = useStore();
-    
+
     const [selectedEvent, setSelectedEvent] = useState<IEvent | null>(null);
     const [isOptionsMenuOpen, setOptionsMenuOpen] = useState(false);
     const [isFormOpen, setFormOpen] = useState(false);
@@ -126,7 +126,10 @@ const Events: FC = () => {
             <OptionsMenu
                 event={selectedEvent}
                 isOpen={isOptionsMenuOpen}
-                onClose={() => setOptionsMenuOpen(false)}
+                onClose={() => {
+                  setOptionsMenuOpen(false);
+                  setSelectedEvent(null);
+                }}
                 onEdit={handleEdit}
                 onDelete={handleDelete}
             />
