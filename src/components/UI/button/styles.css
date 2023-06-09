@@ -45,6 +45,10 @@
   background-color: transparent;
   padding: 0;
   gap: 1rem;
+  min-width: -moz-max-content;
+  min-width: max-content;
+  height: -moz-max-content;
+  height: max-content;
 }
 .buttonComponent.text span, .buttonComponent.text .icon-container {
   color: #4651C6;
