@@ -30,13 +30,13 @@ interface EventFormProps {
 const EventForm: FC<EventFormProps> = ({ isOpen, onClose, event }) => {
     // const modal = useModal();
     // const navigate = useNavigate();
+    console.log(event);
 
     const { events } = useStore();
 
-    // const [formData, setFormData] = useState<IEvent>({} as IEvent);
-    const [formData, setFormData] = useState<IEvent>(event || {} as IEvent);
+    const [formData, setFormData] = useState<IEvent>({} as IEvent);
 
-    const [title, setTitle] = useState(event ? "Редактирование" : "Новое событие");
+    const [title, setTitle] = useState<"Редактирование" | "Новое событие">("Новое событие");
 
 
     // const [isFormValid, setIsFormValid] = useState(false);
@@ -46,6 +46,13 @@ const EventForm: FC<EventFormProps> = ({ isOpen, onClose, event }) => {
     // const [clearAll, setClearAll] = useState(false);
     const [successModalOpen, setSuccessModalOpen] = useState(false);
     // const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+
+    useEffect(() => {
+      if (event) {
+        setFormData(event);
+        setTitle("Редактирование");
+      }
+    }, [event])
 
     const handleInputChange = (name: string, value: string | Date | null) => {
         setFormData((prevData) => ({ ...prevData, [name]: value }));
@@ -81,6 +88,12 @@ const EventForm: FC<EventFormProps> = ({ isOpen, onClose, event }) => {
             });
         }
 
+        handleClose();
+      }
+
+      const handleClose = () => {
+        setTitle("Новое событие");
+        setFormData({} as IEvent);
         onClose();
       }
     
@@ -93,7 +106,7 @@ const EventForm: FC<EventFormProps> = ({ isOpen, onClose, event }) => {
                     <div className="form-card">
                         <div className="top">
                             <div className="title">{title}</div>
-                            <button onClick={() => onClose()} className="close-btn">
+                            <button onClick={handleClose} className="close-btn">
                                 <span className="_icon-ico-plus"></span>
                             </button>
                         </div>

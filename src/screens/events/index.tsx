@@ -59,7 +59,7 @@ const Events: FC = () => {
         setOptionsMenuOpen(false);
     };
 
-    const handleAddNewEvent = () => {
+    const handleAddNewEvent = () => {     
         setSelectedEvent(null);
         setFormOpen(true);
     };
@@ -119,7 +119,10 @@ const Events: FC = () => {
 
             <EventForm
                 isOpen={isFormOpen}
-                onClose={() => setFormOpen(false)}
+                onClose={() => {
+                  setFormOpen(false);
+                  setSelectedEvent(null);
+                }}
                 // onSave={handleSave}
                 event={selectedEvent}
             />
