@@ -30,6 +30,7 @@
     "react-dom": "^18.0.0",
     "react-image-crop": "^10.0.1",
     "react-moment": "^1.1.2",
+    "react-quill": "^2.0.0",
     "react-router-dom": "^6.11.2",
     "react-scripts": "5.0.1",
     "sass": "^1.50.0",

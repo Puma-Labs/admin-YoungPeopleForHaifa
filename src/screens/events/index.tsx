@@ -52,7 +52,7 @@ const Events: FC = () => {
         setOptionsMenuOpen(false);
     };
 
-    const handleDelete = (event: IEvent) => {
+    const handleDelete = (event: IEvent | null) => {
       setSelectedEvent(event);
       setDeleteConfirmationOpen(true);
       setOptionsMenuOpen(false);
@@ -70,6 +70,7 @@ const Events: FC = () => {
             setSelectedEvent(null);
         }
 
+        setFormOpen(false);
         setDeleteConfirmationOpen(false);
     };
 
@@ -153,7 +154,9 @@ const Events: FC = () => {
                 showModal={isDeleteConfirmationOpen}
                 onCancel={() => {
                   setDeleteConfirmationOpen(false)
-                  setSelectedEvent(null);
+                  if (!isFormOpen) {
+                    setSelectedEvent(null);
+                  }
                 }}
                 onConfirm={handleDeleteConfirmed}
                 title="Вы уверены?"

@@ -15,9 +15,8 @@ import moment from "moment";
 interface EventFormProps {
     isOpen: boolean;
     onClose: () => void;
-    // onSave: (event: IEvent) => void;
     event: IEvent | null;
-    onDelete: (event: IEvent) => void;
+    onDelete: (event: IEvent | null) => void;
 }
 
 const EventForm: FC<EventFormProps> = ({ isOpen, onClose, event, onDelete }) => {
@@ -26,27 +25,38 @@ const EventForm: FC<EventFormProps> = ({ isOpen, onClose, event, onDelete }) => 
     const [formData, setFormData] = useState<IEvent>(event || ({} as IEvent));
     const [title, setTitle] = useState<"Редактирование" | "Новое событие">("Новое событие");
     const [submitBtnText, setSubmitBtnText] = useState<"Обновить публикацию" | "Опубликовать">("Опубликовать");
-
-    // const [isFormValid, setIsFormValid] = useState(false);
-    // const [isFormEmpty, setIsFormEmpty] = useState(!!event);
+    const [isFormEmpty, setIsFormEmpty] = useState(true);
     const [isPosting, setIsPosting] = useState(false);
-    // const [showError, setShowError] = useState(false);
-    const [successModalOpen, setSuccessModalOpen] = useState(false);
-    // const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
     useEffect(() => {
-        console.log(event);
-
         if (event) {
             setFormData(event);
             setTitle("Редактирование");
             setSubmitBtnText("Обновить публикацию");
+            setIsFormEmpty(false);
         } else {
             setFormData({} as IEvent);
             setTitle("Новое событие");
             setSubmitBtnText("Опубликовать");
         }
     }, [event]);
+
+    useEffect(() => {
+        setIsFormEmpty(checkIsFormEmpty());
+    }, [formData]);
+
+    const checkIsFormEmpty = () => {
+        if (Object.keys(formData).length === 0) {
+            return true;
+        }
+
+        const { title, place, date, time, cover, text } = formData;
+        if (title || place || date || time || cover || text) {
+            return false;
+        }
+
+        return true;
+    };
 
     const handleInputChange = (name: string, value: string | Date | null) => {
         setFormData((prevData) => ({ ...prevData, [name]: value }));
@@ -84,8 +94,7 @@ const EventForm: FC<EventFormProps> = ({ isOpen, onClose, event, onDelete }) => 
     };
 
     const handleDelete = () => {
-        if (event) {
-            onClose();
+        if (!isFormEmpty) {
             onDelete(event);
         }
     };
