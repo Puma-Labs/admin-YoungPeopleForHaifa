@@ -4,21 +4,13 @@ import React, { FC, useEffect, useState, FormEvent } from "react";
 import { observer } from "mobx-react-lite";
 import { useParams, useNavigate } from "react-router-dom";
 import { useStore } from "../../../context/StoreContext";
-import { useModal } from "../../../customHooks/useModal";
 import { IEvent } from "../../../models/IEvent";
 import Input from "../../../components/UI/input/Input";
 import ImageLoader from "../../../components/imageLoader/ImageLoader";
-import Emptiness from "../../../components/UI/emptiness_/Emptiness";
-import AddButton from "../../../components/UI/addButton/AddButton";
-import SearchInput from "../../../components/UI/searchInput/SearchInput";
-import MenuDropdown from "../../../components/UI/menuDropdown/MenuDropdown";
-import StatItem from "../../../components/statItem/statItem";
-import { log } from "console";
 import coverEmpty from "../../../assets/images/preview-empty.png";
-import coverImg from "../../../assets/images/preview.png";
-import Textarea from "../../../components/UI/input/Textarea";
 import { DateFieldComponent, TimeFieldComponent } from "../../../components/dateTimeFields/DateTimeFieldComponents";
-import moment from 'moment';
+import TextEditor from "../../../components/textEditor/TextEditor";
+import moment from "moment";
 
 interface EventFormProps {
     isOpen: boolean;
@@ -31,10 +23,9 @@ interface EventFormProps {
 const EventForm: FC<EventFormProps> = ({ isOpen, onClose, event, onDelete }) => {
     const { events } = useStore();
 
-    const [formData, setFormData] = useState<IEvent>(event || {} as IEvent);
+    const [formData, setFormData] = useState<IEvent>(event || ({} as IEvent));
     const [title, setTitle] = useState<"Редактирование" | "Новое событие">("Новое событие");
-    const [submitBtnText, setSubmitBtnText] =useState<"Обновить публикацию" | "Опубликовать">("Опубликовать");
-
+    const [submitBtnText, setSubmitBtnText] = useState<"Обновить публикацию" | "Опубликовать">("Опубликовать");
 
     // const [isFormValid, setIsFormValid] = useState(false);
     // const [isFormEmpty, setIsFormEmpty] = useState(!!event);
@@ -44,68 +35,67 @@ const EventForm: FC<EventFormProps> = ({ isOpen, onClose, event, onDelete }) => 
     // const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
     useEffect(() => {
-      console.log(event);
-      
-      if (event) {
-        setFormData(event);
-        setTitle("Редактирование");
-        setSubmitBtnText("Обновить публикацию");
-      } else {
-        setFormData({} as IEvent);
-        setTitle("Новое событие");
-        setSubmitBtnText("Опубликовать");
-      }
-    }, [event])
+        console.log(event);
+
+        if (event) {
+            setFormData(event);
+            setTitle("Редактирование");
+            setSubmitBtnText("Обновить публикацию");
+        } else {
+            setFormData({} as IEvent);
+            setTitle("Новое событие");
+            setSubmitBtnText("Опубликовать");
+        }
+    }, [event]);
 
     const handleInputChange = (name: string, value: string | Date | null) => {
         setFormData((prevData) => ({ ...prevData, [name]: value }));
     };
 
     const handleSubmit = async (e: FormEvent) => {
-      e.preventDefault();
-  
-      // if (error) {
-      //   setShowError(true);
-      // } else {
-      //   setIsPosting(true);
-  
+        e.preventDefault();
+
+        // if (error) {
+        //   setShowError(true);
+        // } else {
+        //   setIsPosting(true);
+
         if (!event) {
-          events
-            .createOne(formData)
-            .then(() => {
-              setIsPosting(false);
-            })
-            .catch((err) => {
-              console.error(err);
-            });
+            events
+                .createOne(formData)
+                .then(() => {
+                    setIsPosting(false);
+                })
+                .catch((err) => {
+                    console.error(err);
+                });
         } else {
-          events
-            .updateOne(formData)
-            .then(() => {
-              setIsPosting(false);
-            })
-            .catch((err) => {
-              console.error(err);
-            });
+            events
+                .updateOne(formData)
+                .then(() => {
+                    setIsPosting(false);
+                })
+                .catch((err) => {
+                    console.error(err);
+                });
         }
 
         handleClose();
-      }
+    };
 
-      const handleDelete = () => {
+    const handleDelete = () => {
         if (event) {
-          onClose();
-          onDelete(event);
+            onClose();
+            onDelete(event);
         }
-      };
+    };
 
-      const handleClose = () => {
+    const handleClose = () => {
         setTitle("Новое событие");
         setSubmitBtnText("Опубликовать");
         setFormData({} as IEvent);
         onClose();
-      }
-    
+    };
 
     return (
         <>
@@ -140,28 +130,26 @@ const EventForm: FC<EventFormProps> = ({ isOpen, onClose, event, onDelete }) => 
                                     <DateFieldComponent
                                         label="Дата проведения"
                                         onChange={(date) => {
-                                          handleInputChange("date", date);
-                                      }}
+                                            handleInputChange("date", date);
+                                        }}
                                         value={formData?.date || null}
                                     />
                                     <TimeFieldComponent
                                         label="Время проведения"
                                         onChange={(time) => {
-                                          handleInputChange("time", time);
-                                      }}
+                                            handleInputChange("time", time);
+                                        }}
                                         value={formData?.time || null}
                                     />
                                 </div>
                                 <div className="section">
                                     <div className="section-title">Обложка</div>
-                                    <ImageLoader onChange={() => {}}/>
+                                    <ImageLoader onChange={() => {}} />
                                 </div>
                                 <div className="section">
                                     <div className="section-title">Текст статьи</div>
-                                    <Textarea
-                                        onChange={(text) => {
-                                            handleInputChange("text", text);
-                                        }}
+                                    <TextEditor
+                                        onChange={(text) => handleInputChange("text", text)}
                                         value={formData?.text || ""}
                                     />
                                 </div>
@@ -174,7 +162,11 @@ const EventForm: FC<EventFormProps> = ({ isOpen, onClose, event, onDelete }) => 
                                         </div>
                                         <div className="event-title">{formData?.title || ""}</div>
                                         <div className="event-info">
-                                            {`${formData?.date ? moment(formData.date).format("DD.MM.YYYY") + " —" : ""} ${formData?.time ? moment(formData.time).format("hh:mm") + " —" : ""} ${formData?.place || ""}`}
+                                            {`${
+                                                formData?.date ? moment(formData.date).format("DD.MM.YYYY") + " —" : ""
+                                            } ${formData?.time ? moment(formData.time).format("hh:mm") + " —" : ""} ${
+                                                formData?.place || ""
+                                            }`}
                                         </div>
                                     </div>
                                 </div>

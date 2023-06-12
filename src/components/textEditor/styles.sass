@@ -1,0 +1,134 @@
+@import '../variables'
+
+$b-radius: 8px
+$b-color: #777680
+
+.quill-container
+  padding: 0
+  .errorComponent
+    display: flex
+    flex-direction: row
+    align-items: center
+    .errorText
+      margin-left: 5px
+
+.quill-container.error
+  .quill .ql-toolbar.ql-snow
+    border-color: red
+    border-bottom-color: $b-color
+  .ql-toolbar.ql-snow + .ql-container.ql-snow
+    border-color: red
+
+.quill-label
+  font-size: 14px
+  font-weight: 600
+  margin-bottom: 0.3rem
+.quill
+  margin-bottom: 0.8rem
+  .ql-toolbar.ql-snow
+    display: flex
+    justify-content: flex-end
+    align-items: center
+    min-height: 50px
+    border: 1px solid $b-color
+    border-top-left-radius: $b-radius
+    border-top-right-radius: $b-radius
+    position: relative
+    .ql-formats:first-child
+      gap: 0.3rem
+    .ql-formats
+      display: flex
+      gap: 0.5rem
+      margin-right: -0.5rem
+      .ql-align .gl-picker .ql-icon-picker
+        width: 24px
+        display: flex
+        align-items: center
+      button
+        font-size: 14px
+      .ql-font
+        width: 100%
+        &::before
+          content: "Red Hat Display"
+          display: block
+          width: max-content
+        &:hover
+          color: $c-main
+          cursor: default
+      .ql-size
+        width: 100%
+        &::before
+          content: "16px"
+        &:hover
+          color: $c-main
+          cursor: default
+      .ql-weight
+        width: 100%
+        &::before
+          content: "Medium"
+        &:hover
+          color: $c-main
+          cursor: default
+
+      .ql-picker.ql-expanded
+        .ql-picker-label
+          display: flex
+          justify-content: center
+          width: 24px
+          border: none
+          background-color: #F2E7FF
+          border-radius: 50%
+        .ql-picker-options
+          display: flex
+          top: calc(50% - 40px/2 + 40px)
+          left: calc(50% - 104px/2 + 1px)
+          .ql-picker-item
+            display: flex
+            justify-content: center
+            align-items: center
+            padding: 0
+          .ql-picker-item.ql-selected
+            background-color: #F2E7FF
+            border-radius: 50%
+
+.ql-toolbar.ql-snow .ql-picker-label
+  display: flex
+  align-items: center
+
+.ql-snow .ql-icon-picker .ql-picker-item
+  padding: 0
+
+.ql-container.ql-snow
+  width: 100%
+  height: 190px
+  border: 1px solid $b-color !important
+  border-top: none !important
+  border-bottom-left-radius: $b-radius
+  border-bottom-right-radius: $b-radius
+  .ql-editor
+    padding: 15px 13px
+  .ql-editor, .ql-editor p
+    @include fMain
+    p:not(:last-child)
+      margin-bottom: 1rem
+  .ql-editor.ql-blank::before
+    @include fLabel
+    font-size: 16px !important
+    font-style: normal
+
+.custom-icon
+  path
+    transition: fill 0.6s ease-in-out
+  &:hover
+    path
+      fill: $c-purple
+
+@media only screen and (max-width: 558px)
+  .quill .ql-toolbar.ql-snow .ql-formats:first-child
+    display: none
+
+@media only screen and (max-width: 440px)
+  .quill .ql-container.ql-snow .ql-editor, .quill .ql-container.ql-snow .ql-editor p
+    font-size: 14px
+  .quill .ql-container.ql-snow .ql-editor.ql-blank::before
+    font-size: 14px !important
