@@ -4,6 +4,7 @@ import React, { FC, useState, useEffect } from "react";
 import { useStore } from "../../context/StoreContext";
 import { observer } from "mobx-react-lite";
 import moment from "moment";
+import 'moment/locale/ru';
 import FilterBar from "./filterBar/FilterBar";
 import EventForm from "./eventForm/EventForm";
 import OptionsMenu from "./optionsMenu/OptionsMenu";
@@ -18,6 +19,10 @@ import coverImg from "../../assets/images/preview.png";
 import { IEvent } from "../../models/IEvent";
 import Spinner from "../../components/UI/spinner/Spinner";
 import Modal from "../../components/modal_/Modal";
+
+interface GroupedEvents {
+  [key: string]: IEvent[];
+}
 
 const Events: FC = () => {
     const { events } = useStore();
@@ -34,12 +39,40 @@ const Events: FC = () => {
             .then(() => {})
             .catch((err) => {
                 console.error(err);
-            });
+            });        
     }, [events]);
 
     useEffect(() => {
       setSelectedEvent(pendingSelectedEvent);
     }, [isOptionsMenuOpen]);
+
+
+    const groupEvents = () => {
+      const groupedEvents = events.eventsList.reduce((acc: GroupedEvents, event) => {
+          const monthYear = moment(event.date).format('MMMM, yyyy');
+          if (!acc[monthYear]) {
+              acc[monthYear] = [];
+          }
+          acc[monthYear].push(event);
+          return acc;
+      }, {});
+
+      const sortedKeys = Object.keys(groupedEvents).sort((a, b) => {
+        const dateA = moment(a, 'MMMM, yyyy');
+        const dateB = moment(b, 'MMMM, yyyy');
+        return dateB.valueOf() - dateA.valueOf();
+      });
+
+      const sortedGroupedEvents: GroupedEvents = {};
+      sortedKeys.forEach(key => {
+        sortedGroupedEvents[key] = groupedEvents[key];
+      });
+
+      return sortedGroupedEvents;
+    }
+
+    console.log(groupEvents());
+    const groupedEvents = groupEvents();    
 
     const handleOptionsClick = (event: IEvent) => {
         setPendingSelectedEvent(event);
@@ -86,8 +119,10 @@ const Events: FC = () => {
                 disabled={events.eventsList.length === 0 || events.loadingEventsBool}
             />
 
-            {events.eventsList.length > 0 && !events.loadingEventsBool ? (
+            {events.eventsList.length > 0 && !events.loadingEventsBool ? (          
+
                 <div className="container events">
+
                     <div className="events-container upcoming-events">
                         <div className="title">Ближайшие мероприятия</div>
                         <div className="month-events">
@@ -101,18 +136,20 @@ const Events: FC = () => {
                             <div className="events-wrapper"></div>
                         </div>
                     </div>
+
                     <div className="events-container all-events">
                         <div className="title">Все мероприятия</div>
-                        <div className="month-events">
+                        {Object.keys(groupedEvents).map(monthYear => (
+                          <div className="month-events" key={monthYear}>
                             <div className="top">
                                 <button className="arrow-btn">
                                     <span className="arrow _icon-ico-arrow-s"></span>
                                 </button>
-                                <span className="monthYear">Декабрь, 2022</span>
-                                <span className="eventsCount">4 Событий</span>
+                                <span className="monthYear">{`${monthYear[0].toUpperCase()}${monthYear.slice(1)}`}</span>
+                                <span className="eventsCount">{`${groupedEvents[monthYear].length} Событий`}</span>
                             </div>
                             <div className="events-wrapper">
-                                {events.eventsList.map((event) => (
+                                {groupedEvents[monthYear].map((event) => (
                                     <Event
                                         key={event._id}
                                         event={event}
@@ -121,7 +158,8 @@ const Events: FC = () => {
                                     />
                                 ))}
                             </div>
-                        </div>
+                          </div>
+                        ))}
                     </div>
                 </div>
             ) : events.eventsList.length === 0 && !events.loadingEventsBool ? (
@@ -136,7 +174,6 @@ const Events: FC = () => {
                     setFormOpen(false);
                     setSelectedEvent(null);
                 }}
-                // onSave={handleSave}
                 event={selectedEvent}
                 onDelete={handleDelete}
             />

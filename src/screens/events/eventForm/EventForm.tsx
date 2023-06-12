@@ -29,7 +29,7 @@ const EventForm: FC<EventFormProps> = ({ isOpen, onClose, event, onDelete }) => 
     const [isPosting, setIsPosting] = useState(false);
 
     useEffect(() => {
-        if (event) {
+        if (event) {          
             setFormData(event);
             setTitle("Редактирование");
             setSubmitBtnText("Обновить публикацию");
