@@ -37,22 +37,67 @@
     .menu
       display: flex
       flex-direction: column
-      padding: 2rem 1.1rem
-      gap: 1rem
+      padding: 1.8rem 1.1rem
+      gap: 2rem
       .menu-item
         display: flex
         align-items: center
         letter-spacing: 0.5px
-        .icon
-          font-size: 18px
-          color: $c-icon
-          // width: 24px
-
-
+        justify-content: space-between
+        .label
+          display: flex
+          align-items: center
+          letter-spacing: 0.5px
+          width: max-content
+          .icon
+            font-size: 18px
+            color: $c-icon
+            width: 2.3rem
+            height: 24px
+            display: flex
+            align-items: center
+          .name
+            line-height: 24px
+        .arrow-icon
+          transform: rotate(-90deg)
+          font-size: 10px
+        .checkbox-container
+          display: flex
+          align-items: center
+          position: relative
+          width: 100%
+          -webkit-user-select: none
+          -moz-user-select: none
+          -ms-user-select: none
+          user-select: none
+          input
+            position: absolute
+            opacity: 0
+            height: 0
+            width: 0
+            &:checked ~ .checkmark
+              background-color: $c-purple
+              .tick
+                display: block
+          .checkmark
+            position: absolute
+            top: 50%
+            right: 0
+            width: 18px
+            height: 18px
+            transform: translateY(-50%)
+            border: 1px solid $c-purple
+            border-radius: 2px
+            .tick
+              display: none
+              position: absolute
+              top: 50%
+              left: 50%
+              transform: translate(-50%, -50%)
 
     .bottom
       text-align: right
-      padding: 1.2rem 1.4rem 1.2rem 1.2rem
+      padding: 0.3rem 1.4rem 1.2rem 1.2rem
       .close-btn
         @include fButton
         color: $c-purple

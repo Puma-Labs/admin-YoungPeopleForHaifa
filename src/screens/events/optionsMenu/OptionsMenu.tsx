@@ -26,17 +26,15 @@ interface OptionsMenuProps {
 
 const OptionsMenu: FC<OptionsMenuProps> = ({ event, isOpen, onClose, onEdit, onDelete }) => {
     const handleEdit = () => {
-      if (event) {
-        onEdit(event);
-        // onClose();
-      }
+        if (event) {
+            onEdit(event);
+        }
     };
 
     const handleDelete = () => {
-      if (event) {
-        onDelete(event);
-        // onClose();
-      }
+        if (event) {
+            onDelete(event);
+        }
     };
 
     return (
@@ -50,24 +48,41 @@ const OptionsMenu: FC<OptionsMenuProps> = ({ event, isOpen, onClose, onEdit, onD
                         </div>
                         <div className="menu">
                             <div className="menu-item">
-                                <span className="icon _icon-ico-download"></span>
-                                <span className="name">Добавить в архив</span>
+                                <label htmlFor="archive-checkbox" className="label checkbox-container">
+                                    <span className="icon _icon-ico-download"></span>
+                                    <span className="name">Добавить в архив</span>
+                                    <input type="checkbox" id="archive-checkbox" />
+                                    <span className="checkmark">
+                                        <img src="/icons/tick.svg" alt="checked" className="tick" />
+                                    </span>
+                                </label>
                             </div>
                             <div onClick={handleEdit} className="menu-item">
-                                <span className="icon">
-                                    <EditIcon />
-                                </span>
-                                <span className="name">Изменить событие</span>
+                                <label className="label">
+                                    <span className="icon">
+                                        <EditIcon />
+                                    </span>
+                                    <span className="name">Изменить событие</span>
+                                </label>
+                                <span className="arrow-icon _icon-ico-arrow-filled"></span>
                             </div>
                             <div className="menu-item">
-                                <span className="icon">
-                                    <HideIcon />
-                                </span>
-                                <span className="name">Скрыть событие</span>
+                                <label htmlFor="hide-checkbox" className="label checkbox-container">
+                                    <span className="icon">
+                                        <HideIcon />
+                                    </span>
+                                    <span className="name">Скрыть событие</span>
+                                    <input type="checkbox" id="hide-checkbox" />
+                                    <span className="checkmark">
+                                        <img src="/icons/tick.svg" alt="checked" className="tick" />
+                                    </span>
+                                </label>
                             </div>
                             <div onClick={handleDelete} className="menu-item">
-                                <span className="icon _icon-ico-trash"></span>
-                                <span className="name">Удалить событие</span>
+                                <label className="label">
+                                    <span className="icon _icon-ico-trash"></span>
+                                    <span className="name">Удалить событие</span>
+                                </label>
                             </div>
                         </div>
                         <div className="bottom">
