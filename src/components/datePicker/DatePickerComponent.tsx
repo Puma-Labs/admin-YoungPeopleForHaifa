@@ -3,22 +3,18 @@ import "./styles.sass";
 import React, { FC, useState } from "react";
 
 import { StaticDatePicker } from "@mui/x-date-pickers";
+import Button from "../UI/button/Button";
 import moment from "moment";
 
 interface DatePickerComponentProps {
     value?: string;
-    onChange: () => void;
+    onChange: (date: Date | null) => void;
     disabled?: boolean;
 }
 
 const DatePickerComponent: FC<DatePickerComponentProps> = ({ value, onChange, disabled = false }) => {
     const [selectedDate, setSelectedDate] = useState(value || null);
     const [showCalendar, setShowCalendar] = useState(false);
-
-    const handleSelectDate = () => {
-        setShowCalendar(false);
-        onChange();
-    };
 
     return (
         <div className="menu-dropdown">
@@ -29,7 +25,7 @@ const DatePickerComponent: FC<DatePickerComponentProps> = ({ value, onChange, di
                 >
                     <span className={`icon _icon-ico-calendar`}></span>
                     <span className="status-text">{`Дата: ${
-                        selectedDate ? moment(selectedDate).format("DD/MM/YYYY") : "не выбрано"
+                        selectedDate ? moment(selectedDate).format("DD.MM.YYYY") : "не выбрано"
                     }`}</span>
                     <span className="arrow _icon-ico-arrow-filled"></span>
                 </button>
@@ -40,9 +36,19 @@ const DatePickerComponent: FC<DatePickerComponentProps> = ({ value, onChange, di
                         value={selectedDate}
                         onChange={(newDate) => {
                             setSelectedDate(newDate);
+                            setShowCalendar(false);
+                            onChange(newDate ? new Date(newDate) : null)
                         }}
-                        onAccept={handleSelectDate}
                     />
+                    <div className="action-buttons">
+                      <Button label="Очистить" stylesType="text" onClick={() => {
+                        setSelectedDate(null);
+                        onChange(null);
+                      }} />
+                      <Button label="Закрыть" stylesType="text" onClick={() => {
+                        setShowCalendar(false);
+                      }} />
+                    </div>
                 </div>
             )}
         </div>

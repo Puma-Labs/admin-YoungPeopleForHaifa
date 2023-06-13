@@ -4,7 +4,7 @@ import React, { FC, useState, useEffect } from "react";
 import { useStore } from "../../context/StoreContext";
 import { observer } from "mobx-react-lite";
 import moment from "moment";
-import 'moment/locale/ru';
+import "moment/locale/ru";
 import FilterBar from "./filterBar/FilterBar";
 import EventForm from "./eventForm/EventForm";
 import OptionsMenu from "./optionsMenu/OptionsMenu";
@@ -21,7 +21,7 @@ import Spinner from "../../components/UI/spinner/Spinner";
 import Modal from "../../components/modal_/Modal";
 
 interface GroupedEvents {
-  [key: string]: IEvent[];
+    [key: string]: IEvent[];
 }
 
 const Events: FC = () => {
@@ -32,6 +32,7 @@ const Events: FC = () => {
     const [isFormOpen, setFormOpen] = useState(false);
     const [isDeleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
     const [pendingSelectedEvent, setPendingSelectedEvent] = useState<IEvent | null>(null);
+    const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
     useEffect(() => {
         events
@@ -39,40 +40,46 @@ const Events: FC = () => {
             .then(() => {})
             .catch((err) => {
                 console.error(err);
-            });        
+            });
     }, [events]);
 
     useEffect(() => {
-      setSelectedEvent(pendingSelectedEvent);
+        setSelectedEvent(pendingSelectedEvent);
     }, [isOptionsMenuOpen]);
 
+    const getEventsByDate = () => {
+        return events.eventsList.filter((event) => {
+            return moment(event.date).format("DD.MM.YYYY") === moment(selectedDate).format("DD.MM.YYYY");
+        });
+    };
 
     const groupEvents = () => {
-      const groupedEvents = events.eventsList.reduce((acc: GroupedEvents, event) => {
-          const monthYear = moment(event.date).format('MMMM, yyyy');
-          if (!acc[monthYear]) {
-              acc[monthYear] = [];
-          }
-          acc[monthYear].push(event);
-          return acc;
-      }, {});
+        const eventsList = selectedDate ? getEventsByDate() : events.eventsList;
 
-      const sortedKeys = Object.keys(groupedEvents).sort((a, b) => {
-        const dateA = moment(a, 'MMMM, yyyy');
-        const dateB = moment(b, 'MMMM, yyyy');
-        return dateB.valueOf() - dateA.valueOf();
-      });
+        const groupedEvents = eventsList.reduce((acc: GroupedEvents, event) => {
+            const monthYear = moment(event.date).format("MMMM, yyyy");
+            if (!acc[monthYear]) {
+                acc[monthYear] = [];
+            }
+            acc[monthYear].push(event);
+            return acc;
+        }, {});
 
-      const sortedGroupedEvents: GroupedEvents = {};
-      sortedKeys.forEach(key => {
-        sortedGroupedEvents[key] = groupedEvents[key];
-      });
+        const sortedKeys = Object.keys(groupedEvents).sort((a, b) => {
+            const dateA = moment(a, "MMMM, yyyy");
+            const dateB = moment(b, "MMMM, yyyy");
+            return dateB.valueOf() - dateA.valueOf();
+        });
 
-      return sortedGroupedEvents;
-    }
+        const sortedGroupedEvents: GroupedEvents = {};
+        sortedKeys.forEach((key) => {
+            sortedGroupedEvents[key] = groupedEvents[key];
+        });
 
-    console.log(groupEvents());
-    const groupedEvents = groupEvents();    
+        return sortedGroupedEvents;
+    };
+
+    const groupedEvents = groupEvents();
 
     const handleOptionsClick = (event: IEvent) => {
         setPendingSelectedEvent(event);
@@ -86,13 +93,13 @@ const Events: FC = () => {
     };
 
     const handleDelete = (event: IEvent | null) => {
-      setSelectedEvent(event);
-      setDeleteConfirmationOpen(true);
-      setOptionsMenuOpen(false);
+        setSelectedEvent(event);
+        setDeleteConfirmationOpen(true);
+        setOptionsMenuOpen(false);
     };
-  
+
     const handleDeleteConfirmed = () => {
-      if (selectedEvent) {
+        if (selectedEvent) {
             events
                 .deleteOne(selectedEvent)
                 .then(() => {})
@@ -109,7 +116,7 @@ const Events: FC = () => {
 
     const handleAddNewEvent = () => {
         setSelectedEvent(null);
-        setFormOpen(true);        
+        setFormOpen(true);
     };
 
     return (
@@ -117,12 +124,11 @@ const Events: FC = () => {
             <FilterBar
                 events={events.eventsList}
                 disabled={events.eventsList.length === 0 || events.loadingEventsBool}
+                onFilterByDate={(date) => setSelectedDate(date)}
             />
 
-            {events.eventsList.length > 0 && !events.loadingEventsBool ? (          
-
+            {events.eventsList.length > 0 && !events.loadingEventsBool && Object.keys(groupedEvents).length ? (
                 <div className="container events">
-
                     <div className="events-container upcoming-events">
                         <div className="title">Ближайшие мероприятия</div>
                         <div className="month-events">
@@ -136,33 +142,36 @@ const Events: FC = () => {
                             <div className="events-wrapper"></div>
                         </div>
                     </div>
-
+                    <div>{Object.keys(groupedEvents).length === 0 ? "null" : Object.keys(groupedEvents).length}</div>
                     <div className="events-container all-events">
                         <div className="title">Все мероприятия</div>
-                        {Object.keys(groupedEvents).map(monthYear => (
-                          <div className="month-events" key={monthYear}>
-                            <div className="top">
-                                <button className="arrow-btn">
-                                    <span className="arrow _icon-ico-arrow-s"></span>
-                                </button>
-                                <span className="monthYear">{`${monthYear[0].toUpperCase()}${monthYear.slice(1)}`}</span>
-                                <span className="eventsCount">{`${groupedEvents[monthYear].length} Событий`}</span>
+                        {Object.keys(groupedEvents).map((monthYear) => (
+                            <div className="month-events" key={monthYear}>
+                                <div className="top">
+                                    <button className="arrow-btn">
+                                        <span className="arrow _icon-ico-arrow-s"></span>
+                                    </button>
+                                    <span className="monthYear">{`${monthYear[0].toUpperCase()}${monthYear.slice(
+                                        1
+                                    )}`}</span>
+                                    <span className="eventsCount">{`${groupedEvents[monthYear].length} Событий`}</span>
+                                </div>
+                                <div className="events-wrapper">
+                                    {groupedEvents[monthYear].map((event) => (
+                                        <Event
+                                            key={event._id}
+                                            event={event}
+                                            isSelected={selectedEvent?._id === event._id}
+                                            onOptionsClick={handleOptionsClick}
+                                        />
+                                    ))}
+                                </div>
                             </div>
-                            <div className="events-wrapper">
-                                {groupedEvents[monthYear].map((event) => (
-                                    <Event
-                                        key={event._id}
-                                        event={event}
-                                        isSelected={selectedEvent?._id === event._id}
-                                        onOptionsClick={handleOptionsClick}
-                                    />
-                                ))}
-                            </div>
-                          </div>
                         ))}
                     </div>
                 </div>
-            ) : events.eventsList.length === 0 && !events.loadingEventsBool ? (
+            ) : (events.eventsList.length === 0 && !events.loadingEventsBool) ||
+              Object.keys(groupedEvents).length === 0 ? (
                 <Emptiness addBtnText="Добавить меропритяие" className="no-events" onClick={handleAddNewEvent} />
             ) : (
                 <Spinner />
@@ -190,10 +199,10 @@ const Events: FC = () => {
             <Modal
                 showModal={isDeleteConfirmationOpen}
                 onCancel={() => {
-                  setDeleteConfirmationOpen(false)
-                  if (!isFormOpen) {
-                    setSelectedEvent(null);
-                  }
+                    setDeleteConfirmationOpen(false);
+                    if (!isFormOpen) {
+                        setSelectedEvent(null);
+                    }
                 }}
                 onConfirm={handleDeleteConfirmed}
                 title="Вы уверены?"

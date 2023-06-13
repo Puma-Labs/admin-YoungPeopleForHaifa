@@ -40,7 +40,6 @@
     box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3), 0px 2px 6px 2px rgba(0, 0, 0, 0.15)
     border-radius: 4px
     background-color: $bg-menu
-    // z-index: 2
     &.optionsMenu
       .menu-item
         width: 200px
@@ -51,6 +50,17 @@
           cursor: pointer
     &.datePicker
       width: 328px
+      .action-buttons
+        display: flex
+        justify-content: flex-end
+        gap: 1.5rem
+        margin: 0 2rem 2rem
 
 .MuiPickersToolbar-root.MuiPickersLayout-toolbar.css-1eurbeq-MuiPickersToolbar-root-MuiDatePickerToolbar-root
+  display: none !important
+
+.css-4pax7l-MuiPickersLayout-root
+  background-color: $bg-menu !important
+
+.css-4pax7l-MuiPickersLayout-root .MuiPickersLayout-actionBar
   display: none !important

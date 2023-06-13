@@ -13,20 +13,17 @@ import { IEvent } from "../../../models/IEvent";
 
 interface FilterBarProps {
   events: IEvent[];
-  disabled: boolean
+  disabled: boolean;
+  onFilterByDate: (date: Date | null) => void;
 }
 
-const FilterBar: FC<FilterBarProps> = ({ events, disabled }) => {
+const FilterBar: FC<FilterBarProps> = ({ events, disabled, onFilterByDate }) => {
     const defaultStatus = "Активные";
     const [status, setStatus] = useState(defaultStatus);
     const [date, setDate] = useState("");
 
     const handleStatusChange = (newStatus: string) => {
         setStatus(newStatus);
-    };
-
-    const handleDateChange = (newDate: string) => {
-        setDate(newDate);
     };
 
     return (
@@ -52,7 +49,7 @@ const FilterBar: FC<FilterBarProps> = ({ events, disabled }) => {
                         defaultOption={defaultStatus}
                         disabled={disabled}
                     />
-                    <DatePickerComponent onChange={() => {}} disabled={disabled} />
+                    <DatePickerComponent onChange={onFilterByDate} disabled={disabled} />
                     <button className="archive-btn" disabled={disabled}>
                         <span className="icon _icon-ico-download"></span>
                         <span className="badge">3</span>
