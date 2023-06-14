@@ -1,25 +1,27 @@
 import "./styles.sass";
 
-import React, { FC, useState, useEffect } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { FC, useEffect } from "react";
 import Button from "../../components/UI/button/Button";
-import { IEvent } from "../../models/IEvent";
 
-interface IModal {
-    showModal: boolean;
-    title?: string;
-    message: string;
-    onCancel: () => void;
-    onConfirm?: () => void;
-    cancelButtonText: string;
-    confirmButtonText?: string;
+interface IButton {
+  onPress: () => void;
+  label: string;
 }
 
-const Modal: FC<IModal> = ({ showModal, title, message, onCancel, onConfirm, cancelButtonText, confirmButtonText }) => {
+interface IModal {
+  showModal: boolean;
+  title?: string;
+  message: string;
+  buttons: IButton[];
+  cancelButton: IButton;
+}
+
+const Modal: FC<IModal> = ({ showModal, title, message, buttons, cancelButton }) => {
+
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
             if (event.key === "Escape" && showModal) {
-                onCancel();
+                cancelButton.onPress();
             }
         };
 
@@ -28,32 +30,29 @@ const Modal: FC<IModal> = ({ showModal, title, message, onCancel, onConfirm, can
         return () => {
             document.removeEventListener("keydown", handleKeyDown);
         };
-    }, [onCancel]);
+    }, [cancelButton]);
 
     return (
         <>
             {showModal && (
                 <div className="modal">
-                    <div className="background" onClick={onCancel}></div>
+                    <div className="background" onClick={cancelButton.onPress}></div>
                     <div className="modal-card">
                         {title && <div className="title">{title}</div>}
                         <div className="message">{message}</div>
                         <div className="btn-container">
-                            {onConfirm && onCancel ? (
-                                <>
-                                    <Button label={cancelButtonText} stylesType="text" onClick={onCancel} />
-                                    <Button
-                                        label={confirmButtonText}
-                                        stylesType="text"
-                                        onClick={() => {
-                                            onConfirm();
-                                            onCancel();
-                                        }}
-                                    />
-                                </>
-                            ) : (
-                                <Button label={cancelButtonText} stylesType="text" onClick={onCancel} />
-                            )}
+                          {buttons.map((button) => (
+                                <Button
+                                    label={button.label}
+                                    stylesType="text"
+                                    onClick={button.onPress}
+                                />                           
+                          ))}
+                          <Button
+                              label={cancelButton.label}
+                              stylesType="text"
+                              onClick={cancelButton.onPress}
+                          />                          
                         </div>
                     </div>
                 </div>

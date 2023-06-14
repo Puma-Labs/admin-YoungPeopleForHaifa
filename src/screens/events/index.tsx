@@ -188,17 +188,23 @@ const Events: FC = () => {
             />
             <Modal
                 showModal={isDeleteConfirmationOpen}
-                onCancel={() => {
-                    setDeleteConfirmationOpen(false);
-                    if (!isFormOpen) {
-                        setSelectedEvent(null);
-                    }
-                }}
-                onConfirm={handleDeleteConfirmed}
                 title="Вы уверены?"
                 message="Если вы удалите событие, то отменить это действие будет невозможно."
-                cancelButtonText="Отмена"
-                confirmButtonText="Удалить"
+                buttons={[
+                    {
+                        onPress: handleDeleteConfirmed,
+                        label: "Удалить",
+                    },
+                ]}
+                cancelButton={{
+                    onPress: () => {
+                        setDeleteConfirmationOpen(false);
+                        if (!isFormOpen) {
+                            setSelectedEvent(null);
+                        }
+                    },
+                    label: "Отмена",
+                }}
             />
 
             <AddButton onClick={handleAddNewEvent} />
