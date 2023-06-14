@@ -20,10 +20,6 @@ import { IEvent } from "../../models/IEvent";
 import Spinner from "../../components/UI/spinner/Spinner";
 import Modal from "../../components/modal_/Modal";
 
-interface GroupedEvents {
-    [key: string]: IEvent[];
-}
-
 const Events: FC = () => {
     const { events } = useStore();
 
@@ -47,39 +43,17 @@ const Events: FC = () => {
         setSelectedEvent(pendingSelectedEvent);
     }, [isOptionsMenuOpen]);
 
+    useEffect(() => {
+        events.getAllEvents(getEventsByDate());
+    }, [selectedDate]);
+
     const getEventsByDate = () => {
+        if (!selectedDate) return events.eventsList;
+
         return events.eventsList.filter((event) => {
             return moment(event.date).format("DD.MM.YYYY") === moment(selectedDate).format("DD.MM.YYYY");
         });
     };
-
-    const groupEvents = () => {
-        const eventsList = selectedDate ? getEventsByDate() : events.eventsList;
-
-        const groupedEvents = eventsList.reduce((acc: GroupedEvents, event) => {
-            const monthYear = moment(event.date).format("MMMM, yyyy");
-            if (!acc[monthYear]) {
-                acc[monthYear] = [];
-            }
-            acc[monthYear].push(event);
-            return acc;
-        }, {});
-
-        const sortedKeys = Object.keys(groupedEvents).sort((a, b) => {
-            const dateA = moment(a, "MMMM, yyyy");
-            const dateB = moment(b, "MMMM, yyyy");
-            return dateB.valueOf() - dateA.valueOf();
-        });
-
-        const sortedGroupedEvents: GroupedEvents = {};
-        sortedKeys.forEach((key) => {
-            sortedGroupedEvents[key] = groupedEvents[key];
-        });
-
-        return sortedGroupedEvents;
-    };
-
-    const groupedEvents = groupEvents();
 
     const handleOptionsClick = (event: IEvent) => {
         setPendingSelectedEvent(event);
@@ -127,25 +101,41 @@ const Events: FC = () => {
                 onFilterByDate={(date) => setSelectedDate(date)}
             />
 
-            {events.eventsList.length > 0 && !events.loadingEventsBool && Object.keys(groupedEvents).length ? (
+            {events.eventsList.length > 0 && !events.loadingEventsBool && Object.keys(events.allEvents).length ? (
                 <div className="container events">
-                    <div className="events-container upcoming-events">
-                        <div className="title">Ближайшие мероприятия</div>
-                        <div className="month-events">
-                            <div className="top">
-                                <button className="arrow-btn">
-                                    <span className="arrow _icon-ico-arrow-s"></span>
-                                </button>
-                                <span className="monthYear">Декабрь, 2022</span>
-                                <span className="eventsCount">4 Событий</span>
-                            </div>
-                            <div className="events-wrapper"></div>
+                    {!selectedDate && (
+                        <div className="events-container upcoming-events">
+                            <div className="title">Ближайшие мероприятия</div>
+                            {Object.keys(events.upcomingEvents).map((monthYear) => (
+                                <div className="month-events" key={monthYear}>
+                                    <div className="top">
+                                        <button className="arrow-btn">
+                                            <span className="arrow _icon-ico-arrow-s"></span>
+                                        </button>
+                                        <span className="monthYear">{`${monthYear[0].toUpperCase()}${monthYear.slice(
+                                            1
+                                        )}`}</span>
+                                        <span className="eventsCount">{`${events.upcomingEvents[monthYear].length} Событий`}</span>
+                                    </div>
+                                    <div className="events-wrapper">
+                                        {events.upcomingEvents[monthYear].map((event) => (
+                                            <Event
+                                                key={event._id}
+                                                event={event}
+                                                isSelected={selectedEvent?._id === event._id}
+                                                onOptionsClick={handleOptionsClick}
+                                            />
+                                        ))}
+                                    </div>
+                                </div>
+                            ))}
                         </div>
-                    </div>
-                    <div>{Object.keys(groupedEvents).length === 0 ? "null" : Object.keys(groupedEvents).length}</div>
+                    )}
+
                     <div className="events-container all-events">
-                        <div className="title">Все мероприятия</div>
-                        {Object.keys(groupedEvents).map((monthYear) => (
+                        {!selectedDate && <div className="title">Все мероприятия</div>}
+
+                        {Object.keys(events.allEvents).map((monthYear) => (
                             <div className="month-events" key={monthYear}>
                                 <div className="top">
                                     <button className="arrow-btn">
@@ -154,10 +144,10 @@ const Events: FC = () => {
                                     <span className="monthYear">{`${monthYear[0].toUpperCase()}${monthYear.slice(
                                         1
                                     )}`}</span>
-                                    <span className="eventsCount">{`${groupedEvents[monthYear].length} Событий`}</span>
+                                    <span className="eventsCount">{`${events.allEvents[monthYear].length} Событий`}</span>
                                 </div>
                                 <div className="events-wrapper">
-                                    {groupedEvents[monthYear].map((event) => (
+                                    {events.allEvents[monthYear].map((event) => (
                                         <Event
                                             key={event._id}
                                             event={event}
@@ -171,7 +161,7 @@ const Events: FC = () => {
                     </div>
                 </div>
             ) : (events.eventsList.length === 0 && !events.loadingEventsBool) ||
-              Object.keys(groupedEvents).length === 0 ? (
+              Object.keys(events.allEvents).length === 0 ? (
                 <Emptiness addBtnText="Добавить меропритяие" className="no-events" onClick={handleAddNewEvent} />
             ) : (
                 <Spinner />
