@@ -13,6 +13,7 @@ import coverEmpty from "../../../assets/images/preview-empty.png";
 import coverImg from "../../../assets/images/preview.png";
 import editIcon from "../../../assets/icons/edit-icon.svg";
 import { IEvent } from "../../../models/IEvent";
+import { EventStatus } from "../../../models/IEvent";
 import { ReactComponent as EditIcon } from "../../../assets/icons/edit-icon.svg";
 import { ReactComponent as HideIcon } from "../../../assets/icons/eye-hide-icon.svg";
 
@@ -20,11 +21,19 @@ interface OptionsMenuProps {
     event: IEvent | null;
     isOpen: boolean;
     onClose: () => void;
+    onStatusChange: (event: IEvent, status: EventStatus) => void;
     onEdit: (event: IEvent) => void;
     onDelete: (event: IEvent) => void;
 }
 
-const OptionsMenu: FC<OptionsMenuProps> = ({ event, isOpen, onClose, onEdit, onDelete }) => {
+const OptionsMenu: FC<OptionsMenuProps> = ({ event, isOpen, onClose, onStatusChange, onEdit, onDelete }) => {
+    const handleStatusChange = (status: EventStatus) => {
+        if (event) {
+            const newStatus = !event.status || event.status !== status ? status : null;
+            onStatusChange(event, newStatus);
+        }
+    };
+
     const handleEdit = () => {
         if (event) {
             onEdit(event);
@@ -51,7 +60,12 @@ const OptionsMenu: FC<OptionsMenuProps> = ({ event, isOpen, onClose, onEdit, onD
                                 <label htmlFor="archive-checkbox" className="label checkbox-container">
                                     <span className="icon _icon-ico-download"></span>
                                     <span className="name">Добавить в архив</span>
-                                    <input type="checkbox" id="archive-checkbox" />
+                                    <input
+                                        checked={event?.status === "archived"}
+                                        onChange={() => handleStatusChange("archived")}
+                                        type="checkbox"
+                                        id="archive-checkbox"
+                                    />
                                     <span className="checkmark">
                                         <img src="/icons/tick.svg" alt="checked" className="tick" />
                                     </span>
@@ -72,7 +86,12 @@ const OptionsMenu: FC<OptionsMenuProps> = ({ event, isOpen, onClose, onEdit, onD
                                         <HideIcon />
                                     </span>
                                     <span className="name">Скрыть событие</span>
-                                    <input type="checkbox" id="hide-checkbox" />
+                                    <input
+                                        checked={event?.status === "hidden"}
+                                        onChange={() => handleStatusChange("hidden")}
+                                        type="checkbox"
+                                        id="hide-checkbox"
+                                    />
                                     <span className="checkmark">
                                         <img src="/icons/tick.svg" alt="checked" className="tick" />
                                     </span>

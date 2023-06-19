@@ -1,6 +1,6 @@
 import "./styles.sass";
 
-import React, { FC, useState, useEffect } from "react";
+import React, { FC, useState, useEffect, useMemo } from "react";
 import { useStore } from "../../context/StoreContext";
 import { observer } from "mobx-react-lite";
 import moment from "moment";
@@ -11,12 +11,10 @@ import OptionsMenu from "./optionsMenu/OptionsMenu";
 import Emptiness from "../../components/UI/emptiness_/Emptiness";
 import AddButton from "../../components/UI/addButton/AddButton";
 import Event from "./Event";
-import SearchInput from "../../components/UI/searchInput/SearchInput";
-import MenuDropdown from "../../components/UI/menuDropdown/MenuDropdown";
-import StatItem from "../../components/statItem/statItem";
 import coverEmpty from "../../assets/images/preview-empty.png";
 import coverImg from "../../assets/images/preview.png";
 import { IEvent } from "../../models/IEvent";
+import { EventStatus } from "../../models/IEvent";
 import Spinner from "../../components/UI/spinner/Spinner";
 import Modal from "../../components/modal_/Modal";
 
@@ -24,11 +22,12 @@ const Events: FC = () => {
     const { events } = useStore();
 
     const [selectedEvent, setSelectedEvent] = useState<IEvent | null>(null);
-    const [isOptionsMenuOpen, setOptionsMenuOpen] = useState(false);
-    const [isFormOpen, setFormOpen] = useState(false);
-    const [isDeleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
     const [pendingSelectedEvent, setPendingSelectedEvent] = useState<IEvent | null>(null);
     const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+    const [selectedCategory, setSelectedCategory] = useState<"all" | "active" | "archived" | "hidden">("active");
+    const [isOptionsMenuOpen, setOptionsMenuOpen] = useState<boolean>(false);
+    const [isFormOpen, setFormOpen] = useState<boolean>(false);
+    const [isDeleteConfirmationOpen, setDeleteConfirmationOpen] = useState<boolean>(false);
 
     useEffect(() => {
         events
@@ -42,18 +41,6 @@ const Events: FC = () => {
     useEffect(() => {
         setSelectedEvent(pendingSelectedEvent);
     }, [isOptionsMenuOpen]);
-
-    useEffect(() => {
-        events.getAllEvents(getEventsByDate());
-    }, [selectedDate]);
-
-    const getEventsByDate = () => {
-        if (!selectedDate) return events.eventsList;
-
-        return events.eventsList.filter((event) => {
-            return moment(event.date).format("DD.MM.YYYY") === moment(selectedDate).format("DD.MM.YYYY");
-        });
-    };
 
     const handleOptionsClick = (event: IEvent) => {
         setPendingSelectedEvent(event);
@@ -93,20 +80,93 @@ const Events: FC = () => {
         setFormOpen(true);
     };
 
+    const handleStatusChange = (event: IEvent | null, status: EventStatus) => {
+        if (event) {
+            event.status = status;
+
+            events
+                .updateOne(event)
+                .then(() => {})
+                .catch((err) => {
+                    console.error(err);
+                });
+        }
+    };
+
+    const handleShowArchive = () => {
+        setSelectedCategory("archived");
+    };
+
+    const handleCategoryChange = (category: "all" | "active" | "archived" | "hidden") => {
+        setSelectedCategory(category);
+    };
+
+    const getFilteredList = () => {
+        let eventsList = events.eventsList;
+
+        if (selectedDate) {
+            eventsList = getEventsByDate(eventsList);
+        }
+
+        if (selectedCategory === "all") {
+            return events.groupEventsByMonth(eventsList);
+        }
+
+        if (selectedCategory === "active") {
+            const currentDate = moment().startOf("day");
+            const activeEvents = eventsList.filter(
+                (event) => moment(event.date).isSameOrAfter(currentDate) && !event.status
+            );
+
+            return events.groupEventsByMonth(activeEvents);
+        }
+
+        if (selectedCategory === "archived" || selectedCategory === "hidden") {
+            const filteredEvents = eventsList.filter((event) => event.status === selectedCategory);
+            return events.groupEventsByMonth(filteredEvents);
+        }
+
+        return events.groupEventsByMonth(eventsList);
+    };
+
+    const getUpcomingEvents = () => {
+        const eventsList = Object.values(filteredList).flat();
+        const eventsLimit = 6;
+        const currentDate = moment().startOf("day");
+        const upcomingEvents = eventsList.filter((event) => moment(event.date).isSameOrAfter(currentDate));
+        upcomingEvents.sort((a, b) => moment(a.date, "YYYY-MM-DD").diff(moment(b.date, "YYYY-MM-DD")));
+
+        return events.groupEventsByMonth(upcomingEvents.slice(0, eventsLimit));
+    };
+
+    const getEventsByDate = (eventsList: IEvent[]) => {
+        if (!selectedDate) return eventsList;
+
+        return eventsList.filter((event) => {
+            return moment(event.date).format("DD.MM.YYYY") === moment(selectedDate).format("DD.MM.YYYY");
+        });
+    };
+
+    const filteredList = useMemo(getFilteredList, [selectedCategory, selectedDate, events, []]);
+    const upcomingEvents = useMemo(getUpcomingEvents, [selectedCategory, events, []]);
+
     return (
         <>
             <FilterBar
                 events={events.eventsList}
                 disabled={events.eventsList.length === 0 || events.loadingEventsBool}
                 onFilterByDate={(date) => setSelectedDate(date)}
+                onFilterByCategory={handleCategoryChange}
+                onShowArchive={handleShowArchive}
+                archivedCount={events.archivedEvents.length || null}
             />
 
-            {events.eventsList.length > 0 && !events.loadingEventsBool && Object.keys(events.allEvents).length ? (
+            {events.eventsList.length > 0 && !events.loadingEventsBool && Object.keys(filteredList).length ? (
                 <div className="container events">
-                    {!selectedDate && (
+                    {(selectedCategory === "all" || selectedCategory === "active") && !selectedDate && (
                         <div className="events-container upcoming-events">
                             <div className="title">Ближайшие мероприятия</div>
-                            {Object.keys(events.upcomingEvents).map((monthYear) => (
+                            {Object.keys(upcomingEvents).map((monthYear) => (
                                 <div className="month-events" key={monthYear}>
                                     <div className="top">
                                         <button className="arrow-btn">
@@ -115,10 +175,10 @@ const Events: FC = () => {
                                         <span className="monthYear">{`${monthYear[0].toUpperCase()}${monthYear.slice(
                                             1
                                         )}`}</span>
-                                        <span className="eventsCount">{`${events.upcomingEvents[monthYear].length} Событий`}</span>
+                                        <span className="eventsCount">{`${upcomingEvents[monthYear].length} Событий`}</span>
                                     </div>
                                     <div className="events-wrapper">
-                                        {events.upcomingEvents[monthYear].map((event) => (
+                                        {upcomingEvents[monthYear].map((event) => (
                                             <Event
                                                 key={event._id}
                                                 event={event}
@@ -135,7 +195,7 @@ const Events: FC = () => {
                     <div className="events-container all-events">
                         {!selectedDate && <div className="title">Все мероприятия</div>}
 
-                        {Object.keys(events.allEvents).map((monthYear) => (
+                        {Object.keys(filteredList).map((monthYear) => (
                             <div className="month-events" key={monthYear}>
                                 <div className="top">
                                     <button className="arrow-btn">
@@ -144,10 +204,10 @@ const Events: FC = () => {
                                     <span className="monthYear">{`${monthYear[0].toUpperCase()}${monthYear.slice(
                                         1
                                     )}`}</span>
-                                    <span className="eventsCount">{`${events.allEvents[monthYear].length} Событий`}</span>
+                                    <span className="eventsCount">{`${filteredList[monthYear].length} Событий`}</span>
                                 </div>
                                 <div className="events-wrapper">
-                                    {events.allEvents[monthYear].map((event) => (
+                                    {filteredList[monthYear].map((event) => (
                                         <Event
                                             key={event._id}
                                             event={event}
@@ -161,7 +221,7 @@ const Events: FC = () => {
                     </div>
                 </div>
             ) : (events.eventsList.length === 0 && !events.loadingEventsBool) ||
-              Object.keys(events.allEvents).length === 0 ? (
+              Object.keys(filteredList).length === 0 ? (
                 <Emptiness addBtnText="Добавить меропритяие" className="no-events" onClick={handleAddNewEvent} />
             ) : (
                 <Spinner />
@@ -183,6 +243,7 @@ const Events: FC = () => {
                     setPendingSelectedEvent(null);
                     setOptionsMenuOpen(false);
                 }}
+                onStatusChange={handleStatusChange}
                 onEdit={handleEdit}
                 onDelete={handleDelete}
             />

@@ -1,36 +1,64 @@
 import "./styles.sass";
 
 import React, { FC, useState } from "react";
-import { observer } from "mobx-react-lite";
-import Emptiness from "../../../components/UI/emptiness_/Emptiness";
-import AddButton from "../../../components/UI/addButton/AddButton";
 import SearchInput from "../../../components/UI/searchInput/SearchInput";
 import MenuDropdown from "../../../components/UI/menuDropdown/MenuDropdown";
-import StatItem from "../../../components/statItem/statItem";
 import DatePickerComponent from "../../../components/datePicker/DatePickerComponent";
 import { IEvent } from "../../../models/IEvent";
-
+import { EventStatus } from "../../../models/IEvent";
+import archiveOpenedIcon from "../../../assets/icons/archive-icon-active.svg";
 
 interface FilterBarProps {
-  events: IEvent[];
-  disabled: boolean;
-  onFilterByDate: (date: Date | null) => void;
+    events: IEvent[];
+    disabled: boolean;
+    onFilterByDate: (date: Date | null) => void;
+    onFilterByCategory: (category: "all" | "active" | "archived" | "hidden") => void;
+    onShowArchive: () => void;
+    archivedCount: number | null;
 }
 
-const FilterBar: FC<FilterBarProps> = ({ events, disabled, onFilterByDate }) => {
+const FilterBar: FC<FilterBarProps> = ({ events, disabled, onFilterByDate, onFilterByCategory, onShowArchive, archivedCount }) => {
     const defaultStatus = "Активные";
     const [status, setStatus] = useState(defaultStatus);
-    const [date, setDate] = useState("");
+    const [showArchive, setShowArchive] = useState<boolean>(false);
 
     const handleStatusChange = (newStatus: string) => {
+        setShowArchive(false);
         setStatus(newStatus);
+
+        switch (newStatus) {
+          case "Все":
+            onFilterByCategory("all");
+            break;
+          case "Активные":
+            onFilterByCategory("active");
+            break;
+          case "Скрытые":
+            onFilterByCategory("hidden");
+            break;     
+          default:
+            onFilterByCategory("all");
+            break;
+        }
+    };
+
+    const handleShowArchive = () => {
+        if (showArchive) {
+            setShowArchive(false);
+            setStatus(defaultStatus);
+            onFilterByCategory("active");
+        } else {
+            setShowArchive(true);
+            setStatus("Архив");
+            onShowArchive();
+        }
     };
 
     return (
         <div className="filter-bar">
             <div className="title-container">
                 <div className="title _icon-ico-list">
-                    События /<span className="totalCount">{`Всего - ${events.length}`}</span>
+                    События /<span className="totalCount">{`Всего - ${events.length || 0}`}</span>
                 </div>
                 <button className="button-share">
                     <span className="_icon-ico-share"></span>
@@ -45,14 +73,24 @@ const FilterBar: FC<FilterBarProps> = ({ events, disabled, onFilterByDate }) => 
                     <MenuDropdown
                         onChange={handleStatusChange}
                         type="optionsMenu"
-                        optionsList={["Все", "Активные", "Удаленные", "Скрытые"]}
+                        optionsList={["Все", "Активные", "Скрытые"]}
                         defaultOption={defaultStatus}
-                        disabled={disabled}
+                        disabled={disabled || showArchive}
                     />
                     <DatePickerComponent onChange={onFilterByDate} disabled={disabled} />
-                    <button className="archive-btn" disabled={disabled}>
-                        <span className="icon _icon-ico-download"></span>
-                        <span className="badge">3</span>
+                    <button onClick={handleShowArchive} className="archive-btn" disabled={disabled}>
+                        {showArchive ? (
+                            <span className="icon active">
+                                <img src={archiveOpenedIcon} alt="" />
+                            </span>
+                        ) : (
+                            <>
+                                <span className="icon _icon-ico-download"></span>
+                                {archivedCount && (
+                                  <span className="badge">{archivedCount}</span>
+                                )}
+                            </>
+                        )}
                     </button>
                 </div>
             </div>

@@ -1,4 +1,5 @@
 import { IEvent } from "../models/IEvent";
+import { EventStatus } from "../models/IEvent";
 import { makeAutoObservable } from "mobx";
 import EventService from "../service/EventService";
 import moment from "moment";
@@ -11,8 +12,7 @@ export default class Events {
     eventsList: IEvent[] = [];
     event = {} as IEvent;
     loadingEventsBool: boolean = false;
-    allEvents = {} as GroupedEvents;
-    upcomingEvents = {} as GroupedEvents;
+    archivedEvents: IEvent[] = [];
 
     constructor() {
         makeAutoObservable(this);
@@ -30,17 +30,9 @@ export default class Events {
         this.loadingEventsBool = newValue;
     }
 
-    // setGroupedEvents(groupedEvents: GroupedEvents) {
-    //     this.groupedEvents = groupedEvents;
-    // }
-
-    setAllEvents(allEvents: GroupedEvents) {
-      this.allEvents = allEvents;
-  }
-
-    setUpcomingEvents(upcomingEvents: GroupedEvents) {
-      this.upcomingEvents = upcomingEvents;
-  }
+    setArchivedEvents(archivedEvents: IEvent[]) {
+        this.archivedEvents = archivedEvents;
+    }
 
     groupEventsByMonth(eventsList: IEvent[]) {
         const groupedEvents = eventsList.reduce((acc: GroupedEvents, event) => {
@@ -52,34 +44,13 @@ export default class Events {
             return acc;
         }, {});
 
-        // const sortedKeys = Object.keys(groupedEvents).sort((a, b) => {
-        //     const dateA = moment(a, "MMMM, yyyy");
-        //     const dateB = moment(b, "MMMM, yyyy");
-        //     return dateB.valueOf() - dateA.valueOf();
-        // });
-
-        // const sortedKeys = Object.keys(groupedEvents)
-
-        // const sortedGroupedEvents: GroupedEvents = {};
-        // sortedKeys.forEach((key) => {
-        //     sortedGroupedEvents[key] = groupedEvents[key];
-        // });
-
-        // return sortedGroupedEvents;
         return groupedEvents;
     }
 
-    getAllEvents(eventsList: IEvent[]) {      
-      this.setAllEvents(this.groupEventsByMonth(eventsList));
-    }
+    getEventsByStatus(status: EventStatus) {
+        const filteredEvents = this.eventsList.filter((event) => event.status === status);
 
-    getUpcomingEvents(eventsList: IEvent[]) {
-      const eventsLimit = 6;
-      const currentDate = moment().startOf('day');
-      const upcomingEvents = eventsList.filter(event => moment(event.date).isSameOrAfter(currentDate));
-      upcomingEvents.sort((a, b) => moment(a.date, 'YYYY-MM-DD').diff(moment(b.date, 'YYYY-MM-DD')));
-      
-      this.setUpcomingEvents(this.groupEventsByMonth(upcomingEvents.slice(0, eventsLimit)));  
+        if (status === "archived") this.setArchivedEvents(filteredEvents);
     }
 
     async loadList() {
@@ -88,8 +59,7 @@ export default class Events {
             const EventsList = await EventService.fetchList();
             this.setEventsList(EventsList.data);
 
-            this.getAllEvents(EventsList.data);
-            this.getUpcomingEvents(EventsList.data);
+            this.getEventsByStatus("archived");
         } catch (err) {
             console.log(err);
         }

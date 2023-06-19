@@ -1,3 +1,5 @@
+export type EventStatus = "archived" | "hidden" | null;
+
 export interface IEvent {
   _id?: string,
   title: string,
@@ -6,6 +8,5 @@ export interface IEvent {
   time?: Date,
   cover?: string,
   text: string,
-  // created_at: Date,
-  // updated_at: Date
+  status?: EventStatus,
 }
