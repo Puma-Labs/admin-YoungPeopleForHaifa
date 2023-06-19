@@ -1,6 +1,7 @@
 import "./styles.sass";
 
-import React, { FC, useState } from "react";
+import React, { FC, useState, useRef } from "react";
+import useClickOutside from "../../customHooks/useClickOutside";
 
 import { StaticDatePicker } from "@mui/x-date-pickers";
 import Button from "../UI/button/Button";
@@ -15,9 +16,12 @@ interface DatePickerComponentProps {
 const DatePickerComponent: FC<DatePickerComponentProps> = ({ value, onChange, disabled = false }) => {
     const [selectedDate, setSelectedDate] = useState(value || null);
     const [showCalendar, setShowCalendar] = useState(false);
+    const menuRef = useRef<HTMLDivElement>(null);
+
+    useClickOutside(menuRef, () => setShowCalendar(false));
 
     return (
-        <div className="menu-dropdown">
+        <div className="menu-dropdown" ref={menuRef}>
             <div className="menu-btn">
                 <button
                     onClick={() => setShowCalendar((prev) => !prev)}

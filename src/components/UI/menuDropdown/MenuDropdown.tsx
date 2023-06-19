@@ -1,7 +1,7 @@
-import { type } from "os";
 import "./styles.sass";
 
-import React, { FC, useState } from "react";
+import React, { FC, useState, useRef } from "react";
+import useClickOutside from "../../../customHooks/useClickOutside";
 
 interface MenuDropdownProps {
     onChange: (value: string) => void;
@@ -12,12 +12,10 @@ interface MenuDropdownProps {
 }
 
 const MenuDropdown: FC<MenuDropdownProps> = ({ onChange, type, optionsList = [], defaultOption = "", disabled = false }) => {
-    // const optionsList = ["Все", "Активные", "Удаленные"];
-    // const defaultOption = "Активные";
-
     const [showMenu, setShowMenu] = useState(false);
     const [selectedOption, setSelectedOption] = useState(defaultOption);
     const [selectedDate, setSelectedDate] = useState("не выбрано");
+    const menuRef = useRef<HTMLDivElement>(null);
 
     const handleOptionChange = (option: string) => {
         setSelectedOption(option);
@@ -25,8 +23,10 @@ const MenuDropdown: FC<MenuDropdownProps> = ({ onChange, type, optionsList = [],
         onChange(option);
     };
 
+    useClickOutside(menuRef, () => setShowMenu(false));
+
     return (
-        <div className="menu-dropdown">
+        <div className="menu-dropdown" ref={menuRef}>
             <div className="menu-btn">
                 <button
                     onClick={() => setShowMenu((prev) => !prev)}
@@ -42,9 +42,9 @@ const MenuDropdown: FC<MenuDropdownProps> = ({ onChange, type, optionsList = [],
             {showMenu && !disabled && (
                 <div className={`menu ${type === "optionsMenu" ? "optionsMenu" : "datePicker"}`}>
                     {optionsList?.map(
-                        (option) =>
+                        (option, index) =>
                             option !== selectedOption && (
-                                <div className="menu-item">
+                                <div className="menu-item" key={index}>
                                     <span onClick={() => handleOptionChange(option)} className="menu-text">
                                         {option}
                                     </span>
