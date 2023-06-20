@@ -1,8 +1,6 @@
 import "./styles.sass";
 
 import React, { FC, useEffect, useState, FormEvent } from "react";
-import { observer } from "mobx-react-lite";
-import { useParams, useNavigate } from "react-router-dom";
 import { useStore } from "../../../context/StoreContext";
 import { IEvent } from "../../../models/IEvent";
 import Input from "../../../components/UI/input/Input";
@@ -25,8 +23,9 @@ const EventForm: FC<EventFormProps> = ({ isOpen, onClose, event, onDelete }) => 
     const [formData, setFormData] = useState<IEvent>(event || ({} as IEvent));
     const [title, setTitle] = useState<"Редактирование" | "Новое событие">("Новое событие");
     const [submitBtnText, setSubmitBtnText] = useState<"Обновить публикацию" | "Опубликовать">("Опубликовать");
-    const [isFormEmpty, setIsFormEmpty] = useState(true);
-    const [isPosting, setIsPosting] = useState(false);
+    const [isFormEmpty, setIsFormEmpty] = useState<boolean>(true);
+    const [isPosting, setIsPosting] = useState<boolean>(false);
+    const [previewImg, setPreviewImg] = useState<string>("");
 
     useEffect(() => {
         if (event) {          
@@ -61,6 +60,10 @@ const EventForm: FC<EventFormProps> = ({ isOpen, onClose, event, onDelete }) => 
     const handleInputChange = (name: string, value: string | Date | null) => {
         setFormData((prevData) => ({ ...prevData, [name]: value }));
     };
+
+    const handlePreviewImgChange = (newImage: string) => {
+      setPreviewImg(newImage);
+    }
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
@@ -153,7 +156,7 @@ const EventForm: FC<EventFormProps> = ({ isOpen, onClose, event, onDelete }) => 
                                 </div>
                                 <div className="section">
                                     <div className="section-title">Обложка</div>
-                                    <ImageLoader onChange={() => {}} />
+                                    <ImageLoader onChange={handlePreviewImgChange} />
                                 </div>
                                 <div className="section">
                                     <div className="section-title">Текст статьи</div>
@@ -167,7 +170,8 @@ const EventForm: FC<EventFormProps> = ({ isOpen, onClose, event, onDelete }) => 
                                     <div className="preview-card">
                                         <span className="dots _icon-ico-menu"></span>
                                         <div className="img-container">
-                                            <img src={formData?.cover ? formData?.cover : coverEmpty} alt="cover"></img>
+                                            {/* <img src={formData?.cover ? formData?.cover : coverEmpty} alt="cover"></img> */}
+                                            <img src={previewImg || coverEmpty} alt="cover"></img>
                                         </div>
                                         <div className="event-title">{formData?.title || ""}</div>
                                         <div className="event-info">

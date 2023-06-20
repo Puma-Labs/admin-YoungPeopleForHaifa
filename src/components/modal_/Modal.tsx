@@ -1,7 +1,7 @@
 import "./styles.sass";
 
 import React, { FC, useEffect } from "react";
-import Button from "../../components/UI/button/Button";
+import Button from "../UI/button/Button";
 
 interface IButton {
   onPress: () => void;
@@ -41,11 +41,12 @@ const Modal: FC<IModal> = ({ showModal, title, message, buttons, cancelButton })
                         {title && <div className="title">{title}</div>}
                         <div className="message">{message}</div>
                         <div className="btn-container">
-                          {buttons.map((button) => (
+                          {buttons.map((button, index) => (
                                 <Button
                                     label={button.label}
                                     stylesType="text"
                                     onClick={button.onPress}
+                                    key={index}
                                 />                           
                           ))}
                           <Button

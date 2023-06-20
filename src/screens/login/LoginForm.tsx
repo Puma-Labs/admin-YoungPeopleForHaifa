@@ -21,12 +21,6 @@ const LoginForm: FC = () => {
     });
   }
 
-  const handleRememberPasswordChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setIsRemembered(e.target.checked);
-  };
-
   return (
     <div id="loginLayout">
       <Background />
@@ -60,7 +54,7 @@ const LoginForm: FC = () => {
           <div className="login">
             <label htmlFor="remember" className='checkbox-container'>
             Запомнить меня
-              <input type="checkbox" id="remember" onChange={handleRememberPasswordChange}/>
+              <input type="checkbox" id="remember" onChange={(e) => setIsRemembered(e.target.checked)}/>
               <span className='checkmark'>
                 <img src="/icons/tick.svg" alt="checked" className='tick' />
               </span>
