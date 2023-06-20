@@ -1,6 +1,6 @@
 import "./styles.sass";
 
-import React, { FC, useState, useRef } from "react";
+import React, { FC, useState, useRef, useEffect } from "react";
 import useClickOutside from "../../../customHooks/useClickOutside";
 
 interface MenuDropdownProps {
@@ -8,14 +8,28 @@ interface MenuDropdownProps {
     type: "optionsMenu" | "datePicker";
     optionsList?: string[];
     defaultOption?: string;
+    value?: string;
     disabled?: boolean;
 }
 
-const MenuDropdown: FC<MenuDropdownProps> = ({ onChange, type, optionsList = [], defaultOption = "", disabled = false }) => {
+const MenuDropdown: FC<MenuDropdownProps> = ({
+    onChange,
+    type,
+    optionsList = [],
+    defaultOption = "",
+    value,
+    disabled = false,
+}) => {
     const [showMenu, setShowMenu] = useState(false);
     const [selectedOption, setSelectedOption] = useState(defaultOption);
     const [selectedDate, setSelectedDate] = useState("не выбрано");
     const menuRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (value) {
+            setSelectedOption(value);
+        }
+    }, [value]);
 
     const handleOptionChange = (option: string) => {
         setSelectedOption(option);

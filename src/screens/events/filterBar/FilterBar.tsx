@@ -17,7 +17,14 @@ interface FilterBarProps {
     archivedCount: number | null;
 }
 
-const FilterBar: FC<FilterBarProps> = ({ events, disabled, onFilterByDate, onFilterByCategory, onShowArchive, archivedCount }) => {
+const FilterBar: FC<FilterBarProps> = ({
+    events,
+    disabled,
+    onFilterByDate,
+    onFilterByCategory,
+    onShowArchive,
+    archivedCount,
+}) => {
     const defaultStatus = "Активные";
     const [status, setStatus] = useState(defaultStatus);
     const [showArchive, setShowArchive] = useState<boolean>(false);
@@ -27,26 +34,25 @@ const FilterBar: FC<FilterBarProps> = ({ events, disabled, onFilterByDate, onFil
         setStatus(newStatus);
 
         switch (newStatus) {
-          case "Все":
-            onFilterByCategory("all");
-            break;
-          case "Активные":
-            onFilterByCategory("active");
-            break;
-          case "Скрытые":
-            onFilterByCategory("hidden");
-            break;     
-          default:
-            onFilterByCategory("all");
-            break;
+            case "Все":
+                onFilterByCategory("all");
+                break;
+            case "Активные":
+                onFilterByCategory("active");
+                break;
+            case "Скрытые":
+                onFilterByCategory("hidden");
+                break;
+            default:
+                onFilterByCategory("all");
+                break;
         }
     };
 
     const handleShowArchive = () => {
         if (showArchive) {
             setShowArchive(false);
-            setStatus(defaultStatus);
-            onFilterByCategory("active");
+            handleStatusChange("Активные");
         } else {
             setShowArchive(true);
             setStatus("Архив");
@@ -75,6 +81,7 @@ const FilterBar: FC<FilterBarProps> = ({ events, disabled, onFilterByDate, onFil
                         type="optionsMenu"
                         optionsList={["Все", "Активные", "Скрытые"]}
                         defaultOption={defaultStatus}
+                        value={status}
                         disabled={disabled || showArchive}
                     />
                     <DatePickerComponent onChange={onFilterByDate} disabled={disabled} />
@@ -86,9 +93,7 @@ const FilterBar: FC<FilterBarProps> = ({ events, disabled, onFilterByDate, onFil
                         ) : (
                             <>
                                 <span className="icon _icon-ico-download"></span>
-                                {archivedCount && (
-                                  <span className="badge">{archivedCount}</span>
-                                )}
+                                {archivedCount && <span className="badge">{archivedCount}</span>}
                             </>
                         )}
                     </button>
