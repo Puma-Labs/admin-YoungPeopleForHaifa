@@ -89,10 +89,15 @@
 }
 .events .events-container .month-events .events-wrapper .event .menu-btn {
   position: absolute;
-  top: 1rem;
+  top: 0.8rem;
   right: 1.7rem;
   height: -moz-max-content;
   height: max-content;
+  padding: 0.2rem;
+  border-radius: 50%;
+}
+.events .events-container .month-events .events-wrapper .event.selected .menu-btn {
+  background-color: #e0dee7;
 }
 .events .events-container .month-events:not(:first-child) {
   padding-top: 1.45rem;

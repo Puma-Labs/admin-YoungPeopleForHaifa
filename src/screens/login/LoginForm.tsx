@@ -9,12 +9,15 @@ const LoginForm: FC = () => {
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
   const [isShowPass, setShowPass] = useState<boolean>(false)
-  // const [error, setError] = useState<string>('')
+  const [isRemembered, setIsRemembered] = useState(false);
+  const [error, setError] = useState<string>('')
 
   function login(e: FormEvent) {
     e.preventDefault();
-    auth.login(email, password).catch(e => {
-      // setError(`Упс, что-то пошло не так!`)
+    auth.login(email, password, isRemembered).catch((e) => {
+      console.log(e);
+      
+      setError(`Incorrect password or email`);
     });
   }
 
@@ -51,12 +54,12 @@ const LoginForm: FC = () => {
           <div className="login">
             <label htmlFor="remember" className='checkbox-container'>
             Запомнить меня
-              <input type="checkbox" id="remember" />
+              <input type="checkbox" id="remember" onChange={(e) => setIsRemembered(e.target.checked)}/>
               <span className='checkmark'>
                 <img src="/icons/tick.svg" alt="checked" className='tick' />
               </span>
             </label>
-            <button className="button" onClick={() => { auth.login(email, password).then() }}>Войти</button>
+            <button className="button" type="submit">Войти</button>
           </div>
         </form>
       </div >

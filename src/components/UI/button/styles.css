@@ -30,6 +30,30 @@
   background-color: #A181E7;
 }
 
+.buttonComponent.icon {
+  min-width: unset;
+  height: unset;
+  background-color: transparent;
+  padding: 0;
+}
+.buttonComponent.icon span, .buttonComponent.icon .icon-container {
+  font-size: 18px;
+}
+
+.buttonComponent.text {
+  color: #4651C6;
+  background-color: transparent;
+  padding: 0;
+  gap: 1rem;
+  min-width: -moz-max-content;
+  min-width: max-content;
+  height: -moz-max-content;
+  height: max-content;
+}
+.buttonComponent.text span, .buttonComponent.text .icon-container {
+  color: #4651C6;
+}
+
 .buttonComponent.border, .buttonComponent.round {
   color: #4651C6;
   background-color: #ffffff;

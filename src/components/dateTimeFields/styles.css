@@ -1,0 +1,26 @@
+.dateField, .timeField {
+  width: 100%;
+  margin: 0.5rem 0 1.5rem 0 !important;
+}
+
+.myInput:hover {
+  outline: none !important;
+}
+.myInput fieldset {
+  border: 1px solid #777680;
+}
+.myInput.Mui-focused fieldset {
+  border: 1px solid #777680 !important;
+}
+.myInput.MuiOutlinedInput-root.Mui-error fieldset {
+  border: 1px solid #777680 !important;
+}
+
+.myLabel {
+  font-weight: 500 !important;
+  letter-spacing: 0.4px !important;
+  color: #777680 !important;
+}
+.myLabel.Mui-focused {
+  color: #777680 !important;
+}/*# sourceMappingURL=styles.css.map */

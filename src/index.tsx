@@ -4,6 +4,9 @@ import App from './App';
 import StoreProvider from "./context/StoreContext";
 import ThemeProvider from './context/ThemeContext';
 import './fontawesome';
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
+import { Moment } from "moment";
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -12,7 +15,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <StoreProvider>
     <ThemeProvider>
-      <App />
+      <LocalizationProvider dateAdapter={AdapterMoment}>
+        <App />
+      </LocalizationProvider>
     </ThemeProvider>
   </StoreProvider>
 );

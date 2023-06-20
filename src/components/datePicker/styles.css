@@ -60,7 +60,21 @@
 .menu-dropdown .menu.datePicker {
   width: 328px;
 }
+.menu-dropdown .menu.datePicker .action-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1.5rem;
+  margin: 0 2rem 2rem;
+}
 
 .MuiPickersToolbar-root.MuiPickersLayout-toolbar.css-1eurbeq-MuiPickersToolbar-root-MuiDatePickerToolbar-root {
+  display: none !important;
+}
+
+.css-4pax7l-MuiPickersLayout-root {
+  background-color: #f1edfa !important;
+}
+
+.css-4pax7l-MuiPickersLayout-root .MuiPickersLayout-actionBar {
   display: none !important;
 }/*# sourceMappingURL=styles.css.map */

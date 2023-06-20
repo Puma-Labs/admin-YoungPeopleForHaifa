@@ -41,21 +41,78 @@
 .options-menu .menu-card .menu {
   display: flex;
   flex-direction: column;
-  padding: 2rem 1.1rem;
-  gap: 1rem;
+  padding: 1.8rem 1.1rem;
+  gap: 2rem;
 }
 .options-menu .menu-card .menu .menu-item {
   display: flex;
   align-items: center;
   letter-spacing: 0.5px;
+  justify-content: space-between;
 }
-.options-menu .menu-card .menu .menu-item .icon {
+.options-menu .menu-card .menu .menu-item .label {
+  display: flex;
+  align-items: center;
+  letter-spacing: 0.5px;
+  width: -moz-max-content;
+  width: max-content;
+}
+.options-menu .menu-card .menu .menu-item .label .icon {
   font-size: 18px;
   color: #45464f;
+  width: 2.3rem;
+  height: 24px;
+  display: flex;
+  align-items: center;
+}
+.options-menu .menu-card .menu .menu-item .label .name {
+  line-height: 24px;
+}
+.options-menu .menu-card .menu .menu-item .arrow-icon {
+  transform: rotate(-90deg);
+  font-size: 10px;
+}
+.options-menu .menu-card .menu .menu-item .checkbox-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+.options-menu .menu-card .menu .menu-item .checkbox-container input {
+  position: absolute;
+  opacity: 0;
+  height: 0;
+  width: 0;
+}
+.options-menu .menu-card .menu .menu-item .checkbox-container input:checked ~ .checkmark {
+  background-color: #4651C6;
+}
+.options-menu .menu-card .menu .menu-item .checkbox-container input:checked ~ .checkmark .tick {
+  display: block;
+}
+.options-menu .menu-card .menu .menu-item .checkbox-container .checkmark {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: 18px;
+  height: 18px;
+  transform: translateY(-50%);
+  border: 1px solid #4651C6;
+  border-radius: 2px;
+}
+.options-menu .menu-card .menu .menu-item .checkbox-container .checkmark .tick {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 .options-menu .menu-card .bottom {
   text-align: right;
-  padding: 1.2rem 1.4rem 1.2rem 1.2rem;
+  padding: 0.3rem 1.4rem 1.2rem 1.2rem;
 }
 .options-menu .menu-card .bottom .close-btn {
   font-weight: 500;

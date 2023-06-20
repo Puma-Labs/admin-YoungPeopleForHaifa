@@ -76,9 +76,15 @@ $c-eventText: #1B1B1F
               letter-spacing: 0.25px
           .menu-btn
             position: absolute
-            top: 1rem
+            top: 0.8rem
             right: 1.7rem
-            height: max-content  
+            height: max-content
+            padding: 0.2rem
+            border-radius: 50%
+          &.selected
+            .menu-btn
+              background-color: $bg-active-btn
+
     .month-events:not(:first-child)
       padding-top: 1.45rem
       

@@ -3,7 +3,7 @@ import {AxiosResponse} from 'axios'
 import {AuthResponse} from '../models/response/AuthResponse';
 
 export default class AuthService {
-  static async login(email: string, password: string) : Promise<AxiosResponse<AuthResponse>> {
+  static async login(email: string, password: string, remember: boolean = false) : Promise<AxiosResponse<AuthResponse>> {
     return $api.post<AuthResponse>('/user/login', {email, password})
   }
 
@@ -16,6 +16,6 @@ export default class AuthService {
   }
 
   static async checkAuth() : Promise<AxiosResponse<AuthResponse>> {
-      return $api.get<AuthResponse>('/refresh')
+    return $api.get<AuthResponse>('/user/refresh')
   }
 }

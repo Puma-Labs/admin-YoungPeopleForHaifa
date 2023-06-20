@@ -1,0 +1,25 @@
+@import '../variables'
+
+.dateField, .timeField
+  width: 100%
+  margin: 0.5rem 0 1.5rem 0 !important
+
+.myInput
+  &:hover
+    outline: none !important
+  fieldset
+    border: $border-dark
+  &.Mui-focused
+    fieldset
+      border: $border-dark !important
+  &.MuiOutlinedInput-root
+    &.Mui-error
+      fieldset
+        border: $border-dark !important
+
+.myLabel
+  font-weight: 500 !important
+  letter-spacing: 0.4px !important
+  color: $c-label !important
+  &.Mui-focused
+    color: $c-label !important

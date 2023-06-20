@@ -1,11 +1,18 @@
-import { IEvent } from '../models/IEvent';
+import { IEvent } from "../models/IEvent";
+import { EventStatus } from "../models/IEvent";
 import { makeAutoObservable } from "mobx";
 import EventService from "../service/EventService";
+import moment from "moment";
+
+interface GroupedEvents {
+    [key: string]: IEvent[];
+}
 
 export default class Events {
     eventsList: IEvent[] = [];
     event = {} as IEvent;
     loadingEventsBool: boolean = false;
+    archivedEvents: IEvent[] = [];
 
     constructor() {
         makeAutoObservable(this);
@@ -23,11 +30,36 @@ export default class Events {
         this.loadingEventsBool = newValue;
     }
 
+    setArchivedEvents(archivedEvents: IEvent[]) {
+        this.archivedEvents = archivedEvents;
+    }
+
+    groupEventsByMonth(eventsList: IEvent[]) {
+        const groupedEvents = eventsList.reduce((acc: GroupedEvents, event) => {
+            const monthYear = moment(event.date).format("MMMM, yyyy");
+            if (!acc[monthYear]) {
+                acc[monthYear] = [];
+            }
+            acc[monthYear].push(event);
+            return acc;
+        }, {});
+
+        return groupedEvents;
+    }
+
+    getEventsByStatus(status: EventStatus) {
+        const filteredEvents = this.eventsList.filter((event) => event.status === status);
+
+        if (status === "archived") this.setArchivedEvents(filteredEvents);
+    }
+
     async loadList() {
         this.setLoadingEventsBool(true);
         try {
             const EventsList = await EventService.fetchList();
             this.setEventsList(EventsList.data);
+
+            this.getEventsByStatus("archived");
         } catch (err) {
             console.log(err);
         }

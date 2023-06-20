@@ -1,284 +1,298 @@
 import "./styles.sass";
 
-import React, { FC, useState } from "react";
+import React, { FC, useState, useEffect, useMemo } from "react";
 import { useStore } from "../../context/StoreContext";
 import { observer } from "mobx-react-lite";
+import moment from "moment";
+import "moment/locale/ru";
 import FilterBar from "./filterBar/FilterBar";
 import EventForm from "./eventForm/EventForm";
 import OptionsMenu from "./optionsMenu/OptionsMenu";
 import Emptiness from "../../components/UI/emptiness_/Emptiness";
 import AddButton from "../../components/UI/addButton/AddButton";
-import SearchInput from "../../components/UI/searchInput/SearchInput";
-import MenuDropdown from "../../components/UI/menuDropdown/MenuDropdown";
-import StatItem from "../../components/statItem/statItem";
+import Event from "./Event";
 import coverEmpty from "../../assets/images/preview-empty.png";
 import coverImg from "../../assets/images/preview.png";
+import { IEvent } from "../../models/IEvent";
+import { EventStatus } from "../../models/IEvent";
+import Spinner from "../../components/UI/spinner/Spinner";
+import Modal from "../../components/modal_/Modal";
 
 const Events: FC = () => {
-  const { events } = useStore();
+    const { events } = useStore();
 
-  const [showForm, setShowForm] = useState(false);
-  const [showOptionsMenu, setShowOptionsMenu] = useState(false);
-  const [editingEvent, setEditingEvent] = useState();
+    const [selectedEvent, setSelectedEvent] = useState<IEvent | null>(null);
+    const [pendingSelectedEvent, setPendingSelectedEvent] = useState<IEvent | null>(null);
+    const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+    const [selectedCategory, setSelectedCategory] = useState<"all" | "active" | "archived" | "hidden">("active");
+    const [searchQuery, setSearchQuery] = useState<string>("");
+    const [isOptionsMenuOpen, setOptionsMenuOpen] = useState<boolean>(false);
+    const [isFormOpen, setFormOpen] = useState<boolean>(false);
+    const [isDeleteConfirmationOpen, setDeleteConfirmationOpen] = useState<boolean>(false);
 
-  const handleShowForm = () => {
-    setShowForm((prev) => !prev);
-  };
+    useEffect(() => {
+        events
+            .loadList()
+            .then(() => {})
+            .catch((err) => {
+                console.error(err);
+            });
+    }, [events]);
 
-  const handleShowOptionsMenu = () => {
-    setShowOptionsMenu((prev) => !prev);
-  };
+    useEffect(() => {
+        setSelectedEvent(pendingSelectedEvent);
+    }, [isOptionsMenuOpen]);
 
-  const event = {
-    title: "Фитнес. Поддержка оздоровительного центра",
-    place: "Площадь главного Еврея, д.1",
-    date: "22.02.2012",
-    time: "22:22",
-    cover: "",
-    text: "Закон и порядок являются ключевыми аспектами израильской системы правосудия. Израиль, как демократическое государство, придерживается принципа, что все граждане равны перед законом и имеют право на справедливое судебное разбирательство",
-  }
+    const handleOptionsClick = (event: IEvent) => {
+        setPendingSelectedEvent(event);
+        setOptionsMenuOpen(true);
+    };
 
+    const handleEdit = (event: IEvent) => {
+        setSelectedEvent(event);
+        setFormOpen(true);
+        setOptionsMenuOpen(false);
+    };
+
+    const handleDelete = (event: IEvent | null) => {
+        setSelectedEvent(event);
+        setDeleteConfirmationOpen(true);
+        setOptionsMenuOpen(false);
+    };
+
+    const handleDeleteConfirmed = () => {
+        if (selectedEvent) {
+            events
+                .deleteOne(selectedEvent)
+                .then(() => {})
+                .catch((err) => {
+                    console.error(err);
+                });
+
+            setSelectedEvent(null);
+        }
+
+        setFormOpen(false);
+        setDeleteConfirmationOpen(false);
+    };
+
+    const handleAddNewEvent = () => {
+        setSelectedEvent(null);
+        setFormOpen(true);
+    };
+
+    const handleStatusChange = (event: IEvent | null, status: EventStatus) => {
+        if (event) {
+            event.status = status;
+
+            events
+                .updateOne(event)
+                .then(() => {})
+                .catch((err) => {
+                    console.error(err);
+                });
+        }
+    };
+
+    const handleShowArchive = () => {
+        setSelectedCategory("archived");
+    };
+
+    const handleSearchQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchQuery(e.target.value);
+    };
+
+    const handleCategoryChange = (category: "all" | "active" | "archived" | "hidden") => {
+        setSelectedCategory(category);
+    };
+
+    const getFilteredList = () => {
+        let eventsList = events.eventsList;
+
+        if (searchQuery) {
+            eventsList = getEventsBySearchQuery(searchQuery, eventsList);
+        }
+
+        if (selectedDate) {
+            eventsList = getEventsByDate(eventsList);
+        }
+
+        if (selectedCategory === "all") {
+            return events.groupEventsByMonth(eventsList);
+        }
+
+        if (selectedCategory === "active") {
+            const currentDate = moment().startOf("day");
+            const activeEvents = eventsList.filter(
+                (event) => moment(event.date).isSameOrAfter(currentDate) && !event.status
+            );
+
+            return events.groupEventsByMonth(activeEvents);
+        }
+
+        if (selectedCategory === "archived" || selectedCategory === "hidden") {
+            const filteredEvents = eventsList.filter((event) => event.status === selectedCategory);
+            return events.groupEventsByMonth(filteredEvents);
+        }
+
+        return events.groupEventsByMonth(eventsList);
+    };
+
+    const getUpcomingEvents = () => {
+        const eventsList = Object.values(filteredList).flat();
+        const eventsLimit = 6;
+        const currentDate = moment().startOf("day");
+        const upcomingEvents = eventsList.filter((event) => moment(event.date).isSameOrAfter(currentDate));
+        upcomingEvents.sort((a, b) => moment(a.date, "YYYY-MM-DD").diff(moment(b.date, "YYYY-MM-DD")));
+
+        return events.groupEventsByMonth(upcomingEvents.slice(0, eventsLimit));
+    };
+
+    const getEventsBySearchQuery = (query: string, eventsList: IEvent[]) => {
+        const filtered = eventsList.filter((event) => {
+            const { title = "", place = "", text = "" } = event;
+            const lowerCaseQuery = query.toLowerCase();
+            return (
+                title.toLowerCase().includes(lowerCaseQuery) ||
+                place.toLowerCase().includes(lowerCaseQuery) ||
+                text.toLowerCase().includes(lowerCaseQuery)
+            );
+        });
+
+        return filtered;
+    };
+
+    const getEventsByDate = (eventsList: IEvent[]) => {
+        if (!selectedDate) return eventsList;
+
+        return eventsList.filter((event) => {
+            return moment(event.date).format("DD.MM.YYYY") === moment(selectedDate).format("DD.MM.YYYY");
+        });
+    };
+
+    const filteredList = useMemo(getFilteredList, [searchQuery, selectedCategory, selectedDate, events, []]);
+    const upcomingEvents = useMemo(getUpcomingEvents, [selectedCategory, events, []]);
 
     return (
         <>
-            <FilterBar disabled={false} />
-            <EventForm showForm={showForm} onCloseForm={handleShowForm} event={event}/>
-            <OptionsMenu showMenu={showOptionsMenu} onCloseMenu={handleShowOptionsMenu}/>
+            <FilterBar
+                events={events.eventsList}
+                disabled={events.eventsList.length === 0 || events.loadingEventsBool}
+                onFilterByDate={(date) => setSelectedDate(date)}
+                onFilterByCategory={handleCategoryChange}
+                onFilterBySearch={handleSearchQueryChange}
+                onShowArchive={handleShowArchive}
+                archivedCount={events.archivedEvents.length || null}
+            />
 
-            <div className="container events">
-              <div className="events-container upcoming-events">
-                <div className="title">Ближайшие мероприятия</div>
-                <div className="month-events">
-                  <div className="top">
-                    <button className="arrow-btn">
-                      <span className="arrow _icon-ico-arrow-s"></span> 
-                    </button>
-                    <span className="monthYear">Декабрь, 2022</span>
-                    <span className="eventsCount">4 Событий</span>
-                  </div>
-                  <div className="events-wrapper">
-                    <div className="event">
-                      <div className="img-container">
-                        <img src={coverEmpty} alt="cover"></img>
-                      </div>
-                      <div className="text">
-                        <div className="event-title">Получение гражданства</div>
-                        <div className="event-info">22.12.2022 - 10:00 Хайфа, пл. городская. д. 3</div>
-                      </div>
-                      <button onClick={handleShowOptionsMenu} className="menu-btn"><span className="_icon-ico-menu"></span></button>
-                    </div>
-                    <div className="event">
-                      <div className="img-container">
-                        <img src={coverEmpty} alt="cover"></img>
-                      </div>
-                      <div className="text">
-                        <div className="event-title">Получение гражданства</div>
-                        <div className="event-info">22.12.2022 - 10:00 Хайфа, пл. городская. д. 3</div>
-                      </div>
-                      <button className="menu-btn"><span className="_icon-ico-menu"></span></button>
-                    </div>
-                    <div className="event">
-                      <div className="img-container">
-                        <img src={coverEmpty} alt="cover"></img>
-                      </div>
-                      <div className="text">
-                        <div className="event-title">Получение гражданства</div>
-                        <div className="event-info">22.12.2022 - 10:00 Хайфа, пл. городская. д. 3</div>
-                      </div>
-                      <button className="menu-btn"><span className="_icon-ico-menu"></span></button>
-                    </div>
-                    <div className="event">
-                      <div className="img-container">
-                        <img src={coverEmpty} alt="cover"></img>
-                      </div>
-                      <div className="text">
-                        <div className="event-title">Получение гражданства</div>
-                        <div className="event-info">22.12.2022 - 10:00 Хайфа, пл. городская. д. 3</div>
-                      </div>
-                      <button className="menu-btn"><span className="_icon-ico-menu"></span></button>
-                    </div>
-                    <div className="event">
-                      <div className="img-container">
-                        <img src={coverEmpty} alt="cover"></img>
-                      </div>
-                      <div className="text">
-                        <div className="event-title">Получение гражданства</div>
-                        <div className="event-info">22.12.2022 - 10:00 Хайфа, пл. городская. д. 3</div>
-                      </div>
-                      <button className="menu-btn"><span className="_icon-ico-menu"></span></button>
-                    </div>                                                                              
-                  </div>
-                </div>
-              </div>
-              <div className="events-container all-events">
-                <div className="title">Все мероприятия</div>
-                <div className="month-events">
-                  <div className="top">
-                    <button className="arrow-btn">
-                      <span className="arrow _icon-ico-arrow-s"></span> 
-                    </button>
-                    <span className="monthYear">Декабрь, 2022</span>
-                    <span className="eventsCount">4 Событий</span>
-                  </div>
-                  <div className="events-wrapper">
-                    <div className="event">
-                      <div className="img-container">
-                        <img src={coverEmpty} alt="cover"></img>
-                      </div>
-                      <div className="text">
-                        <div className="event-title">Получение гражданства</div>
-                        <div className="event-info">22.12.2022 - 10:00 Хайфа, пл. городская. д. 3</div>
-                      </div>
-                      <button className="menu-btn"><span className="_icon-ico-menu"></span></button>
-                    </div>
-                    <div className="event">
-                      <div className="img-container">
-                        <img src={coverEmpty} alt="cover"></img>
-                      </div>
-                      <div className="text">
-                        <div className="event-title">Получение гражданства</div>
-                        <div className="event-info">22.12.2022 - 10:00 Хайфа, пл. городская. д. 3</div>
-                      </div>
-                      <button className="menu-btn"><span className="_icon-ico-menu"></span></button>
-                    </div>
-                    <div className="event">
-                      <div className="img-container">
-                        <img src={coverEmpty} alt="cover"></img>
-                      </div>
-                      <div className="text">
-                        <div className="event-title">Получение гражданства</div>
-                        <div className="event-info">22.12.2022 - 10:00 Хайфа, пл. городская. д. 3</div>
-                      </div>
-                      <button className="menu-btn"><span className="_icon-ico-menu"></span></button>
-                    </div>
-                    <div className="event">
-                      <div className="img-container">
-                        <img src={coverEmpty} alt="cover"></img>
-                      </div>
-                      <div className="text">
-                        <div className="event-title">Получение гражданства</div>
-                        <div className="event-info">22.12.2022 - 10:00 Хайфа, пл. городская. д. 3</div>
-                      </div>
-                      <button className="menu-btn"><span className="_icon-ico-menu"></span></button>
-                    </div>
-                    <div className="event">
-                      <div className="img-container">
-                        <img src={coverEmpty} alt="cover"></img>
-                      </div>
-                      <div className="text">
-                        <div className="event-title">Получение гражданства</div>
-                        <div className="event-info">22.12.2022 - 10:00 Хайфа, пл. городская. д. 3</div>
-                      </div>
-                      <button className="menu-btn"><span className="_icon-ico-menu"></span></button>
-                    </div>
-                    <div className="event">
-                      <div className="img-container">
-                        <img src={coverEmpty} alt="cover"></img>
-                      </div>
-                      <div className="text">
-                        <div className="event-title">Получение гражданства</div>
-                        <div className="event-info">22.12.2022 - 10:00 Хайфа, пл. городская. д. 3</div>
-                      </div>
-                      <button className="menu-btn"><span className="_icon-ico-menu"></span></button>
-                    </div>
-                    <div className="event">
-                      <div className="img-container">
-                        <img src={coverEmpty} alt="cover"></img>
-                      </div>
-                      <div className="text">
-                        <div className="event-title">Получение гражданства</div>
-                        <div className="event-info">22.12.2022 - 10:00 Хайфа, пл. городская. д. 3</div>
-                      </div>
-                      <button className="menu-btn"><span className="_icon-ico-menu"></span></button>
-                    </div>                                                                               
-                  </div>
-                </div>
-                <div className="month-events">
-                  <div className="top">
-                    <button className="arrow-btn">
-                      <span className="arrow _icon-ico-arrow-s"></span> 
-                    </button>
-                    <span className="monthYear">Декабрь, 2022</span>
-                    <span className="eventsCount">4 Событий</span>
-                  </div>
-                  <div className="events-wrapper">
-                    <div className="event">
-                      <div className="img-container">
-                        <img src={coverEmpty} alt="cover"></img>
-                      </div>
-                      <div className="text">
-                        <div className="event-title">Получение гражданства</div>
-                        <div className="event-info">22.12.2022 - 10:00 Хайфа, пл. городская. д. 3</div>
-                      </div>
-                      <button className="menu-btn"><span className="_icon-ico-menu"></span></button>
-                    </div>
-                    <div className="event">
-                      <div className="img-container">
-                        <img src={coverEmpty} alt="cover"></img>
-                      </div>
-                      <div className="text">
-                        <div className="event-title">Получение гражданства</div>
-                        <div className="event-info">22.12.2022 - 10:00 Хайфа, пл. городская. д. 3</div>
-                      </div>
-                      <button className="menu-btn"><span className="_icon-ico-menu"></span></button>
-                    </div>
-                    <div className="event">
-                      <div className="img-container">
-                        <img src={coverEmpty} alt="cover"></img>
-                      </div>
-                      <div className="text">
-                        <div className="event-title">Получение гражданства</div>
-                        <div className="event-info">22.12.2022 - 10:00 Хайфа, пл. городская. д. 3</div>
-                      </div>
-                      <button className="menu-btn"><span className="_icon-ico-menu"></span></button>
-                    </div>
-                    <div className="event">
-                      <div className="img-container">
-                        <img src={coverEmpty} alt="cover"></img>
-                      </div>
-                      <div className="text">
-                        <div className="event-title">Получение гражданства</div>
-                        <div className="event-info">22.12.2022 - 10:00 Хайфа, пл. городская. д. 3</div>
-                      </div>
-                      <button className="menu-btn"><span className="_icon-ico-menu"></span></button>
-                    </div>
-                    <div className="event">
-                      <div className="img-container">
-                        <img src={coverEmpty} alt="cover"></img>
-                      </div>
-                      <div className="text">
-                        <div className="event-title">Получение гражданства</div>
-                        <div className="event-info">22.12.2022 - 10:00 Хайфа, пл. городская. д. 3</div>
-                      </div>
-                      <button className="menu-btn"><span className="_icon-ico-menu"></span></button>
-                    </div>
-                    <div className="event">
-                      <div className="img-container">
-                        <img src={coverEmpty} alt="cover"></img>
-                      </div>
-                      <div className="text">
-                        <div className="event-title">Получение гражданства</div>
-                        <div className="event-info">22.12.2022 - 10:00 Хайфа, пл. городская. д. 3</div>
-                      </div>
-                      <button className="menu-btn"><span className="_icon-ico-menu"></span></button>
-                    </div>
-                    <div className="event">
-                      <div className="img-container">
-                        <img src={coverEmpty} alt="cover"></img>
-                      </div>
-                      <div className="text">
-                        <div className="event-title">Получение гражданства</div>
-                        <div className="event-info">22.12.2022 - 10:00 Хайфа, пл. городская. д. 3</div>
-                      </div>
-                      <button className="menu-btn"><span className="_icon-ico-menu"></span></button>
-                    </div>                                                                               
-                  </div>
-                </div>
-              </div>
-            </div>
+            {events.eventsList.length > 0 && !events.loadingEventsBool && Object.keys(filteredList).length ? (
+                <div className="container events">
+                    {(selectedCategory === "all" || selectedCategory === "active") && !selectedDate && !searchQuery && (
+                        <div className="events-container upcoming-events">
+                            <div className="title">Ближайшие мероприятия</div>
+                            {Object.keys(upcomingEvents).map((monthYear) => (
+                                <div className="month-events" key={monthYear}>
+                                    <div className="top">
+                                        <button className="arrow-btn">
+                                            <span className="arrow _icon-ico-arrow-s"></span>
+                                        </button>
+                                        <span className="monthYear">{`${monthYear[0].toUpperCase()}${monthYear.slice(
+                                            1
+                                        )}`}</span>
+                                        <span className="eventsCount">{`${upcomingEvents[monthYear].length} Событий`}</span>
+                                    </div>
+                                    <div className="events-wrapper">
+                                        {upcomingEvents[monthYear].map((event) => (
+                                            <Event
+                                                key={event._id}
+                                                event={event}
+                                                isSelected={selectedEvent?._id === event._id}
+                                                onOptionsClick={handleOptionsClick}
+                                            />
+                                        ))}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
 
-            {/* <Emptiness addBtnText="Добавить меропритяие" className="no-events" onClick={handleShowForm}/> */}
-            <AddButton onClick={handleShowForm} />
+                    <div className="events-container all-events">
+                        {!selectedDate && !searchQuery && <div className="title">Все мероприятия</div>}
+
+                        {Object.keys(filteredList).map((monthYear) => (
+                            <div className="month-events" key={monthYear}>
+                                <div className="top">
+                                    <button className="arrow-btn">
+                                        <span className="arrow _icon-ico-arrow-s"></span>
+                                    </button>
+                                    <span className="monthYear">{`${monthYear[0].toUpperCase()}${monthYear.slice(
+                                        1
+                                    )}`}</span>
+                                    <span className="eventsCount">{`${filteredList[monthYear].length} Событий`}</span>
+                                </div>
+                                <div className="events-wrapper">
+                                    {filteredList[monthYear].map((event) => (
+                                        <Event
+                                            key={event._id}
+                                            event={event}
+                                            isSelected={selectedEvent?._id === event._id}
+                                            onOptionsClick={handleOptionsClick}
+                                        />
+                                    ))}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            ) : (events.eventsList.length === 0 && !events.loadingEventsBool) ||
+              Object.keys(filteredList).length === 0 ? (
+                <Emptiness addBtnText="Добавить меропритяие" className="no-events" onClick={handleAddNewEvent} />
+            ) : (
+                <Spinner />
+            )}
+
+            <EventForm
+                isOpen={isFormOpen}
+                onClose={() => {
+                    setFormOpen(false);
+                    setSelectedEvent(null);
+                }}
+                event={selectedEvent}
+                onDelete={handleDelete}
+            />
+            <OptionsMenu
+                event={selectedEvent}
+                isOpen={isOptionsMenuOpen}
+                onClose={() => {
+                    setPendingSelectedEvent(null);
+                    setOptionsMenuOpen(false);
+                }}
+                onStatusChange={handleStatusChange}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+            />
+            <Modal
+                showModal={isDeleteConfirmationOpen}
+                title="Вы уверены?"
+                message="Если вы удалите событие, то отменить это действие будет невозможно."
+                buttons={[
+                    {
+                        onPress: handleDeleteConfirmed,
+                        label: "Удалить",
+                    },
+                ]}
+                cancelButton={{
+                    onPress: () => {
+                        setDeleteConfirmationOpen(false);
+                        if (!isFormOpen) {
+                            setSelectedEvent(null);
+                        }
+                    },
+                    label: "Отмена",
+                }}
+            />
+
+            <AddButton onClick={handleAddNewEvent} />
         </>
     );
 };
