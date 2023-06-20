@@ -13,6 +13,7 @@ interface FilterBarProps {
     disabled: boolean;
     onFilterByDate: (date: Date | null) => void;
     onFilterByCategory: (category: "all" | "active" | "archived" | "hidden") => void;
+    onFilterBySearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
     onShowArchive: () => void;
     archivedCount: number | null;
 }
@@ -22,6 +23,7 @@ const FilterBar: FC<FilterBarProps> = ({
     disabled,
     onFilterByDate,
     onFilterByCategory,
+    onFilterBySearch,
     onShowArchive,
     archivedCount,
 }) => {
@@ -73,7 +75,7 @@ const FilterBar: FC<FilterBarProps> = ({
             <div className="filter">
                 <div className="container-left">
                     <span className={`status-info ${disabled && "disabled"}`}>{status}</span>
-                    <SearchInput disabled={disabled} />
+                    <SearchInput onChange={onFilterBySearch} disabled={disabled} />
                 </div>
                 <div className="container-right">
                     <MenuDropdown

@@ -25,6 +25,7 @@ const Events: FC = () => {
     const [pendingSelectedEvent, setPendingSelectedEvent] = useState<IEvent | null>(null);
     const [selectedDate, setSelectedDate] = useState<Date | null>(null);
     const [selectedCategory, setSelectedCategory] = useState<"all" | "active" | "archived" | "hidden">("active");
+    const [searchQuery, setSearchQuery] = useState<string>("");
     const [isOptionsMenuOpen, setOptionsMenuOpen] = useState<boolean>(false);
     const [isFormOpen, setFormOpen] = useState<boolean>(false);
     const [isDeleteConfirmationOpen, setDeleteConfirmationOpen] = useState<boolean>(false);
@@ -97,12 +98,20 @@ const Events: FC = () => {
         setSelectedCategory("archived");
     };
 
+    const handleSearchQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchQuery(e.target.value);
+    };
+
     const handleCategoryChange = (category: "all" | "active" | "archived" | "hidden") => {
         setSelectedCategory(category);
     };
 
     const getFilteredList = () => {
         let eventsList = events.eventsList;
+
+        if (searchQuery) {
+            eventsList = getEventsBySearchQuery(searchQuery, eventsList);
+        }
 
         if (selectedDate) {
             eventsList = getEventsByDate(eventsList);
@@ -139,6 +148,20 @@ const Events: FC = () => {
         return events.groupEventsByMonth(upcomingEvents.slice(0, eventsLimit));
     };
 
+    const getEventsBySearchQuery = (query: string, eventsList: IEvent[]) => {
+        const filtered = eventsList.filter((event) => {
+            const { title = "", place = "", text = "" } = event;
+            const lowerCaseQuery = query.toLowerCase();
+            return (
+                title.toLowerCase().includes(lowerCaseQuery) ||
+                place.toLowerCase().includes(lowerCaseQuery) ||
+                text.toLowerCase().includes(lowerCaseQuery)
+            );
+        });
+
+        return filtered;
+    };
+
     const getEventsByDate = (eventsList: IEvent[]) => {
         if (!selectedDate) return eventsList;
 
@@ -147,7 +170,7 @@ const Events: FC = () => {
         });
     };
 
-    const filteredList = useMemo(getFilteredList, [selectedCategory, selectedDate, events, []]);
+    const filteredList = useMemo(getFilteredList, [searchQuery, selectedCategory, selectedDate, events, []]);
     const upcomingEvents = useMemo(getUpcomingEvents, [selectedCategory, events, []]);
 
     return (
@@ -157,13 +180,14 @@ const Events: FC = () => {
                 disabled={events.eventsList.length === 0 || events.loadingEventsBool}
                 onFilterByDate={(date) => setSelectedDate(date)}
                 onFilterByCategory={handleCategoryChange}
+                onFilterBySearch={handleSearchQueryChange}
                 onShowArchive={handleShowArchive}
                 archivedCount={events.archivedEvents.length || null}
             />
 
             {events.eventsList.length > 0 && !events.loadingEventsBool && Object.keys(filteredList).length ? (
                 <div className="container events">
-                    {(selectedCategory === "all" || selectedCategory === "active") && !selectedDate && (
+                    {(selectedCategory === "all" || selectedCategory === "active") && !selectedDate && !searchQuery && (
                         <div className="events-container upcoming-events">
                             <div className="title">Ближайшие мероприятия</div>
                             {Object.keys(upcomingEvents).map((monthYear) => (
@@ -193,7 +217,7 @@ const Events: FC = () => {
                     )}
 
                     <div className="events-container all-events">
-                        {!selectedDate && <div className="title">Все мероприятия</div>}
+                        {!selectedDate && !searchQuery && <div className="title">Все мероприятия</div>}
 
                         {Object.keys(filteredList).map((monthYear) => (
                             <div className="month-events" key={monthYear}>
