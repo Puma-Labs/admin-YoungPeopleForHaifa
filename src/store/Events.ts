@@ -4,7 +4,7 @@ import { makeAutoObservable } from "mobx";
 import EventService from "../service/EventService";
 import moment from "moment";
 
-interface GroupedEvents {
+export interface GroupedEvents {
     [key: string]: IEvent[];
 }
 

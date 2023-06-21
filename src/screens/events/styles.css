@@ -19,9 +19,13 @@
 }
 .events .events-container .month-events .top .arrow-btn {
   margin-right: 0.35rem;
+  transition: transform 0.3s ease;
 }
 .events .events-container .month-events .top .arrow-btn .arrow {
   font-size: 12px;
+}
+.events .events-container .month-events .top .arrow-btn.hide {
+  transform: rotate(180deg);
 }
 .events .events-container .month-events .top .monthYear {
   font-weight: 500;
