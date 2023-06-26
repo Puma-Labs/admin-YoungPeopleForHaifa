@@ -3,6 +3,7 @@ import "./styles.sass";
 import React, { FC } from "react";
 import { IEvent } from "../../models/IEvent";
 import moment from "moment";
+import { getImageURL } from "../../utils";
 import coverEmpty from "../../assets/images/preview-empty.png";
 
 interface EventProps {
@@ -19,7 +20,7 @@ const Event: FC<EventProps> = ({ event, isSelected, onOptionsClick }) => {
     return (
         <div className={`event ${isSelected ? 'selected' : ''}`}>
             <div className="img-container">
-                <img src={event.cover || coverEmpty} alt="cover"></img>
+                <img src={event.cover? getImageURL(event.cover) : coverEmpty} alt="cover"></img>
             </div>
             <div className="text">
                 <div className="event-title">{event.title}</div>
