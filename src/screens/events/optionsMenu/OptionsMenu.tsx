@@ -1,17 +1,7 @@
 import "./styles.sass";
 
-import React, { FC, useState } from "react";
-import { observer } from "mobx-react-lite";
-import Input from "../../../components/UI/input/Input";
-import Emptiness from "../../../components/UI/emptiness_/Emptiness";
-import AddButton from "../../../components/UI/addButton/AddButton";
-import SearchInput from "../../../components/UI/searchInput/SearchInput";
-import MenuDropdown from "../../../components/UI/menuDropdown/MenuDropdown";
-import StatItem from "../../../components/statItem/statItem";
-import { log } from "console";
-import coverEmpty from "../../../assets/images/preview-empty.png";
-import coverImg from "../../../assets/images/preview.png";
-import editIcon from "../../../assets/icons/edit-icon.svg";
+import React, { FC, useRef } from "react";
+import useClickOutside from "../../../customHooks/useClickOutside";
 import { IEvent } from "../../../models/IEvent";
 import { EventStatus } from "../../../models/IEvent";
 import { ReactComponent as EditIcon } from "../../../assets/icons/edit-icon.svg";
@@ -27,6 +17,8 @@ interface OptionsMenuProps {
 }
 
 const OptionsMenu: FC<OptionsMenuProps> = ({ event, isOpen, onClose, onStatusChange, onEdit, onDelete }) => {
+    const menuRef = useRef<HTMLDivElement>(null);
+
     const handleStatusChange = (status: EventStatus) => {
         if (event) {
             const newStatus = !event.status || event.status !== status ? status : null;
@@ -46,12 +38,14 @@ const OptionsMenu: FC<OptionsMenuProps> = ({ event, isOpen, onClose, onStatusCha
         }
     };
 
+    useClickOutside(menuRef, onClose);
+
     return (
         <>
             {isOpen && (
                 <div className="options-menu">
                     <div className="background"></div>
-                    <div className="menu-card">
+                    <div className="menu-card" ref={menuRef}>
                         <div className="top">
                             <div className="title">Настройки</div>
                         </div>

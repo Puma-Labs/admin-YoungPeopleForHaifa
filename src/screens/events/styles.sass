@@ -22,8 +22,11 @@ $c-eventText: #1B1B1F
         margin-bottom: 1rem
         .arrow-btn
           margin-right: 0.35rem
+          transition: transform 0.3s ease
           .arrow
             font-size: 12px
+          &.hide
+            transform: rotate(180deg)
         .monthYear
           @include fButton
           padding: 0.1rem 0.3rem

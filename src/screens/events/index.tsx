@@ -10,6 +10,7 @@ import EventForm from "./eventForm/EventForm";
 import OptionsMenu from "./optionsMenu/OptionsMenu";
 import Emptiness from "../../components/UI/emptiness_/Emptiness";
 import AddButton from "../../components/UI/addButton/AddButton";
+import Month from "./Month";
 import Event from "./Event";
 import coverEmpty from "../../assets/images/preview-empty.png";
 import coverImg from "../../assets/images/preview.png";
@@ -191,56 +192,27 @@ const Events: FC = () => {
                         <div className="events-container upcoming-events">
                             <div className="title">Ближайшие мероприятия</div>
                             {Object.keys(upcomingEvents).map((monthYear) => (
-                                <div className="month-events" key={monthYear}>
-                                    <div className="top">
-                                        <button className="arrow-btn">
-                                            <span className="arrow _icon-ico-arrow-s"></span>
-                                        </button>
-                                        <span className="monthYear">{`${monthYear[0].toUpperCase()}${monthYear.slice(
-                                            1
-                                        )}`}</span>
-                                        <span className="eventsCount">{`${upcomingEvents[monthYear].length} Событий`}</span>
-                                    </div>
-                                    <div className="events-wrapper">
-                                        {upcomingEvents[monthYear].map((event) => (
-                                            <Event
-                                                key={event._id}
-                                                event={event}
-                                                isSelected={selectedEvent?._id === event._id}
-                                                onOptionsClick={handleOptionsClick}
-                                            />
-                                        ))}
-                                    </div>
-                                </div>
+                                <Month
+                                    monthYear={monthYear}
+                                    events={upcomingEvents}
+                                    selectedEvent={selectedEvent || null}
+                                    onOptionsClick={handleOptionsClick}
+                                    key={monthYear}
+                                />
                             ))}
                         </div>
                     )}
 
                     <div className="events-container all-events">
                         {!selectedDate && !searchQuery && <div className="title">Все мероприятия</div>}
-
                         {Object.keys(filteredList).map((monthYear) => (
-                            <div className="month-events" key={monthYear}>
-                                <div className="top">
-                                    <button className="arrow-btn">
-                                        <span className="arrow _icon-ico-arrow-s"></span>
-                                    </button>
-                                    <span className="monthYear">{`${monthYear[0].toUpperCase()}${monthYear.slice(
-                                        1
-                                    )}`}</span>
-                                    <span className="eventsCount">{`${filteredList[monthYear].length} Событий`}</span>
-                                </div>
-                                <div className="events-wrapper">
-                                    {filteredList[monthYear].map((event) => (
-                                        <Event
-                                            key={event._id}
-                                            event={event}
-                                            isSelected={selectedEvent?._id === event._id}
-                                            onOptionsClick={handleOptionsClick}
-                                        />
-                                    ))}
-                                </div>
-                            </div>
+                            <Month
+                                monthYear={monthYear}
+                                events={filteredList}
+                                selectedEvent={selectedEvent || null}
+                                onOptionsClick={handleOptionsClick}
+                                key={monthYear}
+                            />
                         ))}
                     </div>
                 </div>

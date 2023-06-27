@@ -1,0 +1,128 @@
+@import '../variables'
+
+$background: #959595
+
+.image-loader
+  display: flex
+  position: relative
+  flex-direction: column
+  width: 100%
+  border: none
+  .label
+    @include fButton
+    margin-bottom: $gap-xsm
+  .input-file
+    display: none
+  .workspace
+    border-radius: 4px
+    width: 100%
+    display: flex
+    flex-direction: row
+    min-height: 348px
+    background-color: $bg-white
+    cursor: pointer
+    align-items: center
+    justify-content: center
+    position: relative
+    overflow: hidden
+    .add-image
+      display: flex
+      flex-direction: column
+      gap: $gap-m
+      width: 100%
+    .params
+      position: absolute
+      top: 0
+      left: 0
+      width: 120px
+      background-color: #4b76af
+      padding: 10px
+      z-index: 105
+    .ReactCrop, .original
+      display: block
+      min-width: 100%
+      // max-height: 500px
+      img
+        min-width: 100%
+  .workspace.error
+    background-color: rgba(118, 43, 43, 0.44) !important
+  .toolContainer
+    margin-bottom: 10px
+    .tools
+      display: flex
+      justify-content: space-between
+      padding-bottom: 15px
+      padding-top: 1rem
+      .addBtn.hidden
+        visibility: hidden
+      .tool-item
+        margin: 0 10px
+      .icon-buttons
+        display: flex
+        align-items: center
+        .tick-icon
+          width: 18px
+    .containerListImage
+      position: relative
+      display: flex
+      align-items: center
+      overflow: scroll
+      height: 100px
+      &::-webkit-scrollbar
+        display: none
+      .listImg
+        height: 100px
+        padding: 10px 0
+        display: flex
+        overflow: scroll
+        position: absolute
+        .itemImageAdd
+          width: 80px
+          height: 80px
+          border: 2px #54739c dashed
+          display: flex
+          align-items: center
+          justify-content: center
+          font-size: 20px
+          color: #54739c
+          border-radius: 10px
+          margin-right: 10px
+          cursor: pointer
+          transition: 1s
+          &:hover
+            border: 2px #54739c solid
+        .itemImageAdd.disabled
+          opacity: 0.3
+          cursor: not-allowed
+        .itemImage
+          width: 80px
+          height: 80px
+          border: 2px solid #54739c
+          border-radius: 10px
+          margin-right: 10px
+          position: relative
+          align-items: center
+          justify-content: center
+          display: flex
+          overflow: hidden
+          img
+            position: absolute
+            max-width: 200%
+          .delete
+            position: absolute
+            width: 20px
+            height: 20px
+            background-color: #c28f8f
+            top: 0
+            right: 0
+            z-index: 10
+            display: flex
+            justify-content: center
+            align-items: center
+            border-radius: 100%
+            color: white
+
+
+
+
+

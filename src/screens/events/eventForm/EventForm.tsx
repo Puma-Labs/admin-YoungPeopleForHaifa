@@ -3,8 +3,9 @@ import "./styles.sass";
 import React, { FC, useEffect, useState, FormEvent } from "react";
 import { useStore } from "../../../context/StoreContext";
 import { IEvent } from "../../../models/IEvent";
+import { getImageURL } from "../../../utils";
 import Input from "../../../components/UI/input/Input";
-import ImageLoader from "../../../components/imageLoader/ImageLoader";
+import ImageLoader from "../../../components/imageLoader_/ImageLoader";
 import coverEmpty from "../../../assets/images/preview-empty.png";
 import { DateFieldComponent, TimeFieldComponent } from "../../../components/dateTimeFields/DateTimeFieldComponents";
 import TextEditor from "../../../components/textEditor/TextEditor";
@@ -61,8 +62,9 @@ const EventForm: FC<EventFormProps> = ({ isOpen, onClose, event, onDelete }) => 
         setFormData((prevData) => ({ ...prevData, [name]: value }));
     };
 
-    const handlePreviewImgChange = (newImage: string) => {
+    const handleImgChange = (newImage: string) => {
       setPreviewImg(newImage);
+      setFormData((prevData) => ({ ...prevData, cover: newImage }));
     }
 
     const handleSubmit = async (e: FormEvent) => {
@@ -72,6 +74,8 @@ const EventForm: FC<EventFormProps> = ({ isOpen, onClose, event, onDelete }) => 
         //   setShowError(true);
         // } else {
         //   setIsPosting(true);
+        console.log('data', formData);
+        
 
         if (!event) {
             events
@@ -156,7 +160,7 @@ const EventForm: FC<EventFormProps> = ({ isOpen, onClose, event, onDelete }) => 
                                 </div>
                                 <div className="section">
                                     <div className="section-title">Обложка</div>
-                                    <ImageLoader onChange={handlePreviewImgChange} />
+                                    <ImageLoader onChange={handleImgChange} image={formData?.cover || ""} />
                                 </div>
                                 <div className="section">
                                     <div className="section-title">Текст статьи</div>
@@ -171,7 +175,7 @@ const EventForm: FC<EventFormProps> = ({ isOpen, onClose, event, onDelete }) => 
                                         <span className="dots _icon-ico-menu"></span>
                                         <div className="img-container">
                                             {/* <img src={formData?.cover ? formData?.cover : coverEmpty} alt="cover"></img> */}
-                                            <img src={previewImg || coverEmpty} alt="cover"></img>
+                                            <img src={formData.cover? getImageURL(formData.cover) : coverEmpty} alt="cover"></img>
                                         </div>
                                         <div className="event-title">{formData?.title || ""}</div>
                                         <div className="event-info">
