@@ -12,6 +12,7 @@ import { $public } from "../../http";
 import axios from "axios";
 import coverEmpty from "../../assets/images/preview-empty.png";
 import reloadIcon from "../../assets/icons/reload-icon.svg";
+import tickIcon from "../../assets/icons/tick.svg"
 
 export interface IImageLoader {
     onChange: (image: any) => void;
@@ -34,10 +35,15 @@ const ImageLoader: FC<IImageLoader> = ({ onChange, type, error, multi = false, v
 
     const handleFileChange = (e: any) => {
         setURLFile(URL.createObjectURL(e.target?.files[0]));
+        // onChange(URL.createObjectURL(e.target?.files[0]));
     };
 
-    function getCroppedImg(dataCrop: Crop) {      
-        setCrop(dataCrop);
+    const handleCropChange = (dataCrop: Crop) => {
+      setCrop(dataCrop);
+    }
+
+    function getCroppedImg() {      
+        // setCrop(dataCrop);
         clearTimeout(isLoop);
 
         setLoop(
@@ -46,8 +52,8 @@ const ImageLoader: FC<IImageLoader> = ({ onChange, type, error, multi = false, v
                     const canvas = document.createElement("canvas");
                     const scaleX = image.current.naturalWidth / image.current.width;
                     const scaleY = image.current.naturalHeight / image.current.height;
-                    canvas.width = proportion === 1 ? 960 : 1200;
-                    canvas.height = proportion === 1 ? 960 : 520;
+                    canvas.width = proportion === 1 ? 960 : 318;
+                    canvas.height = proportion === 1 ? 960 : 188;
                     const ctx = canvas.getContext("2d");
 
                     ctx?.drawImage(
@@ -58,13 +64,17 @@ const ImageLoader: FC<IImageLoader> = ({ onChange, type, error, multi = false, v
                         crop.height * scaleY,
                         0,
                         0,
-                        proportion === 1 ? 960 : 1200,
-                        proportion === 1 ? 960 : 520
+                        proportion === 1 ? 960 : 318,
+                        proportion === 1 ? 960 : 188
                     );
                     if (multi) {
                         setCropImage(ctx?.canvas.toDataURL("image/jpeg", 0.8) ?? "");
                     } else {
+                        const croppedImg = ctx?.canvas.toDataURL("image/jpeg", 0.8)
                         console.log(ctx?.canvas.toDataURL("image/jpeg", 0.8));
+
+                        setURLFile(croppedImg);
+
                         onChange(ctx?.canvas.toDataURL("image/jpeg", 0.8) ?? "");
                     }
                 }
@@ -106,6 +116,7 @@ const ImageLoader: FC<IImageLoader> = ({ onChange, type, error, multi = false, v
         if (fileURL) {
             setURLFile(null);
             setCrop(undefined);
+            onChange("");
         }
     }
 
@@ -128,7 +139,7 @@ const ImageLoader: FC<IImageLoader> = ({ onChange, type, error, multi = false, v
             <div className={`workspace ${error ? "error" : ""}`} onClick={selectFile}>
                 {fileURL ? (
                     <>
-                        <ReactCrop crop={crop} aspect={proportion} onChange={getCroppedImg}>
+                        <ReactCrop crop={crop} aspect={proportion} onChange={handleCropChange}>
                             <img ref={image} src={fileURL} alt="original" className="original" />
                         </ReactCrop>
                     </>
@@ -159,6 +170,12 @@ const ImageLoader: FC<IImageLoader> = ({ onChange, type, error, multi = false, v
                         <Button
                             className="tool-item"
                             stylesType="icon"
+                            icon={{ leftIcon: <img className="icon-container tick-icon" src={tickIcon} alt=""></img> }}
+                            onClick={getCroppedImg}
+                        />
+                        <Button
+                            className="tool-item"
+                            stylesType="icon"
                             icon={{ leftIcon: <img className="icon-container" src={reloadIcon} alt=""></img> }}
                             // onClick={cancel}
                         />
@@ -171,9 +188,6 @@ const ImageLoader: FC<IImageLoader> = ({ onChange, type, error, multi = false, v
                         />
                     </div>
 
-                    {/* {!type && (
-                                <Button className="tool-item" label={proportion === 1 ? 'Квадрат' : 'Прямоугольник'} onClick={turnProportion} />
-                        )} */}
                 </div>
                 {multi && (
                     <div className="containerListImage">
