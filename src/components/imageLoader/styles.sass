@@ -40,7 +40,10 @@ $background: #959595
       z-index: 105
     .ReactCrop, .original
       display: block
-      max-height: 500px
+      min-width: 100%
+      // max-height: 500px
+      img
+        min-width: 100%
   .workspace.error
     background-color: rgba(118, 43, 43, 0.44) !important
   .toolContainer
@@ -55,6 +58,8 @@ $background: #959595
       .icon-buttons
         display: flex
         align-items: center
+        .tick-icon
+          width: 18px
     .containerListImage
       position: relative
       display: flex

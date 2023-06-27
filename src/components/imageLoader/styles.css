@@ -45,7 +45,10 @@
 }
 .image-loader .workspace .ReactCrop, .image-loader .workspace .original {
   display: block;
-  max-height: 500px;
+  min-width: 100%;
+}
+.image-loader .workspace .ReactCrop img, .image-loader .workspace .original img {
+  min-width: 100%;
 }
 .image-loader .workspace.error {
   background-color: rgba(118, 43, 43, 0.44) !important;
@@ -65,6 +68,9 @@
 .image-loader .toolContainer .tools .icon-buttons {
   display: flex;
   align-items: center;
+}
+.image-loader .toolContainer .tools .icon-buttons .tick-icon {
+  width: 18px;
 }
 .image-loader .toolContainer .containerListImage {
   position: relative;
