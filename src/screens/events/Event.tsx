@@ -24,8 +24,8 @@ const Event: FC<EventProps> = ({ event, isSelected, onOptionsClick }) => {
             </div>
             <div className="text">
                 <div className="event-title">{event.title}</div>
-                <div className="event-info">{`${moment(event.date).format("DD.MM.YYYY")} - ${moment(event.time).format(
-                    "hh:mm"
+                <div className="event-info">{`${moment(event.date).format("DD.MM.YYYY")} - ${moment(event.date).format(
+                    "HH:mm"
                 )} ${event.place}`}</div>
             </div>
             <button onClick={handleOptionsClick} className="menu-btn">

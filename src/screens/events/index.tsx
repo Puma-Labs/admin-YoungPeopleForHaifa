@@ -18,6 +18,7 @@ import { IEvent } from "../../models/IEvent";
 import { EventStatus } from "../../models/IEvent";
 import Spinner from "../../components/UI/spinner/Spinner";
 import Modal from "../../components/modal_/Modal";
+import { toJS } from 'mobx'
 
 const Events: FC = () => {
     const { events } = useStore();
@@ -140,13 +141,11 @@ const Events: FC = () => {
     };
 
     const getUpcomingEvents = () => {
-        const eventsList = Object.values(filteredList).flat();
-        const eventsLimit = 6;
-        const currentDate = moment().startOf("day");
-        const upcomingEvents = eventsList.filter((event) => moment(event.date).isSameOrAfter(currentDate));
-        upcomingEvents.sort((a, b) => moment(a.date, "YYYY-MM-DD").diff(moment(b.date, "YYYY-MM-DD")));
-
-        return events.groupEventsByMonth(upcomingEvents.slice(0, eventsLimit));
+        const eventsList = toJS(events.upcomingEvents)
+        const upcomingEvents = eventsList.sort(
+        (a, b) => moment(a.date, "YYYY-MM-DD HH:mm").diff(moment(b.date, "YYYY-MM-DD HH:mm"))
+        );
+        return events.groupEventsByMonth(upcomingEvents);
     };
 
     const getEventsBySearchQuery = (query: string, eventsList: IEvent[]) => {
@@ -226,8 +225,8 @@ const Events: FC = () => {
             <EventForm
                 isOpen={isFormOpen}
                 onClose={() => {
-                    setFormOpen(false);
-                    setSelectedEvent(null);
+                    setFormOpen(false)
+                    setSelectedEvent(null)
                 }}
                 event={selectedEvent}
                 onDelete={handleDelete}
@@ -236,8 +235,8 @@ const Events: FC = () => {
                 event={selectedEvent}
                 isOpen={isOptionsMenuOpen}
                 onClose={() => {
-                    setPendingSelectedEvent(null);
-                    setOptionsMenuOpen(false);
+                    setPendingSelectedEvent(null)
+                    setOptionsMenuOpen(false)
                 }}
                 onStatusChange={handleStatusChange}
                 onEdit={handleEdit}
@@ -255,9 +254,9 @@ const Events: FC = () => {
                 ]}
                 cancelButton={{
                     onPress: () => {
-                        setDeleteConfirmationOpen(false);
+                        setDeleteConfirmationOpen(false)
                         if (!isFormOpen) {
-                            setSelectedEvent(null);
+                            setSelectedEvent(null)
                         }
                     },
                     label: "Отмена",
@@ -266,8 +265,8 @@ const Events: FC = () => {
 
             <AddButton onClick={handleAddNewEvent} />
         </>
-    );
-};
+    )
+}
 
-export default observer(Events);
+export default observer(Events)
 

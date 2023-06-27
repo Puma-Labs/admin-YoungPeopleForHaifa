@@ -29,7 +29,7 @@ const EventForm: FC<EventFormProps> = ({ isOpen, onClose, event, onDelete }) => 
     const [previewImg, setPreviewImg] = useState<string>("");
 
     useEffect(() => {
-        if (event) {          
+        if (event) {
             setFormData(event);
             setTitle("Редактирование");
             setSubmitBtnText("Обновить публикацию");
@@ -50,8 +50,8 @@ const EventForm: FC<EventFormProps> = ({ isOpen, onClose, event, onDelete }) => 
             return true;
         }
 
-        const { title, place, date, time, cover, text } = formData;
-        if (title || place || date || time || cover || text) {
+        const { title, place, date, cover, text } = formData;
+        if (title || place || date || cover || text) {
             return false;
         }
 
@@ -75,7 +75,7 @@ const EventForm: FC<EventFormProps> = ({ isOpen, onClose, event, onDelete }) => 
         // } else {
         //   setIsPosting(true);
         console.log('data', formData);
-        
+
 
         if (!event) {
             events
@@ -146,6 +146,7 @@ const EventForm: FC<EventFormProps> = ({ isOpen, onClose, event, onDelete }) => 
                                     <DateFieldComponent
                                         label="Дата проведения"
                                         onChange={(date) => {
+                                            console.log('date', date)
                                             handleInputChange("date", date);
                                         }}
                                         value={formData?.date || null}
@@ -153,9 +154,10 @@ const EventForm: FC<EventFormProps> = ({ isOpen, onClose, event, onDelete }) => 
                                     <TimeFieldComponent
                                         label="Время проведения"
                                         onChange={(time) => {
-                                            handleInputChange("time", time);
+                                            console.log('time', time)
+                                            handleInputChange("date", time);
                                         }}
-                                        value={formData?.time || null}
+                                        value={formData?.date || null}
                                     />
                                 </div>
                                 <div className="section">
@@ -181,7 +183,7 @@ const EventForm: FC<EventFormProps> = ({ isOpen, onClose, event, onDelete }) => 
                                         <div className="event-info">
                                             {`${
                                                 formData?.date ? moment(formData.date).format("DD.MM.YYYY") + " —" : ""
-                                            } ${formData?.time ? moment(formData.time).format("hh:mm") + " —" : ""} ${
+                                            } ${formData?.date ? moment(formData.date).format("HH:mm") + " —" : ""} ${
                                                 formData?.place || ""
                                             }`}
                                         </div>

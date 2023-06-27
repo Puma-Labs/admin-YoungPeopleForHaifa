@@ -1,6 +1,6 @@
 import { IEvent } from "../models/IEvent";
 import { EventStatus } from "../models/IEvent";
-import { makeAutoObservable } from "mobx";
+import {makeAutoObservable, runInAction} from "mobx";
 import EventService from "../service/EventService";
 import moment from "moment";
 
@@ -10,6 +10,7 @@ export interface GroupedEvents {
 
 export default class Events {
     eventsList: IEvent[] = [];
+    upcomingEvents: IEvent[] = [];
     event = {} as IEvent;
     loadingEventsBool: boolean = false;
     archivedEvents: IEvent[] = [];
@@ -20,6 +21,12 @@ export default class Events {
 
     setEventsList(eventList: IEvent[]) {
         this.eventsList = eventList;
+    }
+
+    setUpcomingEvents(eventList: IEvent[]) {
+        runInAction(() => {
+            this.upcomingEvents = eventList;
+        })
     }
 
     setEvent(event: IEvent) {
@@ -57,9 +64,12 @@ export default class Events {
         this.setLoadingEventsBool(true);
         try {
             const EventsList = await EventService.fetchList();
-            this.setEventsList(EventsList.data);
+            if(EventsList.data && EventsList.data.eventsList) {
+                this.setEventsList(EventsList.data.eventsList);
+                this.setUpcomingEvents(EventsList.data.upcomingEvents);
 
-            this.getEventsByStatus("archived");
+                this.getEventsByStatus("archived");
+            }
         } catch (err) {
             console.log(err);
         }

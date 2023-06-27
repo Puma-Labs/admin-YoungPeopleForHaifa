@@ -3,11 +3,11 @@ import { AxiosResponse } from 'axios'
 import { IEvent } from '../models/IEvent';
 
 export default class EventService {
-  static async fetchList(): Promise<AxiosResponse<IEvent[]>> {
-    return (await $api.get<IEvent[]>('/events'))
+  static async fetchList(): Promise<AxiosResponse<{upcomingEvents: IEvent[], eventsList: IEvent[]}>> {
+    return (await $api.get<{upcomingEvents: IEvent[], eventsList: IEvent[]}>('/events'))
   }
 
-  static async fetchOne(id: string | undefined): Promise<AxiosResponse<IEvent>> {    
+  static async fetchOne(id: string | undefined): Promise<AxiosResponse<IEvent>> {
     return (await $api.get<IEvent>(`/events/${id}`))
   }
 

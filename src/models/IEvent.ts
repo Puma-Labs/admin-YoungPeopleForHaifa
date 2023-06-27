@@ -5,7 +5,6 @@ export interface IEvent {
   title: string,
   place: string,
   date?: Date,
-  time?: Date,
   cover?: string,
   text: string,
   status?: EventStatus,
