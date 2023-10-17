@@ -1,0 +1,112 @@
+@import '../../../components/variables'
+
+.event-form
+  position: fixed
+  display: flex
+  justify-content: center
+  align-items: center
+  width: 100vw
+  height: 100vh
+  z-index: 101
+  left: 0
+  top: 0
+  .background
+    width: 100vw
+    height: 100vh
+    position: absolute
+    background-color: #48464A
+    opacity: 0.32
+  .form-card
+    display: flex
+    flex-direction: column
+    width: 716px
+    height: 82vh
+    // overflow-y: auto
+    background-color: $bg-lavender
+    border: 1px solid #C7C5D0
+    border-radius: 24px
+    z-index: 102
+    .top
+      display: flex
+      justify-content: space-between
+      padding: 1.7rem
+      padding-right: 1rem
+      padding: 1.7rem 1rem 1.1rem 1.7rem
+      border-bottom: $border-light
+      .title
+        @include fTitleLarge
+      .close-btn span
+        display: block
+        transform: rotate(45deg)
+        font-size: 20px
+    .content
+      padding: 0 1.5rem
+      overflow-y: auto
+      .section:not(:last-child)
+        border-bottom: $border-light
+      .section
+        padding: 2.1rem 0
+        padding-bottom: 0.3rem
+        .section-title
+          @include fSectionTitle
+          margin-bottom: 2rem
+        &.preview
+          .section-title
+            margin-bottom: 1.3rem
+          .preview-card
+            max-width: 358px
+            margin: 0 auto
+            padding: 0 1rem 1.2rem 1rem
+            margin-bottom: 1rem
+            background-color: $bg-light
+            border: $border-black
+            border-radius: 6px
+            // white-space: nowrap
+            // overflow: hidden
+            // text-overflow: ellipsis
+            .dots
+              display: inline-block
+              transform: rotate(90deg)
+              font-size: 30px
+              margin-bottom: -0.5rem
+            .img-container
+              position: relative
+              display: flex
+              align-items: center
+              justify-content: center
+              width: 100%
+              max-width: 318px
+              height: 188px
+              margin: 0 auto
+              margin-bottom: 1.1rem
+              border: $border-black
+              img
+                position: absolute
+                width: 100%
+                height: 100%
+                object-fit: cover
+                overflow: hidden
+            .event-title, .event-info
+              text-align: center
+            .event-title
+              font-weight: 500
+              line-height: 24px
+              letter-spacing: 0.4px
+              margin-bottom: 0.5rem
+              white-space: nowrap
+              overflow: hidden
+              text-overflow: ellipsis
+            .event-info
+              font-size: 12px
+              letter-spacing: 0.6px
+
+    .bottom
+      display: flex
+      justify-content: space-between
+      border-top: $border-light
+      padding: 1.2rem 1.4rem 1.2rem 1.2rem
+      .btn-delete
+        font-size: 18px
+      .submit-btn
+        @include fButton
+        color: $c-purple
