@@ -29,7 +29,10 @@ const QR: FC = () => {
         setDeleteConfirmationOpen(true);
     };
 
-    const handleDeleteConfirmed = () => {
+    const handleDeleteConfirmed = async () => {
+        if (qr.selected) {
+            await qr.deleteOne(qr.selected)
+        }
         setFormOpen(false);
         setDeleteConfirmationOpen(false);
     };
@@ -44,6 +47,7 @@ const QR: FC = () => {
     return (
         <>
             <div className="container qrs">
+                <div className="title">Информация с QR кодами</div>
                 <div className="qrs-container">
                     {
                         qr.getIds().map((id) => {

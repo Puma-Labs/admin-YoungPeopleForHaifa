@@ -17,6 +17,15 @@ const QRItem: FC<QRProps> = ({ qr, isSelected, onSelect }) => {
       onSelect(qr._id);
     };
 
+    const visit = () => {
+        window.open(`${process.env.REACT_APP_SERVER_HOST}/qr/${qr._id}`, '_blank')
+    }
+
+    const openQR = () => {
+
+        window.open(`${process.env.REACT_APP_SERVER_HOST}/qr/${qr._id}/image`, '_blank')
+    }
+
     return (
         <div className={`qr ${isSelected ? 'selected' : ''}`}>
             <div className="img-container">
@@ -26,9 +35,17 @@ const QRItem: FC<QRProps> = ({ qr, isSelected, onSelect }) => {
                 <h4 className="qr-title">
                     { qr.title }
                 </h4>
-                <button className="qr-btn" onClick={selectQR}>
-                    Edit
-                </button>
+                <div className="qr-buttons">
+                    <button className="qr-btn" onClick={openQR}>
+                        QR
+                    </button>
+                    <button className="qr-btn" onClick={visit}>
+                        Visit
+                    </button>
+                    <button className="qr-btn" onClick={selectQR}>
+                        Edit
+                    </button>
+                </div>
             </div>
         </div>
     );

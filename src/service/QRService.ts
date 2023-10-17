@@ -1,6 +1,6 @@
 import $api from '../http';
 import { AxiosResponse } from 'axios'
-import { IQR, QRPayload } from '../models/IQR';
+import { IQR, QRPayload, QRId } from '../models/IQR';
 
 export default class EventService {
   static async fetchList(): Promise<AxiosResponse<{qrList: IQR[]}>> {
@@ -19,7 +19,7 @@ export default class EventService {
     return (await $api.put<boolean>(`/qr/${data._id}`, data))
   }
 
-  static async fetchDeleteOne(id: string | undefined): Promise<AxiosResponse<boolean>> {
-    return (await $api.delete<boolean>(`/qr?id=${id}`))
+  static async fetchDeleteOne(id: QRId | undefined): Promise<AxiosResponse<boolean>> {
+    return (await $api.delete<boolean>(`/qr/${id}`))
   }
 }

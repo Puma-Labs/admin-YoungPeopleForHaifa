@@ -21,9 +21,19 @@ interface QRFormProps {
 const EventForm: FC<QRFormProps> = ({ isOpen, onClose, qrData, onDelete }) => {
     const { qr } = useStore();
 
+    const titles = {
+        edit: 'Редактирование',
+        create: 'Новый QR'
+    } as const
+
+    const buttons = {
+        edit: 'Обновить QR',
+        create: 'Опубликовать'
+    } as const
+
     const [formData, setFormData] = useState<QRPayload>({});
-    const [title, setTitle] = useState<"Редактирование" | "Новое событие">("Новое событие");
-    const [submitBtnText, setSubmitBtnText] = useState<"Обновить публикацию" | "Опубликовать">("Опубликовать");
+    const [title, setTitle] = useState<typeof titles.edit | typeof titles.create>(titles.create);
+    const [submitBtnText, setSubmitBtnText] = useState<typeof buttons.edit | typeof buttons.create>(buttons.create);
     const [isFormEmpty, setIsFormEmpty] = useState<boolean>(true);
     const [isPosting, setIsPosting] = useState<boolean>(false);
     const [previewImg, setPreviewImg] = useState<string>("");
@@ -35,16 +45,16 @@ const EventForm: FC<QRFormProps> = ({ isOpen, onClose, qrData, onDelete }) => {
             assignForm(qrData);
 
             console.log('if (qrData)', formData);
-            setTitle("Редактирование");
-            setSubmitBtnText("Обновить публикацию");
+            setTitle(titles.edit);
+            setSubmitBtnText(buttons.edit);
             setIsFormEmpty(false);
         } else {
             console.log('if (!qrData)', qrData);
             assignForm({} as IQR);
-            setTitle("Новое событие");
-            setSubmitBtnText("Опубликовать");
+            setTitle(titles.create);
+            setSubmitBtnText(buttons.create);
         }
-    }, [qrData]);
+    }, []);
 
     useEffect(() => {
         setIsFormEmpty(checkIsFormEmpty());
@@ -100,14 +110,14 @@ const EventForm: FC<QRFormProps> = ({ isOpen, onClose, qrData, onDelete }) => {
     };
 
     const handleDelete = () => {
-        if (!isFormEmpty) {
-            // onDelete();
+        if (!isFormEmpty && qrData) {
+            onDelete(qrData._id);
         }
     };
 
     const handleClose = () => {
-        setTitle("Новое событие");
-        setSubmitBtnText("Опубликовать");
+        setTitle(titles.create);
+        setSubmitBtnText(buttons.create);
         setFormData({} as IQR);
         onClose();
     };

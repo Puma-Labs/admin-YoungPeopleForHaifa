@@ -11,27 +11,13 @@ export interface GroupedQrs {
 export default class QR {
     ids: IQR['_id'][] = [];
     byId: Record<IQR['_id'], IQR> = {};
-    selected: IQR['_id'] | null = null;
+    selected: QRId | null = null;
     loadingQRBool: boolean = false;
 
 
     constructor() {
         makeAutoObservable(this);
     }
-
-    // setQRList(eventList: IQR[]) {
-    //     this.qrList = eventList;
-    // }
-
-    // setUpcomingEvents(eventList: IQR[]) {
-    //     runInAction(() => {
-    //         this.upcomingEvents = eventList;
-    //     })
-    // }
-
-    // setEvent(event: IQR) {
-    //     this.event = event;
-    // }
 
     setLoadingQRBool(newValue: boolean) {
         this.loadingQRBool = newValue;
@@ -48,29 +34,6 @@ export default class QR {
     getById () {
         return this.byId
     }
-
-    // setArchivedEvents(archivedEvents: IQR[]) {
-    //     this.archivedEvents = archivedEvents;
-    // }
-
-    // groupEventsByMonth(qrList: IQR[]) {
-    //     const groupedEvents = qrList.reduce((acc: GroupedEvents, event) => {
-    //         const monthYear = moment(event.date).format("MMMM, yyyy");
-    //         if (!acc[monthYear]) {
-    //             acc[monthYear] = [];
-    //         }
-    //         acc[monthYear].push(event);
-    //         return acc;
-    //     }, {});
-
-    //     return groupedEvents;
-    // }
-
-    // getEventsByStatus(status: unknown) {
-    //     const filteredEvents = this.qrList.filter((event) => event.status === status);
-
-    //     if (status === "archived") this.setArchivedEvents(filteredEvents);
-    // }
 
     normalizeQRList (list: QRList): QRById {
         return runInAction(() => (list as IQR[]).reduce<QRById>((_: QRById, q: IQR): QRById => {
@@ -142,15 +105,15 @@ export default class QR {
         this.setLoadingQRBool(false);
     }
 
-    // async deleteOne(data: IQR | undefined) {
-    //     this.setLoadingQRBool(true);
-    //     if (typeof data !== "undefined") {
-    //         await QRService.fetchDeleteOne(data._id);
-    //         await this.loadList();
-    //     } else {
-    //         console.error("no data to delete");
-    //     }
-    //     this.setLoadingQRBool(false);
-    // }
+    async deleteOne(id: QRId | undefined) {
+        this.setLoadingQRBool(true);
+        if (id) {
+            await QRService.fetchDeleteOne(id);
+            await this.loadList();
+        } else {
+            console.error("no data to delete");
+        }
+        this.setLoadingQRBool(false);
+    }
 }
 
