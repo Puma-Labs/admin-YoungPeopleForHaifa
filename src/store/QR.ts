@@ -54,16 +54,11 @@ export default class QR {
             runInAction(() => {
                 this.byId = normalized
             })
-
-            console.log(this.byId);
         } catch (err) {
             console.log(err);
         }
 
         this.setLoadingQRBool(false);
-
-        console.log(this.byId);
-        
     }
 
     async loadOne(id: string | undefined) {
@@ -84,8 +79,6 @@ export default class QR {
 
         if (typeof data !== "undefined") {
             const res = await QRService.fetchCreateOne(data);
-            console.log(res);
-
             await this.loadList();
         } else {
             console.error("no data to send");
@@ -100,7 +93,6 @@ export default class QR {
         }
         this.setLoadingQRBool(true);
         const res = await QRService.fetchUpdateOne(data);
-        console.log(res);
         await this.loadList();
         this.setLoadingQRBool(false);
     }

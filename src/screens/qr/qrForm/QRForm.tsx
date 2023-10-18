@@ -40,16 +40,11 @@ const EventForm: FC<QRFormProps> = ({ isOpen, onClose, qrData, onDelete }) => {
 
     useEffect(() => {
         if (qrData) {
-            console.log('if (qrData)', qrData);
-            
             assignForm(qrData);
-
-            console.log('if (qrData)', formData);
             setTitle(titles.edit);
             setSubmitBtnText(buttons.edit);
             setIsFormEmpty(false);
         } else {
-            console.log('if (!qrData)', qrData);
             assignForm({} as IQR);
             setTitle(titles.create);
             setSubmitBtnText(buttons.create);
@@ -90,11 +85,6 @@ const EventForm: FC<QRFormProps> = ({ isOpen, onClose, qrData, onDelete }) => {
                 console.error(err);
             });
         } else {
-            console.log('else', {
-                _id: qrData._id,
-                ...formData
-            });
-            
             qr.updateOne({
                 _id: qrData._id,
                 ...formData
@@ -154,9 +144,9 @@ const EventForm: FC<QRFormProps> = ({ isOpen, onClose, qrData, onDelete }) => {
                                 </div>
                                 
                                 <div className="section">
-                                    <div className="section-title">Google sheet</div>
+                                    <div className="section-title">Google sheet ID</div>
                                     <Input
-                                        label="Google sheet"
+                                        label="Google sheet ID"
                                         onChange={(url) => {
                                             handleInputChange("sheetURL", url);
                                         }}
