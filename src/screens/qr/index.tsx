@@ -84,10 +84,10 @@ const QR: FC = () => {
                         ]}
                         cancelButton={{
                             onPress: () => {
-                                // setDeleteConfirmationOpen(false)
-                                // if (!isFormOpen) {
-                                //     setSelectedEvent(null)
-                                // }
+                                setDeleteConfirmationOpen(false)
+                                if (!isFormOpen) {
+                                    qr.selectQR(null);
+                                }
                             },
                             label: "Отмена",
                         }}
