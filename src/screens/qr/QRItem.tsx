@@ -2,17 +2,15 @@ import "./styles.sass";
 
 import React, { FC } from "react";
 import { IQR, QRId } from "../../models/IQR";
-import moment from "moment";
-import { getImageURL } from "../../utils";
-import coverEmpty from "../../assets/images/preview-empty.png";
 
 interface QRProps {
     qr: IQR;
     isSelected: boolean;
     onSelect: (id: QRId) => void;
+    onDelete: (id: QRId) => void;
 }
 
-const QRItem: FC<QRProps> = ({ qr, isSelected, onSelect }) => {
+const QRItem: FC<QRProps> = ({ qr, isSelected, onSelect, onDelete }) => {
     const selectQR = () => {
       onSelect(qr._id);
     };
@@ -22,14 +20,17 @@ const QRItem: FC<QRProps> = ({ qr, isSelected, onSelect }) => {
     }
 
     const openQR = () => {
-
         window.open(`${process.env.REACT_APP_SERVER_HOST}/qr/${qr._id}/image`, '_blank')
+    }
+
+    const deleteQR = () => {
+        onDelete(qr._id)
     }
 
     return (
         <div className={`qr ${isSelected ? 'selected' : ''}`}>
             <div className="img-container">
-                <img src={qr.svgURL} alt="svg" />
+                <img src={qr.svgURL} alt="qr svg preview" />
             </div>
             <div className="qr-desc">
                 <h4 className="qr-title">
@@ -44,6 +45,9 @@ const QRItem: FC<QRProps> = ({ qr, isSelected, onSelect }) => {
                     </button>
                     <button className="qr-btn" onClick={selectQR}>
                         Edit
+                    </button>
+                    <button className="qr-btn" onClick={deleteQR}>
+                        Delete
                     </button>
                 </div>
             </div>

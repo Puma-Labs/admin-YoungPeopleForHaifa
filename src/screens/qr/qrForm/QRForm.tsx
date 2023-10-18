@@ -54,7 +54,7 @@ const EventForm: FC<QRFormProps> = ({ isOpen, onClose, qrData, onDelete }) => {
             setTitle(titles.create);
             setSubmitBtnText(buttons.create);
         }
-    }, []);
+    }, [qrData]);
 
     useEffect(() => {
         setIsFormEmpty(checkIsFormEmpty());
@@ -67,9 +67,8 @@ const EventForm: FC<QRFormProps> = ({ isOpen, onClose, qrData, onDelete }) => {
 
         return false;
     };
-
-    function assignForm (form: QRPayload): void {
-        setFormData((old) => ({...form, ...old}))
+    function assignForm (form: QRPayload) {
+        setFormData((prevData) => ({ ...prevData, ...form }));
     }
 
     const handleInputChange = (name: string, value: string | Date | null) => {
@@ -161,14 +160,14 @@ const EventForm: FC<QRFormProps> = ({ isOpen, onClose, qrData, onDelete }) => {
                                         onChange={(url) => {
                                             handleInputChange("sheetURL", url);
                                         }}
-                                        value={formData?.sheetURL || ""}
+                                        value={formData.sheetURL || ""}
                                     />
                                 </div>
                                 {
                                     formData.svgURL && (
                                         <div className="section">
                                             <div className="section-title">QR</div>
-                                            <a href={formData.svgURL} target="_blank">
+                                            <a href={formData.svgURL} rel="noreferrer" target="_blank">
                                                 <img src={formData.svgURL} alt="QR" style={{
                                                     width: '100%',
                                                 }} />    

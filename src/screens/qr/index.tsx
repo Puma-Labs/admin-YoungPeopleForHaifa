@@ -56,6 +56,7 @@ const QR: FC = () => {
                                     isSelected={qr.selected === id} 
                                     onSelect={handleSelectQR(id)} 
                                     key={id}
+                                    onDelete={handleDelete}
                                 />
                             )
                         })
