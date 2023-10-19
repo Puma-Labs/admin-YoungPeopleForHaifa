@@ -1,7 +1,6 @@
 import { IQR, QRList, QRId, QRById, QRPayload } from "../models/IQR";
 import {makeAutoObservable, runInAction} from "mobx";
 import QRService from "../service/QRService";
-import moment from "moment";
 
 export interface GroupedQrs {
     [key: string]: IQR[];
@@ -60,25 +59,11 @@ export default class QR {
 
         this.setLoadingQRBool(false);
     }
-
-    async loadOne(id: string | undefined) {
-        this.setLoadingQRBool(true);
-
-        if (typeof id !== "undefined") {
-            // const Event = await QRService.fetchOne(id);
-            // this.setEvent(Event.data);
-        } else {
-            console.error("not found");
-        }
-
-        this.setLoadingQRBool(false);
-    }
-
     async createOne(data: QRPayload | undefined) {
         this.setLoadingQRBool(true);
 
         if (typeof data !== "undefined") {
-            const res = await QRService.fetchCreateOne(data);
+            await QRService.fetchCreateOne(data);
             await this.loadList();
         } else {
             console.error("no data to send");
