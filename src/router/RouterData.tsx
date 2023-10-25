@@ -1,5 +1,6 @@
 import React from 'react'
 import Events from '../screens/events';
+import QR from '../screens/qr';
 import Users from '../screens/users';
 import {Outlet} from "react-router-dom";
 import Notifications from "../screens/notifications";
@@ -38,6 +39,13 @@ const RouteData: IRouteData[] = [
                 visible: true,
                 icon: <span className='icon _icon-ico-list'></span>,
                 element: <Events />,
+            },
+            {
+                title: "QR codes",
+                path: "qr",
+                visible: true,
+                icon: <span className='icon _icon-ico-list'></span>,
+                element: <QR />,
             },
             {
                 title: "Users",

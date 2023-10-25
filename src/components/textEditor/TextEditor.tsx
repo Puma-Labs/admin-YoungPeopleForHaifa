@@ -1,6 +1,6 @@
 import "./styles.sass";
 
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import Quill from "quill";
 import "react-quill/dist/quill.snow.css";
@@ -16,6 +16,10 @@ interface TextEditorProps {
 
 const TextEditor: FC<TextEditorProps> = ({ value, onChange, label, placeholder = "", error = "" }) => {
     const [text, setText] = useState(value);
+
+    useEffect(() => {
+        setText(value);
+    }, [value])
 
     const handleChange = (value: string) => {
         setText(value);
